@@ -1,0 +1,63 @@
+name: DeepQuests5
+main: emanondev.deepquests.Quests
+version: 5.0.0-ALPHA
+author: emanon
+depend: [DeepCore]
+softdepend: [ItemEdit,Factions,Towny,SuperVanish,PremiumVanish,Mcmmo,VirginBlock,WorldGuard,PlaceHolderAPI,Citizens,MythicMobs,WorldGuardRegionAPI,Jobs,SkillAPI,Parties]
+api-version: 1.13
+
+commands:
+    quests:
+        description: reload the config
+        usage: "§cUsage: /quests"
+        permission: deepquests.commands.quests
+        aliases: [quest,q]
+    deepquests:
+        description: reload the config
+        permission: deepquests.admin.editor
+        usage: "§cUsage: /deepquests"
+        aliases: [dq,deepquest,questadmin,qa]
+    deepquesttext:
+        description: when a string is requested
+        usage: "§cUsage: /deepquesttext"
+        permission: deepquests.admin.editor
+        aliases: [dqtext]
+    deepquestitem:
+        description: when an item is requested
+        usage: "§cUsage: /deepquestitem"
+        permission: deepquests.admin.editor
+        aliases: [dqitem]
+    deepquestback:
+        description: when an item is requested
+        usage: "§cUsage: /deepquestback"
+        permission: deepquests.admin.editor
+        aliases: [dqback]
+    deepquestimport:
+        description: import old database
+        usage: "§cUsage: /deepquestimport"
+        permission: deepquests.admin.editor
+        aliases: [dqimport]
+        
+permissions:
+    deepquests.commands.quests:
+        default: true
+    deepquests.user:
+        default: true
+    deepquests.admin:
+        default: op
+        children:
+            deepquests.admin.help: true
+            deepquests.admin.reload: true
+            deepquests.admin.editor: true
+            deepquests.admin.citizen: true
+            deepquests.admin.player: true
+    deepquests.admin.help:
+        default: op
+    deepquests.admin.reload:
+        default: op
+    deepquests.admin.editor:
+        default: op
+    deepquests.admin.citizen:
+        default: op
+    deepquests.admin.player:
+        default: op

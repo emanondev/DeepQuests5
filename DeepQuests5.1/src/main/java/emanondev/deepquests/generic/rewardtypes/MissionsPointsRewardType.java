@@ -1,0 +1,128 @@
+package emanondev.deepquests.generic.rewardtypes;
+
+import java.util.*;
+
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+
+import emanondev.deepquests.Translations;
+import emanondev.core.YMLSection;
+import emanondev.deepquests.data.AmountData;
+import emanondev.deepquests.data.TargetQuestData;
+import emanondev.deepquests.gui.inventory.Gui;
+import emanondev.deepquests.implementations.AReward;
+import emanondev.deepquests.implementations.ARewardType;
+import emanondev.deepquests.implementations.Paths;
+import emanondev.deepquests.interfaces.Quest;
+import emanondev.deepquests.interfaces.QuestData;
+import emanondev.deepquests.interfaces.QuestManager;
+import emanondev.deepquests.interfaces.Reward;
+import emanondev.deepquests.interfaces.User;
+import emanondev.deepquests.utils.DataUtils;
+import emanondev.core.ItemBuilder;
+
+public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> {
+	public MissionsPointsRewardType(QuestManager<T> manager) {
+		super(ID, manager);
+	}
+
+	@Override
+	protected boolean getStandardHiddenValue() {
+		return false;
+	}
+
+	private final static String ID = "missions_points";
+
+	@Override
+	public Material getGuiMaterial() {
+		return Material.IRON_NUGGET;
+	}
+
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList("&7give missions points");
+	}
+
+	@Override
+	public MissionsPointsReward getInstance(int id, QuestManager<T> manager, YMLSection section) {
+		return new MissionsPointsReward(id, manager, section);
+	}
+
+	public class MissionsPointsReward extends AReward<T> {
+		private TargetQuestData<T, MissionsPointsReward> questData;
+		private AmountData<T, MissionsPointsReward> amountData;
+
+		public MissionsPointsReward(int id, QuestManager<T> manager, YMLSection section) {
+			super(id, manager, MissionsPointsRewardType.this, section);
+			amountData = new AmountData<T, MissionsPointsReward>(this,
+					getConfig().loadSection(Paths.REWARD_INFO_AMOUNT));
+			questData = new TargetQuestData<T, MissionsPointsReward>(this,
+					getConfig().loadSection(Paths.REWARD_INFO_TARGET_QUEST));
+		}
+
+		public List<String> getInfo() {
+			List<String> info = super.getInfo();
+			info.addAll(questData.getInfo());
+			info.add("&9Points: &e%amount%");
+			return info;
+		}
+
+		public TargetQuestData<T, MissionsPointsReward> getTargetQuestData() {
+			return questData;
+		}
+
+		@Override
+		public void apply(T qPlayer, int amount) {
+			if (amount <= 0)
+				return;
+			try {
+				Quest<T> quest = questData.getQuest();
+				if (quest == null)
+					new NullPointerException("Data missing or not setted still on reward " + this.getID())
+							.printStackTrace();
+				QuestData<T> questData = qPlayer.getQuestData(quest);
+				questData.setPoints((int) (questData.getPoints() + amount * amountData.getAmount()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		public AmountData<T, MissionsPointsReward> getAmountData() {
+			return amountData;
+		}
+
+		@Override
+		public Gui getEditorGui(Player target, Gui parent) {
+			return new GuiEditor(target, parent);
+		}
+
+		private class GuiEditor extends ARewardGuiEditor {
+
+			public GuiEditor(Player player, Gui previusHolder) {
+				super(player, previusHolder);
+				this.putButton(27, questData.getQuestSelectorButton(this));
+				this.putButton(28,
+						amountData.getAmountEditorButton("&9Points Selector",
+								Arrays.asList("&6Points Selector", "&9Points: &e%amount%"),
+								new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
+			}
+		}
+	}
+
+	@Override
+	public String getDefaultFeedback(Reward<T> reward) {
+		if (!(reward instanceof MissionsPointsRewardType.MissionsPointsReward))
+			return null;
+		MissionsPointsReward r = (MissionsPointsReward) reward;
+		YMLSection config = getProvider().getTypeConfig(this);
+		String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+		if (txt == null) {
+			txt = "&a{action:obtained} &e{amount} &a{action:points} on &e{target}";
+			config.set(Paths.REWARD_FEEDBACK, txt);
+
+		}
+		return Translations.replaceAll(txt).replace("{target}", DataUtils.getTargetHolder(r.getTargetQuestData()))
+				.replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
+	}
+
+}
