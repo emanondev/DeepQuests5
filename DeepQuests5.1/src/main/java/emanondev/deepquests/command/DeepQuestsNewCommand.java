@@ -87,27 +87,13 @@ public class DeepQuestsNewCommand extends CoreCommand {
 			else
 				this.questbag(sender, alias, args);
 			return;
-		case "debug":
-			for (QuestManager<?> qManager:Quests.get().getManagers()) {
-				getPlugin().logDone("checking manager &e"+qManager.getName());
-				((AQuestManager) qManager).debug();
-				
-			}
-			return;
 		case "debugunused":
-			for (QuestManager<?> qManager:Quests.get().getManagers()) {
-				getPlugin().logDone("checking manager &e"+qManager.getName());
+			for (QuestManager<?> qManager : Quests.get().getManagers()) {
+				getPlugin().logDone("checking manager &e" + qManager.getName());
 				((AQuestManager) qManager).debugUnused();
 			}
 			return;
-		
-	case "debugclear":
-		for (QuestManager<?> qManager:Quests.get().getManagers()) {
-			getPlugin().logDone("checking manager &e"+qManager.getName());
-			((AQuestManager) qManager).debugClear();
 		}
-		return;
-	}
 		help(sender, alias, args);
 		return;
 	}
@@ -125,18 +111,16 @@ public class DeepQuestsNewCommand extends CoreCommand {
 		QuestManager qm = Quests.get().getQuestManager(args[1]);
 		if (qm == null) {
 			UtilsMessages.sendMessage(sender,
-					this.getPlugin().getLanguageConfig(sender).loadMessage("command.deepquests.questbag.invalid_manager",
-							"&4[&c✘&4] &cInvalid manager name", "%alias%",
-							alias));
+					this.getPlugin().getLanguageConfig(sender).loadMessage(
+							"command.deepquests.questbag.invalid_manager", "&4[&c✘&4] &cInvalid manager name",
+							"%alias%", alias));
 			return;
 		}
 		User u = qm.getArgomentUser(args[2]);
 		if (u == null) {
 
-			UtilsMessages.sendMessage(sender,
-					this.getPlugin().getLanguageConfig(sender).loadMessage("command.deepquests.questbag.invalid_user",
-							"&4[&c✘&4] &cInvalid user name", "%alias%",
-							alias));
+			UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender).loadMessage(
+					"command.deepquests.questbag.invalid_user", "&4[&c✘&4] &cInvalid user name", "%alias%", alias));
 			return;
 		}
 		boolean add;
@@ -150,9 +134,9 @@ public class DeepQuestsNewCommand extends CoreCommand {
 		default:
 
 			UtilsMessages.sendMessage(sender,
-					this.getPlugin().getLanguageConfig(sender).loadMessage("command.deepquests.questbag.invalid_operation",
-							"&4[&c✘&4] &cInvalid operation name, user &eadd &cor &eremove", "%alias%",
-							alias));
+					this.getPlugin().getLanguageConfig(sender).loadMessage(
+							"command.deepquests.questbag.invalid_operation",
+							"&4[&c✘&4] &cInvalid operation name, user &eadd &cor &eremove", "%alias%", alias));
 			return;
 		}
 		int amount;
@@ -219,7 +203,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
 							"&4[&c✘&4] &c/%alias% opengui &6<player>", "%alias%", alias));
 			return;
 		}
-		Player target = this.readPlayer(sender,args[1]);
+		Player target = this.readPlayer(sender, args[1]);
 		if (target == null) {
 			UtilsMessages.sendMessage(sender,
 					this.getPlugin().getLanguageConfig(sender).loadMessage("command.deepquests.opengui.wrong_target",
@@ -330,16 +314,16 @@ public class DeepQuestsNewCommand extends CoreCommand {
 		switch (args.length) {
 		case 1:
 			return this.complete(args[0],
-					Arrays.asList("swapplayers", "manager", "listmanagers", "opengui", "editor", "reload","questbag"));
+					Arrays.asList("swapplayers", "manager", "listmanagers", "opengui", "editor", "reload", "questbag"));
 		case 2:
 			switch (args[0].toLowerCase()) {
 			case "swapplayers":
 				if (sender.hasPermission(P.COMMAND_DEEPQUESTS_SWAPPLAYERS))
-				return this.completePlayerNames(sender, args[1]);
+					return this.completePlayerNames(sender, args[1]);
 				return Collections.emptyList();
 			case "opengui":
 				if (sender.hasPermission(P.COMMAND_DEEPQUESTS_OPENGUI))
-				return this.completePlayerNames(sender, args[1]);
+					return this.completePlayerNames(sender, args[1]);
 				return Collections.emptyList();
 			case "questbag":
 				if (sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
@@ -349,53 +333,54 @@ public class DeepQuestsNewCommand extends CoreCommand {
 				if (sender.hasPermission(P.COMMAND_DEEPQUESTS_MANAGER))
 					return this.complete(args[1], Quests.get().getManagersNames());
 				return Collections.emptyList();
-			}return Collections.emptyList();
+			}
+			return Collections.emptyList();
 		case 3:
 			switch (args[0].toLowerCase()) {
 			case "swapplayers":
 				if (sender.hasPermission(P.COMMAND_DEEPQUESTS_SWAPPLAYERS))
-				return this.completePlayerNames(sender, args[2]);
+					return this.completePlayerNames(sender, args[2]);
 				return Collections.emptyList();
 			case "questbag":
 				if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
 					return Collections.emptyList();
 				QuestManager qm = Quests.get().getQuestManager(args[1]);
-				if (qm==null)
+				if (qm == null)
 					return Collections.emptyList();
 				return this.complete(args[2], qm.getUsersArguments());
-			}return Collections.emptyList();
+			}
+			return Collections.emptyList();
 		case 4:
 			switch (args[0].toLowerCase()) {
 			case "questbag":
 				if (sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
-					return this.complete(args[3], new String[] {"add","remove"});
+					return this.complete(args[3], new String[] { "add", "remove" });
 				return Collections.emptyList();
-			}return Collections.emptyList();
-			case 5:
-				switch (args[0].toLowerCase()) {
-				case "questbag":
-					if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
-						return Collections.emptyList();
-					//TODO
+			}
+			return Collections.emptyList();
+		case 5:
+			switch (args[0].toLowerCase()) {
+			case "questbag":
+				if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
 					return Collections.emptyList();
-					/*QuestManager qm = Quests.get().getQuestManager(args[1]);
-					if (qm==null)
-						return Collections.emptyList();
-					User u = qm.getArgomentUser(args[2]);
-					if (u==null)
-						return Collections.emptyList();
-					QuestBag qb = u.getQuestBag();
-					qb.
-					return this.complete(args[4], qm.getUsersArguments());
-					*/
-				}return Collections.emptyList();
-			case 6:
-				switch (args[0].toLowerCase()) {
-				case "questbag":
-					if (sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
-						return this.complete(args[5], new String[] {"1","5","10"});
-					return Collections.emptyList();
-				}return Collections.emptyList();
+				// TODO
+				return Collections.emptyList();
+			/*
+			 * QuestManager qm = Quests.get().getQuestManager(args[1]); if (qm==null) return
+			 * Collections.emptyList(); User u = qm.getArgomentUser(args[2]); if (u==null)
+			 * return Collections.emptyList(); QuestBag qb = u.getQuestBag(); qb. return
+			 * this.complete(args[4], qm.getUsersArguments());
+			 */
+			}
+			return Collections.emptyList();
+		case 6:
+			switch (args[0].toLowerCase()) {
+			case "questbag":
+				if (sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
+					return this.complete(args[5], new String[] { "1", "5", "10" });
+				return Collections.emptyList();
+			}
+			return Collections.emptyList();
 		}
 		return Collections.emptyList();
 	}

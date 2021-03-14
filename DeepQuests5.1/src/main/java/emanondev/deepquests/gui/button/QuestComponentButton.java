@@ -1,6 +1,5 @@
 package emanondev.deepquests.gui.button;
 
-import emanondev.deepquests.gui.button.AButton;
 import emanondev.deepquests.gui.button.QuestComponentButton;
 import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.interfaces.QuestComponent;

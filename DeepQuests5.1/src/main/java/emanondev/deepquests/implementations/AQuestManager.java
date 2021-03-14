@@ -377,7 +377,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
 							e.printStackTrace();
 						}
 
-					for (int reqId : missionsDB.getIntegerList(PATH_QUESTS + "." + questId + "." + SUB_PATH_REQUIRES))
+					for (int reqId : questsDB.getIntegerList(PATH_QUESTS + "." + questId + "." + SUB_PATH_REQUIRES))
 						try {
 							Require<T> req = requires.get(reqId);
 							if (req == null)
@@ -1040,16 +1040,6 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
 			}
 
 		}
-	}
-
-	public void debug() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void debugClear() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

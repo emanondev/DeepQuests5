@@ -78,7 +78,7 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
 				this.permissionLackNotify(s, SEE_OTHERS);
 				return;
 			}
-			Player t = this.readPlayer(args[0]);
+			Player t = this.readPlayer(sender,args[0]);
 			if (t == null) {
 				// unexisting player
 				UtilsMessages.sendMessage(sender,
