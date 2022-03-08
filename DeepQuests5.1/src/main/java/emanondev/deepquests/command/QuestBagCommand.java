@@ -3,24 +3,17 @@ package emanondev.deepquests.command;
 import java.util.*;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 
 import emanondev.core.CoreCommand;
-import emanondev.core.ItemBuilder;
 import emanondev.core.PermissionBuilder;
 import emanondev.core.UtilsMessages;
-import emanondev.core.UtilsString;
+import emanondev.deepquests.ItemEditUtils;
 import emanondev.deepquests.Quests;
-import emanondev.deepquests.gui.button.Button;
-import emanondev.deepquests.gui.button.StaticButton;
 import emanondev.deepquests.gui.inventory.Gui;
-import emanondev.deepquests.gui.inventory.ListGui;
 import emanondev.deepquests.interfaces.*;
-import emanondev.itemedit.ItemEdit;
 
 public class QuestBagCommand<T extends User<T>> extends CoreCommand {
 
@@ -69,7 +62,8 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
 						.loadMessage("command." + this.getID() + ".no-items", "&cThis bag has no items"));
 				return;
 			}
-			Gui gui = craftGui(u, map, s);
+			Gui gui = ItemEditUtils.craftGui(u, map, s,this.getPlugin().getLanguageConfig(s)
+					.loadMessage("command." + this.getID() + ".gui-title", "&9Quest Bag"));
 			s.openInventory(gui.getInventory());
 			return;
 		}
@@ -107,7 +101,8 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
 						.loadMessage("command." + this.getID() + ".no-items", "&cThis bag has no items"));
 				return;
 			}
-			Gui gui = craftGui(u, map, s);
+			Gui gui = ItemEditUtils.craftGui(u, map, s,this.getPlugin().getLanguageConfig(s)
+					.loadMessage("command." + this.getID() + ".gui-title", "&9Quest Bag"));
 			s.openInventory(gui.getInventory());
 			return;
 		}
@@ -124,7 +119,7 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
 		return this.completePlayerNames(sender, args[0]);
 	}
 
-	public Gui craftGui(T target, Map<String, Integer> map, Player s) {
+	/*public Gui craftGui(T target, Map<String, Integer> map, Player s) {
 		LinkedHashMap<String, ItemStack> itemMap = new LinkedHashMap<>();
 		for (String id : map.keySet()) {
 			try {
@@ -146,6 +141,6 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
 		for (ItemStack item : itemMap.values())
 			gui.addButton(new StaticButton(item, gui));
 		return gui;
-	}
+	}*/
 
 }

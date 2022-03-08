@@ -1,0 +1,148 @@
+generic:
+    next_page:
+        - "&6Vai a pagina %target_page%"
+    previus_page:
+        - "&6Vai a pagina %target_page%"
+    next_page_item: ARROW
+    previus_page_item: ARROW
+    back_inventory:
+        - "&6Torna indietro"
+    close_inventory:
+        - "&9Chiudi"
+    back_inventory_item: OAK_DOOR
+    close_inventory_item: DARK_OAK_DOOR
+    empty_button_item: BLACK_STAINED_GLASS_PANE
+    command_for_players_only: "&cThis command is only for players"
+    lack_of_permission: "&cYou lack of permission %permission%"
+    amount_selector_show:
+        - "&6Amount: &e%amount%"
+    amount_selector_add: 
+        - "&aAdd %amount%"
+    amount_selector_remove: 
+        - "&cRemove %amount%"
+    whitelist_description:
+        - "&fWhitelist"
+    blacklist_description:
+        - "&fBlacklist"
+    null_element:
+        - "&fNone"
+    no_value_set: "&7 - No value is set"
+    invalid_number: "&cNot a number"
+    not_a_number: "&cInvalid number"
+    invalid_input: "&cInvalid input"
+    no_text_changes: "&cText didn't change"
+    confirm_click_gui_title: "&cConfirm?"
+    confirm_button_description:
+        - "&aClicca per confermare"
+    unconfirm_button_description:
+        - "&cCliccca per annullare"
+    confirm_button_item: LIME_WOOL
+    unconfirm_button_item: RED_WOOL
+    quests_menu_title: "quests"
+    missions_menu_title: "missions"
+    
+    
+playerquests:
+    questshowflag:
+        active:
+            locked:
+                item: RED_DYE
+                desc:
+                  - "&6Nascondi quest bloccate"
+            unstarted:
+                item: BLUE_DYE
+                desc:
+                  - "&6Nascondi quest da cominciare"
+            onprogress:
+                item: CYAN_DYE
+                desc:
+                  - "&6Nascondi quest in progresso"
+            cooldown:
+                item: ORANGE_DYE
+                desc:
+                  - "&6Nascondi quest in ricarica"
+            completed:
+                item: LIME_DYE
+                desc:
+                  - "&6Nascondi quest completate"
+            failed:
+                item: BLACK_DYE
+                desc:
+                  - "&6Nascondi quest fallite"
+        inactive:
+            locked:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra quest bloccate"
+            unstarted:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra quest da cominciare"
+            onprogress:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra quest in progresso"
+            cooldown:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra quest in ricarica"
+            completed:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra quest completate"
+            failed:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra quest fallite"
+    missionshowflag:
+        active:
+            locked:
+                item: RED_DYE
+                desc:
+                  - "&6Nascondi missioni bloccate"
+            unstarted:
+                item: BLUE_DYE
+                desc:
+                  - "&6Nascondi missioni da cominciare"
+            onprogress:
+                item: CYAN_DYE
+                desc:
+                  - "&6Nascondi missioni in progresso"
+            cooldown:
+                item: ORANGE_DYE
+                desc:
+                  - "&6Nascondi missioni in ricarica"
+            completed:
+                item: LIME_DYE
+                desc:
+                  - "&6Nascondi missioni completate"
+            failed:
+                item: BLACK_DYE
+                desc:
+                  - "&6Nascondi missioni fallite"
+        inactive:
+            locked:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra missioni bloccate"
+            unstarted:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra missioni da cominciare"
+            onprogress:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra missioni in progresso"
+            cooldown:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra missioni in ricarica"
+            completed:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra missioni completate"
+            failed:
+                item: GRAY_DYE
+                desc:
+                  - "&6Mostra missioni fallite"
+    

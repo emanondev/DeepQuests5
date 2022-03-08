@@ -46,7 +46,7 @@ public class DeepQuestItem extends ACommand {
 			map.get(p).onReicevedItem(null);
 		}
 		else
-			map.get(p).onReicevedItem(item);
+			map.get(p).onReicevedItem(new ItemStack(item));
 		map.remove(p);
 		return;
 	}

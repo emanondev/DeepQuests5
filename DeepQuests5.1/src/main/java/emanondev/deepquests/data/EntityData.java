@@ -335,7 +335,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
 
 			set.add(EntityType.SLIME);
 			set.add(EntityType.MAGMA_CUBE);
-			set.add(EntityType.PIG_ZOMBIE);
+			set.add(EntityType.ZOMBIFIED_PIGLIN);
 			set.add(EntityType.BLAZE);
 			set.add(EntityType.GHAST);
 			set.add(EntityType.WITHER_SKELETON);
@@ -506,7 +506,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
 			return new ItemBuilder(Material.PLAYER_HEAD).setGuiProperty().build();
 		case BLAZE:
 			return new ItemBuilder(Material.BLAZE_ROD).setGuiProperty().build();
-		case PIG_ZOMBIE:
+		case ZOMBIFIED_PIGLIN:
 			return new ItemBuilder(Material.GOLD_NUGGET).setGuiProperty().build();
 		case MAGMA_CUBE:
 			return new ItemBuilder(Material.MAGMA_CREAM).setGuiProperty().build();
