@@ -7,6 +7,7 @@ import emanondev.core.UtilsTowny;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.implementations.AUserManager;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
