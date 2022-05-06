@@ -166,7 +166,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
         if (isDeveloped == value)
             return;
         this.isDeveloped = value;
-        getConfig().set(Paths.QUEST_IS_DEVELOPED, isDeveloped?true:null);
+        getConfig().set(Paths.QUEST_IS_DEVELOPED, isDeveloped ? true : null);
     }
 
     @Override

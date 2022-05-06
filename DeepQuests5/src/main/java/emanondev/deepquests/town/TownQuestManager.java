@@ -1,8 +1,6 @@
 package emanondev.deepquests.town;
 
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import emanondev.core.CorePlugin;
 import emanondev.deepquests.gui.button.GuiElementButton;
@@ -67,9 +65,7 @@ public class TownQuestManager extends AQuestManager<QuestTown> {
     @Override
     public QuestTown getArgomentUser(String argument) {
         try {
-            return getUserManager().getUser(TownyAPI.getInstance().getDataSource().getTown(argument));
-        } catch (NotRegisteredException e) {
-            return null;
+            return getUserManager().getUser(TownyUniverse.getInstance().getTown(argument));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -79,7 +75,7 @@ public class TownQuestManager extends AQuestManager<QuestTown> {
     @Override
     public Collection<String> getUsersArguments() {
         HashSet<String> names = new HashSet<>();
-        for (Town town:TownyUniverse.getInstance().getTowns())
+        for (Town town : TownyUniverse.getInstance().getTowns())
             names.add(town.getName());
         return names;
     }

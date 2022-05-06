@@ -82,7 +82,7 @@ public abstract class CollectionSelectorButton<E> extends AButton {
         }
 
         @Override
-        public int loadPreviusPageButtonPosition() {
+        public int loadPreviousPageButtonPosition() {
             return 6;
         }
 

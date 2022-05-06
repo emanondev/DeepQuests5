@@ -18,7 +18,7 @@ import java.util.List;
 
 public class PartyQuestManager extends AQuestManager<QuestParty> {
 
-    private PartyUserManager userManager;
+    private final PartyUserManager userManager;
     public final static String NAME = "parties";
 
     public PartyQuestManager(String name, CorePlugin plugin) {
@@ -36,7 +36,7 @@ public class PartyQuestManager extends AQuestManager<QuestParty> {
 
     @Override
     public SortableButton getEditorButton(Gui parent) {
-        return new GuiElementButton<PartyQuestManager>(parent, this);
+        return new GuiElementButton<>(parent, this);
     }
 
     @Override

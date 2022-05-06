@@ -23,26 +23,21 @@ public abstract class PagedChestGui extends ChestGui implements PagedGui {
         for (int i = 0; i < 9; i++)
             getInventory().setItem(getInventorySize() - 9 + i, GuiConfig.Generic.EMPTY_BUTTON_ITEM);
 
-        if (this.loadPreviusPageButtonPosition() >= 0 && this.loadPreviusPageButtonPosition() < 9)
-            setControlButton(loadPreviusPageButtonPosition(), new PreviusPageButton(this));
+        if (this.loadPreviousPageButtonPosition() >= 0 && this.loadPreviousPageButtonPosition() < 9)
+            setControlButton(loadPreviousPageButtonPosition(), new PreviusPageButton(this));
 
         if (this.loadNextPageButtonPosition() >= 0 && this.loadNextPageButtonPosition() < 9)
-            Bukkit.getScheduler().runTaskLater(Quests.get(), new Runnable() {
-                public void run() {
-                    setControlButton(loadNextPageButtonPosition(), new NextPageButton(PagedChestGui.this));
-                }
-            }, 1);
+            Bukkit.getScheduler().runTaskLater(Quests.get(), () -> setControlButton(loadNextPageButtonPosition(), new NextPageButton(PagedChestGui.this)), 1);
 
         if (this.loadBackButtonPosition() >= 0 && this.loadBackButtonPosition() < 9)
             setControlButton(loadBackButtonPosition(), new BackButton(this));
     }
 
-    private String rawTitle;
+    private final String rawTitle;
 
     private Inventory getInventory(int page) {
-        Inventory inv = Bukkit.createInventory(this, getInventorySize(),
+        return Bukkit.createInventory(this, getInventorySize(),
                 Utils.fixString(rawTitle, getTargetPlayer(), true, GuiConfig.PAGE_HOLDER, String.valueOf(page)));
-        return inv;
     }
 
     private int page;
@@ -74,15 +69,8 @@ public abstract class PagedChestGui extends ChestGui implements PagedGui {
                 getInventory().setItem(getInventorySize() - 9 + i, controlButtons[i].getItem());
     }
 
-    /**
-     * @param inv
-     * @param page
-     * <p>
-     * has to set all of the button's items on inv
-     */
-    //protected abstract void setInventoryPage(Inventory inv);
 
-    private Button[] controlButtons = new Button[9];
+    private final Button[] controlButtons = new Button[9];
 
     /**
      * control buttons are the last line buttons
@@ -100,50 +88,30 @@ public abstract class PagedChestGui extends ChestGui implements PagedGui {
     public int getMaxPage() {
         return (getMaxSlot() - 1) / (getInventorySize() - 9) + 1;
     }
-	
-	/*
-	private PreviusPageButton previusPageButton = new PreviusPageButton(this);
-	private NextPageButton nextPageButton = new NextPageButton(this);
-	private BackButton backButton = new BackButton(this);
-	
-	public NextPageButton getNextPageButton() {
-		return nextPageButton;
-	}
-	public PreviusPageButton getPreviusPageButton() {
-		return previusPageButton;
-	}
-	public BackButton getBackButton() {
-		return backButton;
-	}*/
+
 
     /**
-     * @param pos - last line slot 0 to 8 or anything else if won't show
-     *            <p>
-     *            override to change position (default 2)
-     *            <p>
-     *            warning this method is called in the constructor
+     * override to change position (default 2)
+     * <p>
+     * warning this method is called in the constructor
      */
-    protected int loadPreviusPageButtonPosition() {
+    protected int loadPreviousPageButtonPosition() {
         return 2;
     }
 
     /**
-     * @param pos - last line slot 0 to 8 or anything else if won't show
-     *            <p>
-     *            override to change position (default 6)
-     *            <p>
-     *            warning this method is called in the constructor
+     * override to change position (default 6)
+     * <p>
+     * warning this method is called in the constructor
      */
     protected int loadNextPageButtonPosition() {
         return 6;
     }
 
     /**
-     * @param pos - last line slot 0 to 8 or anything else if won't show
-     *            <p>
-     *            override to change position (default 8)
-     *            <p>
-     *            warning this method is called in the constructor
+     * override to change position (default 8)
+     * <p>
+     * warning this method is called in the constructor
      */
     protected int loadBackButtonPosition() {
         return 8;

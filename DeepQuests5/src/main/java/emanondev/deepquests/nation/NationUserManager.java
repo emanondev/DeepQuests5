@@ -1,10 +1,9 @@
 package emanondev.deepquests.nation;
 
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
+import emanondev.core.UtilsTowny;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.implementations.AUserManager;
 import org.bukkit.Bukkit;
@@ -20,7 +19,7 @@ import java.util.Map;
 
 public class NationUserManager extends AUserManager<QuestNation> implements Listener {
 
-    private Map<Nation, QuestNation> users = new HashMap<>();
+    private final Map<Nation, QuestNation> users = new HashMap<>();
 
     public NationUserManager(NationQuestManager questManager) {
         super(questManager);
@@ -40,7 +39,7 @@ public class NationUserManager extends AUserManager<QuestNation> implements List
     @Override
     public QuestNation getUser(String uuid) {
         for (Nation nation : users.keySet())
-            if (nation.getUuid().toString().equals(uuid))
+            if (nation.getUUID().toString().equals(uuid))
                 return users.get(nation);
         return null;
     }
@@ -48,8 +47,7 @@ public class NationUserManager extends AUserManager<QuestNation> implements List
     @Override
     public QuestNation getUser(Player p) {
         try {
-            Resident r = TownyAPI.getInstance().getDataSource().getResident(p.getName());
-            return r.hasNation() ? users.get(r.getTown().getNation()) : null;
+            return users.get(UtilsTowny.getNation(p));
         } catch (Exception e) {
             return null;
         }
@@ -76,7 +74,7 @@ public class NationUserManager extends AUserManager<QuestNation> implements List
     public void reload() {
         saveAll();
         users.clear();
-        for (Nation nation : TownyAPI.getInstance().getDataSource().getNations()) {
+        for (Nation nation : UtilsTowny.getNations()) {
             if (!users.containsKey(nation)) {
                 QuestNation questUser = new QuestNation(this, nation);
                 users.put(nation, questUser);

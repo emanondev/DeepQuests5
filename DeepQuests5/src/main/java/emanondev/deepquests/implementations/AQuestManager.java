@@ -274,7 +274,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
                                     mission.addTask(task);
                                     tasks.put(taskId, task);
 
-									for (int rewId : tasksDB
+                                    for (int rewId : tasksDB
                                             .getIntegerList(PATH_TASKS + "." + taskId + "." + SUB_PATH_PROGRESS_REWARDS))
                                         try {
                                             Reward<T> rew = rewards.get(rewId);

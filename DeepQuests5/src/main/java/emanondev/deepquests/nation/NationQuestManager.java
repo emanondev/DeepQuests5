@@ -1,10 +1,7 @@
 package emanondev.deepquests.nation;
 
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Town;
 import emanondev.core.CorePlugin;
 import emanondev.deepquests.gui.button.GuiElementButton;
 import emanondev.deepquests.gui.button.SortableButton;
@@ -54,8 +51,8 @@ public class NationQuestManager extends AQuestManager<QuestNation> {
 
     protected class EditorGui extends AQuestManager<QuestNation>.EditorGui {
 
-        public EditorGui(Player player, Gui previusHolder) {
-            super(player, previusHolder);
+        public EditorGui(Player player, Gui previousHolder) {
+            super(player, previousHolder);
         }
 
     }
@@ -68,9 +65,7 @@ public class NationQuestManager extends AQuestManager<QuestNation> {
     @Override
     public QuestNation getArgomentUser(String argument) {
         try {
-            return getUserManager().getUser(TownyAPI.getInstance().getDataSource().getNation(argument));
-        } catch (NotRegisteredException e) {
-            return null;
+            return getUserManager().getUser(TownyUniverse.getInstance().getNation(argument));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -80,7 +75,7 @@ public class NationQuestManager extends AQuestManager<QuestNation> {
     @Override
     public Collection<String> getUsersArguments() {
         HashSet<String> names = new HashSet<>();
-        for (Nation nation:TownyUniverse.getInstance().getNations())
+        for (Nation nation : TownyUniverse.getInstance().getNations())
             names.add(nation.getName());
         return names;
     }

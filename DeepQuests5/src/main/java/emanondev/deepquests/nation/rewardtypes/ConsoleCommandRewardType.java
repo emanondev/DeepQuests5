@@ -43,11 +43,11 @@ public class ConsoleCommandRewardType extends ARewardType<QuestNation> {
     }
 
     public class ConsoleCommandReward extends AReward<QuestNation> {
-        private CommandData<QuestNation, ConsoleCommandReward> cmdData;
+        private final CommandData<QuestNation, ConsoleCommandReward> cmdData;
 
         public ConsoleCommandReward(int id, QuestManager<QuestNation> manager, YMLSection section) {
             super(id, manager, ConsoleCommandRewardType.this, section);
-            cmdData = new CommandData<QuestNation, ConsoleCommandReward>(this,
+            cmdData = new CommandData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_COMMAND));
         }
 
@@ -79,8 +79,8 @@ public class ConsoleCommandRewardType extends ARewardType<QuestNation> {
 
         private class GuiEditor extends ARewardGuiEditor {
 
-            public GuiEditor(Player player, Gui previusHolder) {
-                super(player, previusHolder);
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
                 this.putButton(27, cmdData.getCommandEditorButton(this));
             }
         }
@@ -88,9 +88,8 @@ public class ConsoleCommandRewardType extends ARewardType<QuestNation> {
 
     @Override
     public String getDefaultFeedback(Reward<QuestNation> reward) {
-        if (!(reward instanceof ConsoleCommandRewardType.ConsoleCommandReward))
+        if (!(reward instanceof ConsoleCommandReward r))
             return null;
-        ConsoleCommandReward r = (ConsoleCommandReward) reward;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.REWARD_FEEDBACK, null);
         if (txt == null) {

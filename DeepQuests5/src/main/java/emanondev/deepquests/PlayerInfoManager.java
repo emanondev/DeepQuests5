@@ -37,7 +37,7 @@ public class PlayerInfoManager implements Listener {
     }
 
     PlayerInfoManager() {
-		loadAll();
+        loadAll();
         Bukkit.getPluginManager().registerEvents(this, Quests.get());
     }
 

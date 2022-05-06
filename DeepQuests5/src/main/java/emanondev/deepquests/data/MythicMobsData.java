@@ -11,9 +11,9 @@ import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
-import io.lumine.xikage.mythicmobs.MythicMobs;
-import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
-import io.lumine.xikage.mythicmobs.mobs.MythicMob;
+import io.lumine.mythic.api.MythicProvider;
+import io.lumine.mythic.api.mobs.MythicMob;
+import io.lumine.mythic.core.mobs.ActiveMob;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -226,7 +226,7 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
         @Override
         public Collection<String> getPossibleValues() {
             TreeSet<String> set = new TreeSet<>();
-            for (MythicMob mob : MythicMobs.inst().getMobManager().getMobTypes())
+            for (MythicMob mob : MythicProvider.get().getMobManager().getMobTypes())
                 set.add(mob.getInternalName());
             return set;
         }
@@ -256,16 +256,18 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
 
         @Override
         public List<String> getElementDescription(String element) {
-            MythicMob mob = MythicMobs.inst().getMobManager().getMythicMob(element);
             ArrayList<String> desc = new ArrayList<>();
             desc.add("&9Type: &e" + element);
-            if (mob != null) {
-                desc.add("&9DisplayName: '&r" + mob.getDisplayName() + "&9'");
-                desc.add("&9EntityType: &e" + mob.getEntityType());
-                desc.add("&9Health: &e" + mob.getHealth());
-                desc.add("&9Damage: &e" + mob.getDamage());
-                desc.add("&9Armor: &e" + mob.getArmor());
-            }
+            Optional<MythicMob> optional = MythicProvider.get().getMobManager().getMythicMob(element);
+            if (optional.isEmpty())
+                return desc;
+            MythicMob mob = optional.get();
+            desc.add("&9DisplayName: '&r" + mob.getDisplayName() + "&9'");
+            desc.add("&9EntityType: &e" + mob.getEntityType());
+            desc.add("&9Health: &e" + mob.getHealth());
+            desc.add("&9Damage: &e" + mob.getDamage());
+            desc.add("&9Armor: &e" + mob.getArmor());
+
             return desc;
         }
 

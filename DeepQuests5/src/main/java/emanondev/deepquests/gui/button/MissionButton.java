@@ -9,11 +9,11 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class MissionButton extends QuestComponentButton<Mission> {
-    private final User user;
+public class MissionButton<T extends User<T>> extends QuestComponentButton<Mission<T>> {
+    private final T user;
     private DisplayState state;
 
-    public MissionButton(Gui parent, Mission questComponent, User user) {
+    public MissionButton(Gui parent, Mission<T> questComponent, T user) {
         super(parent, questComponent);
         this.user = user;
         state = user.getDisplayState(getQuestComponent());
@@ -42,6 +42,10 @@ public class MissionButton extends QuestComponentButton<Mission> {
 
     public User getUser() {
         return user;
+    }
+
+    public Mission<T> getQuestComponent() {
+        return super.getQuestComponent();
     }
 
 }

@@ -3,7 +3,7 @@ package emanondev.deepquests.parties;
 import com.alessiodp.parties.api.Parties;
 import com.alessiodp.parties.api.events.bukkit.party.BukkitPartiesPartyPostCreateEvent;
 import com.alessiodp.parties.api.events.bukkit.party.BukkitPartiesPartyPreDeleteEvent;
-import com.alessiodp.parties.api.events.bukkit.party.BukkitPartiesPartyRenameEvent;
+import com.alessiodp.parties.api.events.bukkit.party.BukkitPartiesPartyPreRenameEvent;
 import com.alessiodp.parties.api.interfaces.Party;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import emanondev.deepquests.Quests;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class PartyUserManager extends AUserManager<QuestParty> implements Listener {
 
-    private Map<Party, QuestParty> users = new HashMap<>();
+    private final Map<Party, QuestParty> users = new HashMap<>();
 
     public PartyUserManager(PartyQuestManager questManager) {
         super(questManager);
@@ -71,7 +71,7 @@ public class PartyUserManager extends AUserManager<QuestParty> implements Listen
 
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onPlayerQuit(BukkitPartiesPartyRenameEvent event) {
+    private void onPlayerQuit(BukkitPartiesPartyPreRenameEvent event) {
         event.setCancelled(true);
         Bukkit.getPlayer(event.getPartyPlayer().getPlayerUUID())
                 .sendMessage("Evento incompatibile con le quest");

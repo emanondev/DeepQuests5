@@ -1,6 +1,6 @@
-name: DeepQuests5
-main: emanondev.deepquests.Quests
-version: 5.1
+name: ${project.name}
+main: ${groupId}.Quests
+version: ${project.version}
 author: emanon
 depend: [ DeepCore ]
 softdepend: [ ItemEdit,Factions,Towny,SuperVanish,PremiumVanish,Mcmmo,VirginBlock,WorldGuard,PlaceHolderAPI,Citizens,MythicMobs,WorldGuardRegionAPI,Jobs,SkillAPI,Parties,CMI ]

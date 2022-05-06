@@ -8,7 +8,10 @@ import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasCooldown<T>, QuestComponent<T> {
 

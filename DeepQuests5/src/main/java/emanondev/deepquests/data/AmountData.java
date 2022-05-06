@@ -25,8 +25,8 @@ public class AmountData<T extends User<T>, E extends QuestComponent<T>> extends 
 
     public AmountData(E parent, YMLSection section, int min, int max, int defaultAmount) {
         super(parent, section);
-        this.minAmount = Math.min(min,max);
-        this.maxAmount = Math.max(min,max);
+        this.minAmount = Math.min(min, max);
+        this.maxAmount = Math.max(min, max);
         if (this.minAmount > defaultAmount || defaultAmount > this.maxAmount)
             new IllegalArgumentException().printStackTrace();
 

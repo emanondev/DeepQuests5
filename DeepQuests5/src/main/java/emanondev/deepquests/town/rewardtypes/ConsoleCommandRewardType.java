@@ -43,11 +43,11 @@ public class ConsoleCommandRewardType extends ARewardType<QuestTown> {
     }
 
     public class ConsoleCommandReward extends AReward<QuestTown> {
-        private CommandData<QuestTown, ConsoleCommandReward> cmdData;
+        private final CommandData<QuestTown, ConsoleCommandReward> cmdData;
 
         public ConsoleCommandReward(int id, QuestManager<QuestTown> manager, YMLSection section) {
             super(id, manager, ConsoleCommandRewardType.this, section);
-            cmdData = new CommandData<QuestTown, ConsoleCommandReward>(this,
+            cmdData = new CommandData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_COMMAND));
         }
 
@@ -88,9 +88,8 @@ public class ConsoleCommandRewardType extends ARewardType<QuestTown> {
 
     @Override
     public String getDefaultFeedback(Reward<QuestTown> reward) {
-        if (!(reward instanceof ConsoleCommandRewardType.ConsoleCommandReward))
+        if (!(reward instanceof ConsoleCommandReward r))
             return null;
-        ConsoleCommandReward r = (ConsoleCommandReward) reward;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.REWARD_FEEDBACK, null);
         if (txt == null) {

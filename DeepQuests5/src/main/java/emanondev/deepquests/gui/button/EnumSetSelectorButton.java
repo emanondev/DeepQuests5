@@ -84,7 +84,7 @@ public abstract class EnumSetSelectorButton<E extends Enum<E>> extends AButton {
         }
 
         @Override
-        public int loadPreviusPageButtonPosition() {
+        public int loadPreviousPageButtonPosition() {
             return 6;
         }
 

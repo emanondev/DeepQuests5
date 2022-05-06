@@ -86,7 +86,7 @@ public abstract class GuiElementSelectorButton<T extends GuiElement> extends ABu
         }
 
         @Override
-        public int loadPreviusPageButtonPosition() {
+        public int loadPreviousPageButtonPosition() {
             return 6;
         }
 

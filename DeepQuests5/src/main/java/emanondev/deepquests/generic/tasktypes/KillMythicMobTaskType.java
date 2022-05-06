@@ -16,7 +16,7 @@ import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
+import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
