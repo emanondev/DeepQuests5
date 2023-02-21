@@ -47,11 +47,11 @@ public class LeaveRegionTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     public class LeaveRegionTask extends ATask<T> {
-        private RegionsData<T, LeaveRegionTask> regionInfo = null;
+        private final RegionsData<T, LeaveRegionTask> regionInfo;
 
         public LeaveRegionTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, LeaveRegionTaskType.this, section);
-            regionInfo = new RegionsData<T, LeaveRegionTask>(this,
+            regionInfo = new RegionsData<>(this,
                     getConfig().loadSection(Paths.TASK_INFO_REGIONSDATA));
         }
 
@@ -103,9 +103,8 @@ public class LeaveRegionTaskType<T extends User<T>> extends ATaskType<T> {
 
     @Override
     public String getDefaultUnstartedDescription(Task<T> task) {
-        if (!(task instanceof LeaveRegionTaskType.LeaveRegionTask))
+        if (!(task instanceof LeaveRegionTask t))
             return null;
-        LeaveRegionTask t = (LeaveRegionTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.UNSTARTED), null);
         if (txt == null) {
@@ -118,9 +117,8 @@ public class LeaveRegionTaskType<T extends User<T>> extends ATaskType<T> {
 
     @Override
     public String getDefaultCompleteDescription(Task<T> task) {
-        if (!(task instanceof LeaveRegionTaskType.LeaveRegionTask))
+        if (!(task instanceof LeaveRegionTask t))
             return null;
-        LeaveRegionTask t = (LeaveRegionTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.COMPLETE), null);
         if (txt == null) {
@@ -133,9 +131,8 @@ public class LeaveRegionTaskType<T extends User<T>> extends ATaskType<T> {
 
     @Override
     public String getDefaultProgressDescription(Task<T> task) {
-        if (!(task instanceof LeaveRegionTaskType.LeaveRegionTask))
+        if (!(task instanceof LeaveRegionTask t))
             return null;
-        LeaveRegionTask t = (LeaveRegionTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.PROGRESS), null);
         if (txt == null) {

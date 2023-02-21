@@ -38,14 +38,6 @@ public class ConfigAPI {
     public static boolean writeToFile(File file, Navigator nav) {
         try {
             String txt = asString(nav);
-			/*BufferedWriter writer = null;
-			try {
-				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8));
-				writer.write(txt);
-				writer.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}*/
 
             Files.write(file.toPath(), Arrays.asList(txt.split("\n")), StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);

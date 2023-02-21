@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.ClickType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CommandData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
 
@@ -31,11 +32,9 @@ public class CommandData<T extends User<T>, E extends QuestComponent<T>> extends
     }
 
     public void setCommand(String value) {
-        if (this.command == value)
+        if (Objects.equals(this.command, value))
             return;
         if (value != null && value.isEmpty())
-            return;
-        if (this.command != null && this.command.equals(value))
             return;
         this.command = value;
         getConfig().set(Paths.DATA_COMMAND, command);

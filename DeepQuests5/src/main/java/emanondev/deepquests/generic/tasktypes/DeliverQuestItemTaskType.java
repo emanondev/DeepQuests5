@@ -42,7 +42,7 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onRightClick(NPCRightClickEvent event) {
-        Player p = (Player) event.getClicker();
+        Player p = event.getClicker();
         T user = getManager().getUserManager().getUser(p);
         if (user == null)
             return;

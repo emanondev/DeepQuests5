@@ -48,30 +48,6 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         return enabled;
     }
 
-	/*
-	@Override
-	public Navigator getNavigator() {
-		getConfig().setBoolean("is-enabled", this.enabled);
-		getConfig().setBoolean("check-amount",this.doCheckAmount);
-		getConfig().setInteger("amount-value", this.amountValue);
-		getConfig().setBoolean("check-damage", this.doCheckDamage);
-		getConfig().setInteger("damage-value", this.damageValue);
-		getConfig().setBoolean("easy-check", this.easyCheck);
-		getConfig().setBoolean("check-unbreakable", this.doCheckUnbreakable);
-		getConfig().setBoolean("unbreakable-value", this.unbreakableValue);
-		getConfig().setBoolean("check-display-name", this.doCheckDisplayName);
-		getConfig().setString("display-name-value", this.displayNameValue);
-		getConfig().setBoolean("check-lore", this.doCheckLore);
-		getConfig().setStringList("lore-value", this.loreValue);
-		getConfig().setBoolean("check-flags", this.doCheckFlags);
-		getConfig().setEnumCollection("flags-value", flagValues);
-		getConfig().setBoolean("check-enchants", this.doCheckEnchants);
-		getConfig().setBoolean("check-attributes", this.doCheckAttributes);
-		getConfig().setBoolean("use-placeholderapi", this.usePlaceHolder);
-		//TODO ench list
-		return nav;
-	}*/
-
     private boolean enabled = false;
     private ItemStack item = null;
 
@@ -103,7 +79,6 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
     private final HashMap<Enchantment, EnchantCheck> enchMap = new HashMap<>();
 
     private boolean doCheckAttributes = true;
-    //private HashMap<Enchantment,EnchantCheckType> enchMap = new HashMap<>();
 
     private boolean usePlaceHolder = true;
 
@@ -199,7 +174,7 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         return true;
     }
 
-    private class EnchantCheck {
+    private static class EnchantCheck {
         private EnchantCheckType type;
         private int level;
 
@@ -221,20 +196,14 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         }
 
         private boolean check(int level) {
-            switch (type) {
-                case DIFFERENT:
-                    return this.level != level;
-                case EQUALS:
-                    return this.level == level;
-                case EQUALS_OR_HIGHTER:
-                    return this.level <= level;
-                case EQUALS_OR_LOWER:
-                    return this.level >= level;
-                case NONE:
-                    return true;
-                default:
-                    throw new IllegalStateException();
-            }
+            return switch (type) {
+                case DIFFERENT -> this.level != level;
+                case EQUALS -> this.level == level;
+                case EQUALS_OR_HIGHTER -> this.level <= level;
+                case EQUALS_OR_LOWER -> this.level >= level;
+                case NONE -> true;
+                default -> throw new IllegalStateException();
+            };
         }
     }
 
@@ -339,7 +308,7 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
 
 
     private class EnableToolCheckFlag extends FlagButton {
-        private String title;
+        private final String title;
 
         public EnableToolCheckFlag(String title, Gui parent) {
             super(new ItemBuilder(Material.RED_BANNER).setGuiProperty().build(),
@@ -499,7 +468,7 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         if (easyCheck)
             return list;
         if (doCheckDisplayName)
-            list.add("  &9DisplayName: &e" + displayNameValue == null ? "&cNONE" : displayNameValue);
+            list.add("  &9DisplayName: &e" + (displayNameValue == null ? "&cNONE" : displayNameValue));
         else
             list.add("  &9DisplayName: &7Not Checked");
 

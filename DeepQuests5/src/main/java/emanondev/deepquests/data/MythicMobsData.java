@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
-    private final Set<String> internalNames = new TreeSet<String>();
+    private final Set<String> internalNames = new TreeSet<>();
     private boolean internalNamesIsWhitelist = true;
     private int minLv = 0;
     private int maxLv = 1;
@@ -34,7 +34,7 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
                 internalNamesIsWhitelist);
         minLv = getConfig().getInteger(Paths.MYTHICMOBDATA_MIN_LV, minLv);
         maxLv = getConfig().getInteger(Paths.MYTHICMOBDATA_MAX_LV, maxLv);
-        internalNames.addAll(getConfig().getStringList(Paths.MYTHICMOBDATA_INTERNAL_NAMES, new ArrayList<String>()));
+        internalNames.addAll(getConfig().getStringList(Paths.MYTHICMOBDATA_INTERNAL_NAMES, new ArrayList<>()));
     }
 
     public boolean isValidMythicMob(ActiveMob mob) {

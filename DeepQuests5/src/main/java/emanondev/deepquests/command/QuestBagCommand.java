@@ -43,7 +43,7 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
             return;
         }
         switch (args.length) {
-            case 0: {
+            case 0 -> {
                 T u = manager.getUserManager().getUser(s);
                 if (u == null) {
                     // no user
@@ -67,9 +67,8 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
                 Gui gui = ItemEditUtils.craftGui(u, map, s, this.getPlugin().getLanguageConfig(s)
                         .loadMessage("command." + this.getID() + ".gui-title", "&9Quest Bag"));
                 s.openInventory(gui.getInventory());
-                return;
             }
-            case 1: {
+            case 1 -> {
                 if (!s.hasPermission(SEE_OTHERS)) {
                     this.permissionLackNotify(s, SEE_OTHERS);
                     return;
@@ -106,11 +105,9 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
                 Gui gui = ItemEditUtils.craftGui(u, map, s, this.getPlugin().getLanguageConfig(s)
                         .loadMessage("command." + this.getID() + ".gui-title", "&9Quest Bag"));
                 s.openInventory(gui.getInventory());
-                return;
             }
-            default:
-                UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
-                        .loadMessage("command." + this.getID() + ".help", "&c/%alias% [player]", "%alias%", alias));
+            default -> UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
+                    .loadMessage("command." + this.getID() + ".help", "&c/%alias% [player]", "%alias%", alias));
         }
     }
 
@@ -120,29 +117,5 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
             return new ArrayList<>();
         return this.completePlayerNames(sender, args[0]);
     }
-
-	/*public Gui craftGui(T target, Map<String, Integer> map, Player s) {
-		LinkedHashMap<String, ItemStack> itemMap = new LinkedHashMap<>();
-		for (String id : map.keySet()) {
-			try {
-				ItemStack stack = ItemEdit.get().getServerStorage().getItem(id);
-				if (stack==null)
-					stack = new ItemBuilder(Material.STONE).setDisplayName("???").setGuiProperty().build();
-				itemMap.put(id,
-						new ItemBuilder(stack)
-								.setAmount(map.get(id) > 100 ? 101 : map.get(id))
-								.setDisplayName(stack.getItemMeta().getDisplayName() + UtilsString.fix(" &7[x &f" + map.get(id) + "&7]",null,true))
-								.build());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		ListGui<Button> gui = new ListGui<Button>(this.getPlugin().getLanguageConfig(s)
-				.loadMessage("command." + this.getID() + ".gui-title", "&9Quest Bag"), 6, s, null);
-		for (ItemStack item : itemMap.values())
-			gui.addButton(new StaticButton(item, gui));
-		return gui;
-	}*/
 
 }

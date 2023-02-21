@@ -17,33 +17,30 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
-    private HashSet<RPGClass> classes = new HashSet<>();
-    private HashSet<String> groups = new HashSet<>();
+    private final HashSet<RPGClass> classes = new HashSet<>();
+    private final HashSet<String> groups = new HashSet<>();
     private boolean classesIsWhitelist = false;
     private boolean groupsIsWhitelist = false;
 
     public SkillAPIClassData(E parent, YMLSection section) {
         super(parent, section);
         List<String> classNames = getConfig().getStringList(Paths.DATA_SKILLAPI_CLASSES, null);
-        if (classNames != null)
-            for (String className : classNames) {
-                RPGClass clazz = SkillAPI.getClass(className);
-                if (clazz == null)
-                    new IllegalArgumentException("Couldn't find RPGClass '" + className + "' skipping it")
-                            .printStackTrace();
-                else
-                    classes.add(clazz);
-            }
+        for (String className : classNames) {
+            RPGClass clazz = SkillAPI.getClass(className);
+            if (clazz == null)
+                new IllegalArgumentException("Couldn't find RPGClass '" + className + "' skipping it")
+                        .printStackTrace();
+            else
+                classes.add(clazz);
+        }
         List<String> groupNames = getConfig().getStringList(Paths.DATA_SKILLAPI_GROUPS, null);
-        if (groupNames != null) {
-            for (String groupName : groupNames) {
-                if (SkillAPI.getGroups().contains(groupName))
-                    new IllegalArgumentException("Couldn't find SkillAPI group '" + groupName + "' skipping it")
-                            .printStackTrace();
-                else
-                    groups.add(groupName);
-            }
-        } // else
+        for (String groupName : groupNames) {
+            if (SkillAPI.getGroups().contains(groupName))
+                new IllegalArgumentException("Couldn't find SkillAPI group '" + groupName + "' skipping it")
+                        .printStackTrace();
+            else
+                groups.add(groupName);
+        }
         // groups.add(SkillAPI.getSettings().getMainGroup());
         classesIsWhitelist = getConfig().getBoolean(Paths.DATA_SKILLAPI_CLASSES_IS_WHITELIST, classesIsWhitelist);
         groupsIsWhitelist = getConfig().getBoolean(Paths.DATA_SKILLAPI_GROUPS_IS_WHITELIST, groupsIsWhitelist);

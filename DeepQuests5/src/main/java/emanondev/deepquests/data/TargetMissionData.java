@@ -82,11 +82,10 @@ public class TargetMissionData<T extends User<T>, E extends QuestComponent<T>> e
         @Override
         public void onElementSelectRequest(Quest<T> element, Player p) {
             new MissionSelector(getGui(), element).onClick(p, ClickType.LEFT);
-            ;
         }
 
         private class MissionSelector extends GuiElementSelectorButton<Mission<T>> {
-            private Quest<T> quest;
+            private final Quest<T> quest;
 
             public MissionSelector(Gui parent, Quest<T> quest) {
                 super("&9Select a Mission", new ItemBuilder(Material.BOOK).setGuiProperty().build(), parent, true, true,
@@ -101,8 +100,7 @@ public class TargetMissionData<T extends User<T>, E extends QuestComponent<T>> e
 
             @Override
             public Collection<Mission<T>> getValues() {
-                Collection<Mission<T>> res = quest.getMissions();
-                return res;
+                return quest.getMissions();
             }
 
             @Override

@@ -108,7 +108,6 @@ abstract class AQuestComponentWithWorlds<T extends User<T>> extends AQuestCompon
                 desc.add("&9World: &6" + element.getName());
                 desc.add("");
                 desc.add("&9Level Type: &e" + element.getEnvironment());
-                desc.add("&9Type: &e" + element.getWorldType());
                 desc.add("&9Difficulty: &e" + element.getDifficulty());
                 desc.add("&9Pvp: &e" + (element.getPVP() ? "on" : "off"));
                 desc.add("&9Monster: &e" + (element.getAllowMonsters() ? "Allowed" : "Disabled"));
@@ -117,16 +116,12 @@ abstract class AQuestComponentWithWorlds<T extends User<T>> extends AQuestCompon
 
             @Override
             public ItemStack getElementItem(World element) {
-                switch (element.getEnvironment()) {
-                    case NETHER:
-                        return new ItemBuilder(Material.NETHERRACK).setGuiProperty().build();
-                    case NORMAL:
-                        return new ItemBuilder(Material.GRASS_BLOCK).setGuiProperty().build();
-                    case THE_END:
-                        return new ItemBuilder(Material.END_STONE).setGuiProperty().build();
-                    default:
-                        return new ItemBuilder(Material.BEDROCK).setGuiProperty().build();
-                }
+                return switch (element.getEnvironment()) {
+                    case NETHER -> new ItemBuilder(Material.NETHERRACK).setGuiProperty().build();
+                    case NORMAL -> new ItemBuilder(Material.GRASS_BLOCK).setGuiProperty().build();
+                    case THE_END -> new ItemBuilder(Material.END_STONE).setGuiProperty().build();
+                    default -> new ItemBuilder(Material.BEDROCK).setGuiProperty().build();
+                };
             }
 
             @Override

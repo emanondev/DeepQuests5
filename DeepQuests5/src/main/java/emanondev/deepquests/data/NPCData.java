@@ -17,7 +17,7 @@ import java.util.*;
 
 public class NPCData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private final Set<Integer> ids = new TreeSet<>();
-    private boolean isListWhitelist = true;
+    private boolean isListWhitelist;
 
     public NPCData(E parent, YMLSection section) {
         super(parent, section);
@@ -45,11 +45,6 @@ public class NPCData<T extends User<T>, E extends QuestComponent<T>> extends Que
         isListWhitelist = !isListWhitelist;
         getConfig().set(Paths.DATA_NPC_ID_LIST_IS_WHITELIST, isListWhitelist);
     }
-    /*
-     * public boolean setWhitelist(boolean value) { if (value==isListWhitelist)
-     * return false; isListWhitelist = value; return true; }/* public boolean
-     * areNPCWhitelisted() { return isListWhitelist; }
-     */
 
     public boolean isValidNPC(NPC npc) {
         if (npc == null)

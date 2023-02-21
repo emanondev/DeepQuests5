@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public abstract class ARequire<T extends User<T>> extends AQuestComponent<T> implements Require<T> {
@@ -23,10 +24,7 @@ public abstract class ARequire<T extends User<T>> extends AQuestComponent<T> imp
     public void setHidden(Boolean value) {
         if (value != null && isHidden == value)
             return;
-        if (value == null)
-            isHidden = getType().getDefaultIsHidden();
-        else
-            isHidden = value;
+        isHidden = Objects.requireNonNullElse(value, getType().getDefaultIsHidden());
         getConfig().set(Paths.IS_HIDDEN, value == null ? null : isHidden);
     }
 

@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.ClickType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PermissionData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private String permission;
@@ -30,11 +31,9 @@ public class PermissionData<T extends User<T>, E extends QuestComponent<T>> exte
     }
 
     public void setPermission(String value) {
-        if (this.permission == value)
+        if (Objects.equals(this.permission, value))
             return;
         if (value != null && (value.contains(" ") || value.isEmpty()))
-            return;
-        if (this.permission != null && this.permission.equals(value))
             return;
         this.permission = value;
         getConfig().set(Paths.DATA_PERMISSION, permission);

@@ -161,19 +161,5 @@ public class Utils {
         return ChatColor.stripColor(msg);
     }
 
-	/*
-	public static boolean testIsPlayer(CommandSender sender) {
-		if (sender instanceof Player)
-			return true;
-		sender.sendMessage(C.GuiGeneric.COMMAND_FOR_PLAYERS_ONLY);
-		return false;
-	}
-
-	public static boolean testHasPermission(Player player, String perm) {
-		if (player.hasPermission(perm))
-			return true;
-		player.sendMessage(Utils.fixString(C.GuiGeneric.COMMAND_FOR_PLAYERS_ONLY,player,true,C.PERMISSION_HOLDER,perm));
-		return false;
-	}*/
 
 }

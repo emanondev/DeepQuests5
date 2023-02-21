@@ -1,36 +1,34 @@
 package emanondev.deepquests.command;
 
-import emanondev.deepquests.Perms;
+import emanondev.core.command.CoreCommand;
+import emanondev.deepquests.Quests;
 import emanondev.deepquests.gui.GuiHandler;
-import org.bukkit.command.Command;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class DeepQuestBack extends ACommand {
+public class DeepQuestBack extends CoreCommand {
 
     public DeepQuestBack() {
-        super("deepquestback", List.of("dqback"), Perms.ADMIN_EDITOR);
-        this.setPlayersOnly(true);
+        super("deepquestback", Quests.get(), P.COMMAND_DEEPQUESTS_DQBACK, "Allow to reopen an editor gui", List.of("dqback"));
     }
 
-    @Override
-    public List<String> onTabComplete(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
-        return new ArrayList<>();
-    }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] args) {
-        if (!(sender instanceof Player p)) {
-            CmdUtils.playersOnly(sender);
-            return true;
-        }
-        if (GuiHandler.getLastUsedGui(p) != null)
+    public void onExecute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player p))
+            this.playerOnlyNotify(sender);
+        else if (GuiHandler.getLastUsedGui(p) != null)
             p.openInventory(GuiHandler.getLastUsedGui(p).getInventory());
-        return true;
     }
 
-
+    @Override
+    public @Nullable List<String> onComplete(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args, @Nullable Location location) {
+        return Collections.emptyList();
+    }
 }

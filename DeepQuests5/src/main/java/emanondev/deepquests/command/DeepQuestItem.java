@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public class DeepQuestItem extends ACommand {
     private static final HashMap<Player, ItemEditorButton> map = new HashMap<>();
 

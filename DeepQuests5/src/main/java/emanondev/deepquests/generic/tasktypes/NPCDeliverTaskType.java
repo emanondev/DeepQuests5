@@ -51,7 +51,7 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onRightClick(NPCRightClickEvent event) {
-        Player p = (Player) event.getClicker();
+        Player p = event.getClicker();
         T user = getManager().getUserManager().getUser(p);
         if (user == null)
             return;
@@ -170,13 +170,6 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.loadString(Paths.TASK_PHASE_DESCRIPTION(Phase.COMPLETE), "&a{action:deliver} &e"
                 + Holders.TASK_MAX_PROGRESS + " {items} &a{conjun:to} {npcs} {action:completed}");
-        /*
-         * if (txt == null) { txt = "&a{action:deliver} &e" + Holders.TASK_MAX_PROGRESS
-         * + " {items} &a{conjun:to} {npcs} {action:completed}" ;
-         * config.set(Paths.TASK_PHASE_DESCRIPTION(Phase.COMPLETE), txt);
-         *
-         * }
-         */
         return Translations.replaceAll(txt).replace("{npcs}", DataUtils.getNPCHolder(t.getNPCData())).replace("{items}",
                 DataUtils.getItemsHolder(t.getItemStackData()));
     }

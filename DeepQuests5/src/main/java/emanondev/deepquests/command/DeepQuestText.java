@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public class DeepQuestText extends ACommand implements TabExecutor {
     private static final HashMap<Player, TextEditorButton> map = new HashMap<>();
 

@@ -6,20 +6,13 @@ import java.util.regex.Pattern;
 
 public class Paths {
     public static final Pattern ALPHANUMERIC = Pattern.compile("[a-zA-Z_0-9]*");
-    //public static final String ID = "unique-key";
     public static final String USERDATA_LAST_STARTED = "last-started";
     public static final String USERDATA_LAST_COMPLETED = "last-completed";
     public static final String USERDATA_COMPLETED_TIMES = "completed-times";
     public static final String USERDATA_FAILED_TIMES = "failed-times";
     public static final String USERDATA_LAST_FAILED = "last-failed";
     public static final String USERDATA_POINTS = "points";
-    public static final String USERDATA_MISSION_DATA_LIST = "missions-data";
-    public static final String USERDATA_QUEST_DATA_LIST = "quests-data";
-    public static final String USERDATA_TASK_DATA_LIST = "tasks-data";
     public static final String USERDATA_TASK_PROGRESS = "progress";
-
-    public static final String PLAYERDATA_SEE_QUEST = "can-see-quest";
-    public static final String PLAYERDATA_SEE_MISSION = "can-see-mission";
 
 
     public static final String DISPLAY_NAME = "display-name";
@@ -50,8 +43,6 @@ public class Paths {
     public static final String DATABASE_REQUIRES = "requires";
     public static final String DATABASE_MISSIONS = "missions";
     public static final String DATABASE_QUESTS = "quests";
-
-    public static final String USERDATA_BASE = "userdata";
 
     public static final String DATA_ENTITYTYPE_LIST = "entitytype-list";
     public static final String DATA_ENTITYTYPE_IS_WHITELIST = "entitytype-is-whitelist";
@@ -111,21 +102,6 @@ public class Paths {
     public static final String TASK_INFO_VIRGINBLOCKDATA = "task-block-virgin-info";
     public static final String TASK_INFO_DROPDATA = "task-drops-info";
     public static final String TASK_INFO_ENTITYDATA = "task-entity-info";
-    public static final String TOOL_INFO_ITEM = "tool-base-item";
-    public static final String TOOL_INFO_CHECK_MATERIAL = "tool-check-material";
-    public static final String TOOL_INFO_CHECK_ENCHANT = "tool-check-enchant";
-    public static final String TOOL_INFO_CHECK_AMOUNT = "tool-check-amount";
-    public static final String TOOL_INFO_CHECK_LORE = "tool-check-lore";
-    public static final String TOOL_INFO_CHECK_DISPLAY_NAME = "tool-check-display-name";
-    public static final String TOOL_INFO_CHECK_DAMAGE = "tool-check-damage";
-    public static final String TOOL_INFO_CHECK_FLAGS = "tool-check-flags";
-    public static final String TOOL_INFO_CHECK_UNBREAKABLE = "tool-check-unbreakable";
-    public static final String TOOL_INFO_CHECK_ALL = "tool-check-all";
-    public static final String TOOL_INFO_CHECK_ATTRIBUTES = "tool-check-attributes";
-    public static final String TOOL_INFO_DEFAULT_ENCHANT_CHECK = "tool-default-enchant-check";
-    public static final String TOOL_INFO_ENCHANT_CHECK_TYPE = "tool-enchants-checks";
-    public static final String TOOL_INFO_USE_PLACE_HOLDER = "tool-use-placeholder";
-    public static final String TOOL_ENABLE_CHECK = "tool-checks-enabled";
     public static final String TASK_INFO_TOOLDATA = "task-tool-data-info";
     public static final String TASK_INFO_TOOLDATA_TARGET = "task-tool-target-data-info";
     public static final String TASK_INFO_REGIONSDATA = "task-regions-info";
@@ -153,16 +129,12 @@ public class Paths {
     public static final String DATA_PLAYTIMERANGE = "playtimerange";
 
     public static final String DATA_AMOUNT = "data-amount";
-	/*public static final String DATA_MAX_AMOUNT = "data-max-amount";
-	public static final String DATA_MIN_AMOUNT = "data-min-amount";
-	public static final String DATA_DEFAULT_AMOUNT = "data-default-amount";*/
 
     public static final String REQUIRE_INFO_AMOUNT = "require-amount-info";
 
     public static final String REWARD_INFO_COMMAND = "reward-command-info";
     public static final String REWARD_INFO_ITEMSTACK = "reward-itemstack-info";
     public static final String REWARD_INFO_AMOUNT = "reward-amount-info";
-    //public static final String REWARD_INFO_EXPERIENCE = "reward-experience-info";
     public static final String REWARD_INFO_JOB = "reward-job-info";
     public static final String REWARD_INFO_TARGET_MISSION = "reward-target-mission";
     public static final String REWARD_INFO_TARGET_QUEST = "reward-target-quest";
@@ -174,7 +146,6 @@ public class Paths {
     public static final String DATA_SKILLAPI_CLASSES_IS_WHITELIST = "data-rpgclasses-is-whitelist";
     public static final String DATA_SKILLAPI_GROUPS_IS_WHITELIST = "data-rpggroups-is-whitelist";
     public static final String DEFAULT_MISSION_LIMIT = "default-active-mission-limit-at-once";
-    //public static final String MISSION_PAUSABLE = "mission-is-pausable";
     @Deprecated
     public static final String MISSION_COMPLETE_MESSAGE = "complete-message";
     @Deprecated
@@ -187,11 +158,6 @@ public class Paths {
     public static final String MISSION_START_MESSAGE_IS_DEFAULT = "start-message-is-default";
     @Deprecated
     public static final String MISSION_FAIL_MESSAGE_IS_DEFAULT = "fail-message-is-default";
-    public static final String MANAGER_DEFAULT_MISSION_START_MESSAGE = "default-mission-start-message";
-    public static final String MANAGER_DEFAULT_MISSION_COMPLETE_MESSAGE = "default-mission-complete-message";
-    public static final String MANAGER_DEFAULT_MISSION_FAIL_MESSAGE = "default-mission-fail-message";
-    public static final String MANAGER_DEFAULT_MISSION_PAUSE_MESSAGE = "default-mission-pause-message";
-    public static final String MANAGER_DEFAULT_MISSION_UNPAUSE_MESSAGE = "default-mission-unpause-message";
     public static final String REWARD_INFO_MCMMO = "reward-mcmmo-info";
     public static final String REQUIRE_INFO_SKILLAPI = "require-skillapi-info";
     public static final String REWARD_FEEDBACK = "reward-feedback";
@@ -202,12 +168,7 @@ public class Paths {
     public static final String REWARD_INFO_QUESTITEM = "reward-questitem-info";
     public static final String AUTHOR = "author";
 
-    public static final class Command {
-        public static final String PLAYERS_ONLY = "command.players-only";
-
-    }
-
-    public final static String TASK_PHASE_DESCRIPTION(Task.Phase phase) {
+    public static String TASK_PHASE_DESCRIPTION(Task.Phase phase) {
         return phase.name().toLowerCase() + "-description";
     }
 }

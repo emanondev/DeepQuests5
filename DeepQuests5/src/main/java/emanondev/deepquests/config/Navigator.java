@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
+@Deprecated
 public class Navigator {
     private final Navigator parent;
     private final HashSet<Navigator> sons = new HashSet<>();
@@ -30,9 +31,9 @@ public class Navigator {
         if (this.dirty == value)
             return;
         this.dirty = value;
-        if (value == true && this.parent != null && this.isAlive())
+        if (value && this.parent != null && this.isAlive())
             this.parent.setDirty(true);
-        if (value == false)
+        if (!value)
             for (Navigator son : sons)
                 son.setDirty(false);
     }

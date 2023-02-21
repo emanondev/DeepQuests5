@@ -146,7 +146,6 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
                 meta.setDisplayName(null);
             item.setItemMeta(meta);
         }
-        //section.set(state.name().toLowerCase() + "." + PATH_IS_ITEM_DEFAULT, isDefItem.get(state));
         if (isDefItem.get(state))
             section.set(state.name().toLowerCase() + "." + PATH_ITEM, null);
         else

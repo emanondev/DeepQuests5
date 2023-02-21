@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class QuestItemData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private String id;
@@ -29,19 +30,7 @@ public class QuestItemData<T extends User<T>, E extends QuestComponent<T>> exten
     }
 
     public void setQuestItemID(String id) {
-        if (this.id == id)
-            return;
-        if (id == null) {
-            this.id = null;
-            getConfig().set(Paths.QUESTITEM_ID, this.id);
-            return;
-        }
-        if (this.id == null) {
-            this.id = id;
-            getConfig().set(Paths.QUESTITEM_ID, this.id);
-            return;
-        }
-        if (this.id.equals(id))
+        if (Objects.equals(this.id, id))
             return;
         this.id = id;
         getConfig().set(Paths.QUESTITEM_ID, this.id);

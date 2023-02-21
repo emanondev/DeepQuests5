@@ -193,7 +193,7 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
                     Material mat = Material.valueOf(args[1] + "_" + args[2] + "_" + args[3]);
                     if (mat.isItem())
                         return mat;
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             if (args.length >= 3)
@@ -201,14 +201,14 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
                     Material mat = Material.valueOf(args[1] + "_" + args[2]);
                     if (mat.isItem())
                         return mat;
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             try {
                 Material mat = Material.valueOf(args[1]);
                 if (mat.isItem())
                     return mat;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
             if (sound.name().contains("LAVA"))
@@ -241,14 +241,14 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
                     Material mat = Material.valueOf(args[1] + "_" + args[2] + "_SPAWN_EGG");
                     if (mat.isItem())
                         return mat;
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             try {
                 Material mat = Material.valueOf(args[1] + "_SPAWN_EGG");
                 if (mat.isItem())
                     return mat;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
             if (args.length >= 3)
@@ -256,14 +256,14 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
                     Material mat = Material.valueOf(args[1] + "_" + args[2]);
                     if (mat.isItem())
                         return mat;
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             try {
                 Material mat = Material.valueOf(args[1]);
                 if (mat.isItem())
                     return mat;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
             if (sound.name().contains("DRAGON"))
@@ -285,14 +285,14 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
                     Material mat = Material.valueOf(args[1] + "_" + args[2]);
                     if (mat.isItem())
                         return mat;
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             try {
                 Material mat = Material.valueOf(args[1]);
                 if (mat.isItem())
                     return mat;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
             return DEF_SOUND_GUI_MATERIAL;
@@ -302,51 +302,12 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
                 Material mat = Material.valueOf(sound.name());
                 if (mat.isItem())
                     return mat;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
             return Material.JUKEBOX;
         }
         return DEF_SOUND_GUI_MATERIAL;
-        /*
-         * switch (sound) { case BLOCK_BUBBLE_COLUMN_BUBBLE_POP: case
-         * BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT: case BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE:
-         * case BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT: case
-         * BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE: break; case ENCHANT_THORNS_HIT: return
-         * Material.DIAMOND_CHESTPLATE; case ENTITY_BOAT_PADDLE_LAND: case
-         * ENTITY_BOAT_PADDLE_WATER: return Material.OAK_BOAT; case
-         * ENTITY_EXPERIENCE_ORB_PICKUP: return Material.EXPERIENCE_BOTTLE; case
-         * ENTITY_FISHING_BOBBER_RETRIEVE: case ENTITY_FISHING_BOBBER_SPLASH: case
-         * ENTITY_FISHING_BOBBER_THROW: case ENTITY_FISH_SWIM: return
-         * Material.FISHING_ROD; case ENTITY_GENERIC_BIG_FALL: case ENTITY_GENERIC_BURN:
-         * case ENTITY_GENERIC_DEATH: case ENTITY_GENERIC_DRINK: case
-         * ENTITY_GENERIC_EAT: case ENTITY_GENERIC_EXPLODE: case
-         * ENTITY_GENERIC_EXTINGUISH_FIRE: case ENTITY_GENERIC_HURT: case
-         * ENTITY_GENERIC_SMALL_FALL: case ENTITY_GENERIC_SPLASH: case
-         * ENTITY_GENERIC_SWIM: break; case ENTITY_HOSTILE_BIG_FALL: case
-         * ENTITY_HOSTILE_DEATH: case ENTITY_HOSTILE_HURT: case
-         * ENTITY_HOSTILE_SMALL_FALL: case ENTITY_HOSTILE_SPLASH: case
-         * ENTITY_HOSTILE_SWIM: break; case ENTITY_ILLUSIONER_AMBIENT: case
-         * ENTITY_ILLUSIONER_CAST_SPELL: case ENTITY_ILLUSIONER_DEATH: case
-         * ENTITY_ILLUSIONER_HURT: case ENTITY_ILLUSIONER_MIRROR_MOVE: case
-         * ENTITY_ILLUSIONER_PREPARE_BLINDNESS: case ENTITY_ILLUSIONER_PREPARE_MIRROR:
-         * return Material.EVOKER_SPAWN_EGG; case ENTITY_ITEM_BREAK: return
-         * Material.ITEM_FRAME; case ENTITY_ITEM_PICKUP: break; case
-         * ENTITY_LEASH_KNOT_BREAK: case ENTITY_LEASH_KNOT_PLACE: return Material.LEAD;
-         * case ENTITY_LIGHTNING_BOLT_IMPACT: case ENTITY_LIGHTNING_BOLT_THUNDER: case
-         * ENTITY_LINGERING_POTION_THROW: break; case ITEM_ARMOR_EQUIP_CHAIN: case
-         * ITEM_ARMOR_EQUIP_DIAMOND: case ITEM_ARMOR_EQUIP_ELYTRA: case
-         * ITEM_ARMOR_EQUIP_GENERIC: case ITEM_ARMOR_EQUIP_GOLD: case
-         * ITEM_ARMOR_EQUIP_IRON: case ITEM_ARMOR_EQUIP_LEATHER: case
-         * ITEM_ARMOR_EQUIP_TURTLE: return Material.LEATHER_CHESTPLATE; case
-         * ITEM_AXE_STRIP: return Material.WOODEN_AXE; case ITEM_BOTTLE_EMPTY: case
-         * ITEM_BOTTLE_FILL: case ITEM_BOTTLE_FILL_DRAGONBREATH: return
-         * Material.GLASS_BOTTLE; case ITEM_FIRECHARGE_USE: return Material.FIRE_CHARGE;
-         * case ITEM_FLINTANDSTEEL_USE: return Material.FLINT_AND_STEEL; case
-         * ITEM_HOE_TILL: return Material.IRON_HOE; case ITEM_SHOVEL_FLATTEN: return
-         * Material.IRON_SHOVEL; case ITEM_TOTEM_USE: return Material.TOTEM_OF_UNDYING;
-         * }
-         */
     }
 
     public Button getVolumeEditorButton(Gui gui) {

@@ -165,7 +165,6 @@ public class Quests extends CorePlugin {
             registerCommand(new DeepQuestText());
             registerCommand(new DeepQuestItem());
             registerCommand(new DeepQuestBack());
-            //registerCommand(new DeepQuestImport());
             registerCommand(new CommandQuests());
             registerCommand(new DeepQuestsNewCommand());
 

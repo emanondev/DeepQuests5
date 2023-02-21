@@ -5,6 +5,7 @@ package emanondev.deepquests;
  * <p>
  * contains all permission constants
  */
+@Deprecated
 public class Perms {
 
     /**

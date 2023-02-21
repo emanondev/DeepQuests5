@@ -302,74 +302,10 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
 
         @Override
         public Collection<EntityType> getPossibleValues() {
-            LinkedHashSet<EntityType> set = new LinkedHashSet<>();
-
-            set.add(EntityType.PLAYER);
-            set.add(EntityType.ZOMBIE);
-            set.add(EntityType.ZOMBIE_VILLAGER);
-            set.add(EntityType.DROWNED);
-            set.add(EntityType.HUSK);
-            set.add(EntityType.GIANT);
-            set.add(EntityType.SKELETON);
-            set.add(EntityType.STRAY);
-            set.add(EntityType.WITCH);
-            set.add(EntityType.SPIDER);
-            set.add(EntityType.CAVE_SPIDER);
-            set.add(EntityType.CREEPER);
-            set.add(EntityType.SILVERFISH);
-            set.add(EntityType.GUARDIAN);
-            set.add(EntityType.ELDER_GUARDIAN);
-            set.add(EntityType.VINDICATOR);
-            set.add(EntityType.VEX);
-            set.add(EntityType.EVOKER);
-            set.add(EntityType.ILLUSIONER);
-
-            set.add(EntityType.SLIME);
-            set.add(EntityType.MAGMA_CUBE);
-            set.add(EntityType.ZOMBIFIED_PIGLIN);
-            set.add(EntityType.BLAZE);
-            set.add(EntityType.GHAST);
-            set.add(EntityType.WITHER_SKELETON);
-            set.add(EntityType.WITHER);
-
-            set.add(EntityType.ENDERMAN);
-            set.add(EntityType.ENDERMITE);
-            set.add(EntityType.SHULKER);
-            set.add(EntityType.ENDER_DRAGON);
-            set.add(EntityType.VILLAGER);
-            set.add(EntityType.IRON_GOLEM);
-            set.add(EntityType.SNOWMAN);
-            set.add(EntityType.HORSE);
-            set.add(EntityType.DONKEY);
-            set.add(EntityType.MULE);
-            set.add(EntityType.SKELETON_HORSE);
-            set.add(EntityType.ZOMBIE_HORSE);
-            set.add(EntityType.PIG);
-            set.add(EntityType.CHICKEN);
-            set.add(EntityType.SHEEP);
-            set.add(EntityType.COW);
-            set.add(EntityType.MUSHROOM_COW);
-            set.add(EntityType.WOLF);
-            set.add(EntityType.OCELOT);
-            set.add(EntityType.RABBIT);
-            set.add(EntityType.LLAMA);
-            set.add(EntityType.POLAR_BEAR);
-            set.add(EntityType.SQUID);
-            set.add(EntityType.TURTLE);
-            set.add(EntityType.COD);
-            set.add(EntityType.SALMON);
-            set.add(EntityType.PUFFERFISH);
-            set.add(EntityType.TROPICAL_FISH);
-            set.add(EntityType.DROWNED);
-            set.add(EntityType.DOLPHIN);
-            set.add(EntityType.PARROT);
-            set.add(EntityType.BAT);
-            set.add(EntityType.PHANTOM);
-
-            for (EntityType type : EntityType.values()) {
-                if (type.isAlive() && !set.contains(type))
+            TreeSet<EntityType> set = new TreeSet<>((type1, type2) -> type1.name().compareToIgnoreCase(type2.name()));
+            for (EntityType type : EntityType.values())
+                if (type.isAlive())
                     set.add(type);
-            }
             return set;
         }
 
@@ -441,6 +377,9 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
     private ItemStack getGuiItem(EntityType element) {
         switch (element) {
             case ZOMBIE:
+            case ZOMBIE_VILLAGER:
+            case HUSK:
+            case DROWNED:
                 return new ItemBuilder(Material.ROTTEN_FLESH).setGuiProperty().build();
             case WITCH:
                 return new ItemBuilder(Material.GLASS_BOTTLE).setGuiProperty().build();
@@ -517,16 +456,12 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
                 return new ItemBuilder(Material.SADDLE).setGuiProperty().build();
             case ELDER_GUARDIAN:
                 return new ItemBuilder(Material.PRISMARINE_CRYSTALS).setGuiProperty().build();
-            case ZOMBIE_VILLAGER:
-                return new ItemBuilder(Material.ROTTEN_FLESH).setGuiProperty().build();
             // 1.9
             case SHULKER:
                 return new ItemBuilder(Material.PURPLE_SHULKER_BOX).setGuiProperty().build();
             // 1.10
             case POLAR_BEAR:
                 return new ItemBuilder(Material.SNOW_BLOCK).setGuiProperty().build();
-            case HUSK:
-                return new ItemBuilder(Material.ROTTEN_FLESH).setGuiProperty().build();
             case STRAY:
                 return new ItemBuilder(Material.BONE).setGuiProperty().build();
             // 1.11
@@ -548,8 +483,6 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
                 return new ItemBuilder(Material.COD_BUCKET).setGuiProperty().build();
             case DOLPHIN:
                 return new ItemBuilder(Material.BUBBLE_CORAL).setGuiProperty().build();
-            case DROWNED:
-                return new ItemBuilder(Material.ROTTEN_FLESH).setGuiProperty().build();
 
             case PHANTOM:
                 return new ItemBuilder(Material.PHANTOM_MEMBRANE).setGuiProperty().build();

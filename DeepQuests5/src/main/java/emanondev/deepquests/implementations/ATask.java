@@ -33,12 +33,6 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     private BarStyle barStyle;
     private boolean isBarColorDefault;
     private BarColor barColor;
-    /*
-     * private boolean isUnstartedDescriptionDefault; private String
-     * unstartedDescription; private boolean isProgressDescriptionDefault; private
-     * String progressDescription; private boolean isCompleteDescriptionDefault;
-     * private String completeDescription;
-     */
     private boolean isShowBossBarDefault;
     private boolean showBossBar;
 
@@ -234,10 +228,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     public final void setHidden(Boolean value) {
         if (value != null && isHidden == value)
             return;
-        if (value == null)
-            isHidden = getType().getDefaultIsHidden();
-        else
-            isHidden = value;
+        isHidden = Objects.requireNonNullElse(value, getType().getDefaultIsHidden());
         getConfig().set(Paths.IS_HIDDEN, value == null ? null : isHidden);
     }
 
@@ -358,18 +349,14 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
 
     private String getDefaultPhaseDescription(Phase phase) {
         String desc = getType().getDefaultPhaseDescription(phase, this);
-        switch (phase) {
-            case COMPLETE:
-                return desc != null ? desc : Holders.DISPLAY_NAME + " " + Translations.translateAction("completed");
-            case PROGRESS:
-                return desc != null ? desc
-                        : Holders.DISPLAY_NAME + " " + Holders.TASK_CURRENT_PROGRESS + " "
-                        + Translations.translateConjunction("of") + " " + Holders.TASK_MAX_PROGRESS;
-            case UNSTARTED:
-                return desc != null ? desc : Holders.DISPLAY_NAME + " " + Holders.TASK_MAX_PROGRESS;
-            default:
-                throw new IllegalStateException();
-        }
+        return switch (phase) {
+            case COMPLETE -> desc != null ? desc : Holders.DISPLAY_NAME + " " + Translations.translateAction("completed");
+            case PROGRESS -> desc != null ? desc
+                    : Holders.DISPLAY_NAME + " " + Holders.TASK_CURRENT_PROGRESS + " "
+                    + Translations.translateConjunction("of") + " " + Holders.TASK_MAX_PROGRESS;
+            case UNSTARTED -> desc != null ? desc : Holders.DISPLAY_NAME + " " + Holders.TASK_MAX_PROGRESS;
+            default -> throw new IllegalStateException();
+        };
     }
 
     protected class ATaskGuiEditor extends AAGuiEditor {
@@ -510,19 +497,13 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             }
 
             private int getAmount(BarStyle style) {
-                switch (style) {
-                    case SEGMENTED_10:
-                        return 10;
-                    case SEGMENTED_12:
-                        return 12;
-                    case SEGMENTED_20:
-                        return 20;
-                    case SEGMENTED_6:
-                        return 6;
-                    case SOLID:
-                    default:
-                        return 1;
-                }
+                return switch (style) {
+                    case SEGMENTED_10 -> 10;
+                    case SEGMENTED_12 -> 12;
+                    case SEGMENTED_20 -> 20;
+                    case SEGMENTED_6 -> 6;
+                    default -> 1;
+                };
             }
 
             @Override
@@ -572,28 +553,15 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             public ItemStack getItem() {
                 ItemStack item = super.getItem();
                 switch (getBossBarColor()) {
-                    case BLUE:
-                        item.setType(Material.LAPIS_LAZULI);
-                        break;
-                    case GREEN:
-                        item.setType(Material.LIME_DYE);
-                        break;
-                    case PINK:
-                        item.setType(Material.PINK_DYE);
-                        break;
-                    case PURPLE:
-                        item.setType(Material.PURPLE_DYE);
-                        break;
-                    case RED:
-                        item.setType(Material.RED_DYE);
-                        break;
-                    case WHITE:
-                        item.setType(Material.BONE_MEAL);
-                        break;
-                    case YELLOW:
-                        item.setType(Material.YELLOW_DYE);
-                        break;
-                    default:
+                    case BLUE -> item.setType(Material.LAPIS_LAZULI);
+                    case GREEN -> item.setType(Material.LIME_DYE);
+                    case PINK -> item.setType(Material.PINK_DYE);
+                    case PURPLE -> item.setType(Material.PURPLE_DYE);
+                    case RED -> item.setType(Material.RED_DYE);
+                    case WHITE -> item.setType(Material.BONE_MEAL);
+                    case YELLOW -> item.setType(Material.YELLOW_DYE);
+                    default -> {
+                    }
                 }
                 return item;
             }
@@ -619,24 +587,16 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
 
             @Override
             public ItemStack getElementItem(BarColor element) {
-                switch (element) {
-                    case BLUE:
-                        return new ItemBuilder(Material.BLUE_CONCRETE).setGuiProperty().build();
-                    case GREEN:
-                        return new ItemBuilder(Material.GREEN_CONCRETE).setGuiProperty().build();
-                    case PINK:
-                        return new ItemBuilder(Material.PINK_CONCRETE).setGuiProperty().build();
-                    case PURPLE:
-                        return new ItemBuilder(Material.PURPLE_CONCRETE).setGuiProperty().build();
-                    case RED:
-                        return new ItemBuilder(Material.RED_CONCRETE).setGuiProperty().build();
-                    case WHITE:
-                        return new ItemBuilder(Material.WHITE_CONCRETE).setGuiProperty().build();
-                    case YELLOW:
-                        return new ItemBuilder(Material.YELLOW_CONCRETE).setGuiProperty().build();
-                    default:
-                        return new ItemBuilder(Material.ORANGE_CONCRETE).setGuiProperty().build();
-                }
+                return switch (element) {
+                    case BLUE -> new ItemBuilder(Material.BLUE_CONCRETE).setGuiProperty().build();
+                    case GREEN -> new ItemBuilder(Material.GREEN_CONCRETE).setGuiProperty().build();
+                    case PINK -> new ItemBuilder(Material.PINK_CONCRETE).setGuiProperty().build();
+                    case PURPLE -> new ItemBuilder(Material.PURPLE_CONCRETE).setGuiProperty().build();
+                    case RED -> new ItemBuilder(Material.RED_CONCRETE).setGuiProperty().build();
+                    case WHITE -> new ItemBuilder(Material.WHITE_CONCRETE).setGuiProperty().build();
+                    case YELLOW -> new ItemBuilder(Material.YELLOW_CONCRETE).setGuiProperty().build();
+                    default -> new ItemBuilder(Material.ORANGE_CONCRETE).setGuiProperty().build();
+                };
             }
 
             @Override
@@ -711,27 +671,19 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
 
             private Material getMaterialDescButton(Phase phase) {
                 if (phaseDescriptionIsDef.get(phase))
-                    switch (phase) {
-                        case COMPLETE:
-                            return Material.GREEN_STAINED_GLASS;
-                        case PROGRESS:
-                            return Material.BLUE_STAINED_GLASS;
-                        case UNSTARTED:
-                            return Material.LIGHT_BLUE_STAINED_GLASS;
-                        default:
-                            throw new IllegalStateException();
-                    }
+                    return switch (phase) {
+                        case COMPLETE -> Material.GREEN_STAINED_GLASS;
+                        case PROGRESS -> Material.BLUE_STAINED_GLASS;
+                        case UNSTARTED -> Material.LIGHT_BLUE_STAINED_GLASS;
+                        default -> throw new IllegalStateException();
+                    };
                 else
-                    switch (phase) {
-                        case COMPLETE:
-                            return Material.GREEN_TERRACOTTA;
-                        case PROGRESS:
-                            return Material.BLUE_TERRACOTTA;
-                        case UNSTARTED:
-                            return Material.LIGHT_BLUE_TERRACOTTA;
-                        default:
-                            throw new IllegalStateException();
-                    }
+                    return switch (phase) {
+                        case COMPLETE -> Material.GREEN_TERRACOTTA;
+                        case PROGRESS -> Material.BLUE_TERRACOTTA;
+                        case UNSTARTED -> Material.LIGHT_BLUE_TERRACOTTA;
+                        default -> throw new IllegalStateException();
+                    };
 
             }
 
@@ -746,13 +698,13 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             @Override
             public void onClick(Player clicker, ClickType click) {
                 switch (click) {
-                    case RIGHT:
-                    case SHIFT_RIGHT:
+                    case RIGHT, SHIFT_RIGHT -> {
                         setPhaseDescription(null, phase);
                         getGui().updateInventory();
                         return;
-                    default:
-                        break;
+                    }
+                    default -> {
+                    }
                 }
                 this.requestText(clicker, getRawPhaseDescription(phase),
                         "&6Set the " + phase.name().toLowerCase() + " description");

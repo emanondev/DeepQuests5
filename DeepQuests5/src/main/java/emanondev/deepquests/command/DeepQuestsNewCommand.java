@@ -100,7 +100,6 @@ public class DeepQuestsNewCommand extends CoreCommand {
                 return;
         }
         help(sender, alias, args);
-        return;
     }
 
     // qa questbag %manager% %user% add/remove %id%
@@ -128,31 +127,24 @@ public class DeepQuestsNewCommand extends CoreCommand {
         }
         boolean add;
         switch (args[3].toLowerCase()) {
-            case "add":
-                add = true;
-                break;
-            case "remove":
-                add = false;
-                break;
-            default:
-
+            case "add" -> add = true;
+            case "remove" -> add = false;
+            default -> {
                 new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
                         "command.deepquests.questbag.invalid_operation",
                         "&4[&c✘&4] &cInvalid operation name, user &eadd &cor &eremove", "%alias%", alias).send();
                 return;
+            }
         }
         int amount;
         try {
-            amount = args.length >= 6 ? Integer.valueOf(args[5]) : 1;
+            amount = args.length >= 6 ? Integer.parseInt(args[5]) : 1;
             if (amount <= 0)
                 throw new IllegalArgumentException();
-        } catch (NumberFormatException e) {
-
-            return;
-
         } catch (IllegalArgumentException e) {
 
             return;
+
         }
         String id = args[4].toLowerCase();
         if (add) {
@@ -201,6 +193,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
         Gui gui = ItemEditUtils.craftGui(u, u.getQuestBag().getQuestItems(), (Player) sender, new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
                 "command.deepquests.seequestbag.gui-title", "&4QuestBag of %user% for %manager%",
                 "%alias%", alias, "%user%", u.getUID(), "%manager%", qm.getName()).toString());
+        //TODO open?
 
     }
 

@@ -1,10 +1,10 @@
 package emanondev.deepquests.data;
 
+import emanondev.core.Hooks;
 import emanondev.core.ItemBuilder;
 import emanondev.core.YMLSection;
 import emanondev.deepquests.gui.button.StaticFlagButton;
 import emanondev.deepquests.gui.inventory.Gui;
-import emanondev.deepquests.hooks.Hooks;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;

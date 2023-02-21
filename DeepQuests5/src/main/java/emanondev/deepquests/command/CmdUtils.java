@@ -4,6 +4,7 @@ import emanondev.deepquests.Holders;
 import emanondev.deepquests.Translations;
 import org.bukkit.command.CommandSender;
 
+@Deprecated
 public class CmdUtils {
 
     public static void lackPermission(CommandSender s, String permission) {

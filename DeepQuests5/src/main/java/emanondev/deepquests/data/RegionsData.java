@@ -20,6 +20,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -29,8 +30,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
-    private Set<String> regionNames = new TreeSet<>();
-    private boolean isRegionListWhitelist = true;
+    private final Set<String> regionNames = new TreeSet<>();
+    private boolean isRegionListWhitelist;
 
     public RegionsData(E parent, YMLSection section) {
         super(parent, section);
@@ -235,8 +236,8 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
             ChatColor.GOLD + "****************************\n" + ChatColor.GOLD + " Click Me and write the name\n"
                     + ChatColor.GOLD + "****************************")
             .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/dqtext "))
-            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GOLD
-                    + "Write the region name\n" + ChatColor.YELLOW + "/dqtext <region name>").create()))
+            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.GOLD
+                    + "Write the region name\n" + ChatColor.YELLOW + "/dqtext <region name>")))
             .create();
 
 }

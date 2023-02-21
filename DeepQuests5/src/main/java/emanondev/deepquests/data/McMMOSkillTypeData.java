@@ -32,8 +32,6 @@ public class McMMOSkillTypeData<T extends User<T>, E extends QuestComponent<T>> 
     public void setSkillType(PrimarySkillType skillType) {
         if (this.skillType == skillType)
             return;
-        if (this.skillType != null && this.skillType.equals(skillType))
-            return;
         this.skillType = skillType;
         getConfig().setEnumAsString(Paths.DATA_MCMMO_SKILLTYPE, skillType);
     }

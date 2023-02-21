@@ -12,10 +12,12 @@ import java.util.EnumMap;
 import java.util.List;
 
 public class GuiConfig {
+    @Deprecated
     public static final String PAGE_HOLDER = "%page%";
+    @Deprecated
     public static final String TARGET_PAGE_HOLDER = "%target_page%";
+    @Deprecated
     public static final String AMOUNT_HOLDER = "%amount%";
-    public static final String PERMISSION_HOLDER = "%permission%";
 
     private static final ConfigFile guiConfig = new ConfigFile("guiconfig");
 
@@ -85,9 +87,7 @@ public class GuiConfig {
             AMOUNT_SELECTOR_REMOVE = getStringList("amount_selector_remove");
 
             WHITELIST_DESCRIPTION = getStringList("whitelist_description");
-            // WHITELIST_ITEM = ;
             BLACKLIST_DESCRIPTION = getStringList("blacklist_description");
-            // BLACKLIST_ITEM = ;
             NULL_ELEMENT = getStringList("null_element");
 
             NO_VALUE_SET = getString("no_value_set");
@@ -122,9 +122,7 @@ public class GuiConfig {
         public static String COMMAND_FOR_PLAYERS_ONLY;
         public static String LACK_OF_PERMISSION;
         public static List<String> WHITELIST_DESCRIPTION;
-        public static ItemStack WHITELIST_ITEM;
         public static List<String> BLACKLIST_DESCRIPTION;
-        public static ItemStack BLACKLIST_ITEM;
         public static List<String> NULL_ELEMENT;
         public static String NO_VALUE_SET;
         public static String INVALID_NUMBER;

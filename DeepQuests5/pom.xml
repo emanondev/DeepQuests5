@@ -88,30 +88,26 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.19.3-R0.1-SNAPSHOT</version>
             <type>jar</type>
-            <scope>provided</scope>
         </dependency>
         <!-- JetBrains Annotations -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>23.0.0</version>
-            <scope>provided</scope>
         </dependency>
         <!-- Vault -->
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
-            <scope>provided</scope>
         </dependency>
         <!-- PlaceHolderAPI -->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.10.9</version>
-            <scope>provided</scope>
         </dependency>
         <!-- Towny -->
         <dependency>
@@ -124,7 +120,7 @@
         <dependency>
             <groupId>emanondev.itemedit</groupId>
             <artifactId>ItemEdit</artifactId>
-            <version>2.20a</version>
+            <version>3.0.3</version>
             <scope>provided</scope>
         </dependency>
         <!-- Jobs -->
@@ -137,7 +133,7 @@
         <dependency>
             <groupId>emanondev.core</groupId>
             <artifactId>DeepCore</artifactId>
-            <version>3.3.3</version>
+            <version>3.8.0</version>
             <scope>provided</scope>
         </dependency>
         <!-- Parties -->

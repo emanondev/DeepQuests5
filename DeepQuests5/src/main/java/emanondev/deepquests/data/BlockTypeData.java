@@ -106,8 +106,8 @@ public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> exten
                 return new ItemBuilder(element).setGuiProperty().build();
             switch (element) {
                 //TODO
-                default:
-                    break;
+                default -> {
+                }
             }
             return new ItemBuilder(Material.KNOWLEDGE_BOOK).setGuiProperty().build();
         }

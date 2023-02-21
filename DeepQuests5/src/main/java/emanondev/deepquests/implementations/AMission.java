@@ -850,37 +850,25 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     private static Material guiFullMaterial(PhaseChange phase) {
-        switch (phase) {
-            case COMPLETE:
-                return Material.GREEN_TERRACOTTA;
-            case FAIL:
-                return Material.RED_TERRACOTTA;
-            case PAUSE:
-                return Material.LIME_TERRACOTTA;
-            case START:
-                return Material.BLUE_TERRACOTTA;
-            case UNPAUSE:
-                return Material.BLUE_TERRACOTTA;
-            default:
-                throw new IllegalStateException();
-        }
+        return switch (phase) {
+            case COMPLETE -> Material.GREEN_TERRACOTTA;
+            case FAIL -> Material.RED_TERRACOTTA;
+            case PAUSE -> Material.LIME_TERRACOTTA;
+            case START -> Material.BLUE_TERRACOTTA;
+            case UNPAUSE -> Material.BLUE_TERRACOTTA;
+            default -> throw new IllegalStateException();
+        };
     }
 
     private static Material guiGlassMaterial(PhaseChange phase) {
-        switch (phase) {
-            case COMPLETE:
-                return Material.GREEN_STAINED_GLASS;
-            case FAIL:
-                return Material.RED_STAINED_GLASS;
-            case PAUSE:
-                return Material.LIME_STAINED_GLASS;
-            case START:
-                return Material.BLUE_STAINED_GLASS;
-            case UNPAUSE:
-                return Material.BLUE_STAINED_GLASS;
-            default:
-                throw new IllegalStateException();
-        }
+        return switch (phase) {
+            case COMPLETE -> Material.GREEN_STAINED_GLASS;
+            case FAIL -> Material.RED_STAINED_GLASS;
+            case PAUSE -> Material.LIME_STAINED_GLASS;
+            case START -> Material.BLUE_STAINED_GLASS;
+            case UNPAUSE -> Material.BLUE_STAINED_GLASS;
+            default -> throw new IllegalStateException();
+        };
     }
 
     /*

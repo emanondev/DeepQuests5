@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import java.util.HashMap;
 
+@Deprecated
 public class GuiHandler implements Listener {
     private static final HashMap<Player, Gui> latestUsedGui = new HashMap<>();
 

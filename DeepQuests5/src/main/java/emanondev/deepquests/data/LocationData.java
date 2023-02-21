@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class LocationData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
 
@@ -54,11 +55,9 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
     }
 
     public void setWorld(String value) {
-        if (this.worldName == value)
+        if (Objects.equals(this.worldName, value))
             return;
         if (value != null && value.isEmpty())
-            return;
-        if (this.worldName != null && this.worldName.equals(value))
             return;
         this.worldName = value;
         getConfig().set(Paths.DATA_LOCATION_WORLD, worldName);
@@ -258,7 +257,6 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
             ArrayList<String> desc = new ArrayList<>();
             desc.add("&9World: &e" + element.getName());
             desc.add("&9Level Type: &e" + element.getEnvironment());
-            desc.add("&9Type: &e" + element.getWorldType());
             desc.add("&9Difficulty: &e" + element.getDifficulty());
             desc.add("&9Pvp: &e" + (element.getPVP() ? "on" : "off"));
             desc.add("&9Monster: &e" + (element.getAllowMonsters() ? "Allowed" : "Disabled"));
@@ -267,16 +265,12 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
 
         @Override
         public ItemStack getElementItem(World element) {
-            switch (element.getEnvironment()) {
-                case NETHER:
-                    return new ItemBuilder(Material.NETHERRACK).setGuiProperty().build();
-                case NORMAL:
-                    return new ItemBuilder(Material.GRASS_BLOCK).setGuiProperty().build();
-                case THE_END:
-                    return new ItemBuilder(Material.END_STONE).setGuiProperty().build();
-                default:
-                    return new ItemBuilder(Material.BEDROCK).setGuiProperty().build();
-            }
+            return switch (element.getEnvironment()) {
+                case NETHER -> new ItemBuilder(Material.NETHERRACK).setGuiProperty().build();
+                case NORMAL -> new ItemBuilder(Material.GRASS_BLOCK).setGuiProperty().build();
+                case THE_END -> new ItemBuilder(Material.END_STONE).setGuiProperty().build();
+                default -> new ItemBuilder(Material.BEDROCK).setGuiProperty().build();
+            };
         }
 
         @Override

@@ -48,10 +48,7 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onEntityDie(MythicMobDeathEvent event) {
-        if (event.getKiller() == null || !(event.getKiller() instanceof Player))
-            return;
-        Player p = (Player) event.getKiller();
-        if (p == null)
+        if (event.getKiller() == null || !(event.getKiller() instanceof Player p))
             return;
         T qPlayer = getManager().getUserManager().getUser(p);
         if (qPlayer == null)
@@ -80,10 +77,10 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
 
         public KillMythicMobTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, KillMythicMobTaskType.this, section);
-            dropsData = new DropData<T, KillMythicMobTask>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-            entityData = new MythicMobsData<T, KillMythicMobTask>(this,
+            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            entityData = new MythicMobsData<>(this,
                     getConfig().loadSection(Paths.TASK_INFO_MYTHICMOBSDATA));
-            toolData = new ToolData<T, KillMythicMobTask>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
+            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
         }
 
         public DropData<T, KillMythicMobTask> getDropData() {
@@ -155,9 +152,8 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
 
     @Override
     public String getDefaultUnstartedDescription(Task<T> task) {
-        if (!(task instanceof KillMythicMobTaskType.KillMythicMobTask))
+        if (!(task instanceof KillMythicMobTask t))
             return null;
-        KillMythicMobTask t = (KillMythicMobTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.UNSTARTED), null);
         if (txt == null) {
@@ -171,9 +167,8 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
 
     @Override
     public String getDefaultProgressDescription(Task<T> task) {
-        if (!(task instanceof KillMythicMobTaskType.KillMythicMobTask))
+        if (!(task instanceof KillMythicMobTask t))
             return null;
-        KillMythicMobTask t = (KillMythicMobTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.PROGRESS), null);
         if (txt == null) {
@@ -188,9 +183,8 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
 
     @Override
     public String getDefaultCompleteDescription(Task<T> task) {
-        if (!(task instanceof KillMythicMobTaskType.KillMythicMobTask))
+        if (!(task instanceof KillMythicMobTask t))
             return null;
-        KillMythicMobTask t = (KillMythicMobTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.COMPLETE), null);
         if (txt == null) {

@@ -17,7 +17,9 @@ public class Translations {
 
     private static final EnumMap<Time, String> timeSingle = loadTimeSingle();
     private static final EnumMap<Time, String> timeMulti = loadTimeMulti();
+    @Deprecated
     private static final EnumMap<EntityType, String> entities = loadEntities();
+    @Deprecated
     private static final EnumMap<Material, String> materials = loadMaterials();
     private static final Map<Enchantment, String> enchantments = loadEnchantments();
     private static final Map<String, String> actions = new HashMap<>();

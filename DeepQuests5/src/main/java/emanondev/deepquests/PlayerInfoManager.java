@@ -27,13 +27,6 @@ public class PlayerInfoManager implements Listener {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-		/* TODO removed
-		if (CONN != null)
-			try {
-				CONN.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}*/
     }
 
     PlayerInfoManager() {
@@ -42,13 +35,7 @@ public class PlayerInfoManager implements Listener {
     }
 
     public PlayerInfo getPlayerInfo(OfflinePlayer p) {
-        //if (p == null)
-        //	throw new NullPointerException();
-        //if (users.containsKey(p.getUniqueId()))
         return users.get(p.getUniqueId());
-        //users.put(p.getUniqueId(),val);
-
-        //return new PlayerInfoSqlite(p);
     }
 
     private void loadAll() {
@@ -80,76 +67,11 @@ public class PlayerInfoManager implements Listener {
             }
         }.runTaskAsynchronously(Quests.get());
     }
-	/* TODO removed
-	private void load(PlayerInfoSqlite pInfo) throws SQLException {
-		PS_LOAD.setString(1, pInfo.getOfflinePlayer().getUniqueId().toString());
-		ResultSet rs = PS_LOAD.executeQuery();
-		if (rs.next()) {
-			for (DisplayState state : DisplayState.values()) {
-				if ((rs.getInt("quest_" + state.toString().toLowerCase()) == 0 ? false : true) != pInfo
-						.canSeeQuestState(state))
-					pInfo.toggleCanSeeQuestState(state);
-				if ((rs.getInt("mission_" + state.toString().toLowerCase()) == 0 ? false : true) != pInfo
-						.canSeeMissionState(state))
-					pInfo.toggleCanSeeMissionState(state);
-			}
-
-			ProgressBarType type = ProgressBarType.values()[rs.getInt("bartype") % ProgressBarType.values().length];
-			if (pInfo.getProgressBarType() != type)
-				pInfo.setProgressBarType(type);
-
-			ProgressBarStyle style = ProgressBarStyle.values()[rs.getInt("barstyle")
-					% ProgressBarStyle.values().length];
-			if (pInfo.getProgressBarStyle() != style)
-				pInfo.setProgressBarStyle(style);
-		}
-		rs.close();
-	}*/
 
     private void save(PlayerInfoSqlite pInfo) throws SQLException {
         if (pInfo == null)
             return;
-		/* TODO removed
-		PS_SELECT.setString(1, pInfo.getUUID().toString());
-		ResultSet rs = PS_SELECT.executeQuery();
-		if (rs.next()) {
-			for (DisplayState state : DisplayState.values()) {
-				PS_UPDATE.setInt(state.ordinal() * 2 + 1, pInfo.canSeeQuestState(state) ? 1 : 0);
-				PS_UPDATE.setInt(state.ordinal() * 2 + 2, pInfo.canSeeMissionState(state) ? 1 : 0);
-			}
-			PS_UPDATE.setInt(DisplayState.values().length * 2 + 1, pInfo.getProgressBarType().ordinal());
-			PS_UPDATE.setInt(DisplayState.values().length * 2 + 2, pInfo.getProgressBarStyle().ordinal());
-			PS_UPDATE.setString(DisplayState.values().length * 2 + 3, pInfo.getOfflinePlayer().getName());
-			PS_UPDATE.setString(DisplayState.values().length * 2 + 4,
-					pInfo.getOfflinePlayer().getUniqueId().toString());
-			PS_UPDATE.executeUpdate();
-		} else {
-			PS_INSERT.setString(1, pInfo.getUUID().toString());
-			PS_INSERT.setString(2, pInfo.getOfflinePlayer().getName().toLowerCase());
-			for (DisplayState state : DisplayState.values()) {
-				PS_INSERT.setInt(state.ordinal() * 2 + 3, pInfo.canSeeQuestState(state) ? 1 : 0);
-				PS_INSERT.setInt(state.ordinal() * 2 + 4, pInfo.canSeeMissionState(state) ? 1 : 0);
-			}
-			PS_INSERT.setInt(DisplayState.values().length * 2 + 3, pInfo.getProgressBarType().ordinal());
-			PS_INSERT.setInt(DisplayState.values().length * 2 + 4, pInfo.getProgressBarStyle().ordinal());
-			PS_INSERT.executeUpdate();
-		}
-		*/
     }
-	/* TODO removed
-	private void createTable() throws SQLException {
-
-		// SQL statement for creating a new table
-		StringBuilder sql = new StringBuilder(
-				"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n" + "	uuid TEXT PRIMARY KEY,\n" + "	name TEXT,\n");
-		for (DisplayState state : DisplayState.values())
-			sql = sql.append(" quest_" + state.toString().toLowerCase() + " INTEGER NOT NULL,\n");
-		for (DisplayState state : DisplayState.values())
-			sql = sql.append(" mission_" + state.toString().toLowerCase() + " INTEGER NOT NULL,\n");
-		sql = sql.append(" bartype INTEGER NOT NULL,\n" + " barstyle INTEGER NOT NULL\n" + ");");
-
-		CONN.createStatement().execute(sql.toString());
-	}*/
 
     public static class PlayerInfoSqlite implements PlayerInfo {
 
@@ -161,16 +83,6 @@ public class PlayerInfoManager implements Listener {
                 canSeeQuestState[i] = true;
                 canSeeMissionState[i] = true;
             }
-			/* TODO removed
-			new BukkitRunnable() {
-				public void run() {
-					try {
-						PlayerInfoManager.this.load(PlayerInfoSqlite.this);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-			}.runTaskAsynchronously(Quests.get());*/
         }
 
         public ProgressBarType getProgressBarType() {

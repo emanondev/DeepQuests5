@@ -61,14 +61,14 @@ public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T>
     }
 
     public class EnterRegionWithItemTask extends ATask<T> {
-        private RegionsData<T, EnterRegionWithItemTask> regionInfo = null;
-        private ItemStackData<T, EnterRegionWithItemTask> itemData = null;
+        private final RegionsData<T, EnterRegionWithItemTask> regionInfo;
+        private final ItemStackData<T, EnterRegionWithItemTask> itemData;
 
         public EnterRegionWithItemTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, EnterRegionWithItemTaskType.this, section);
-            regionInfo = new RegionsData<T, EnterRegionWithItemTask>(this,
+            regionInfo = new RegionsData<>(this,
                     getConfig().loadSection(Paths.TASK_INFO_REGIONSDATA));
-            itemData = new ItemStackData<T, EnterRegionWithItemTask>(this,
+            itemData = new ItemStackData<>(this,
                     getConfig().loadSection(Paths.TASK_INFO_ITEM));
         }
 
@@ -155,9 +155,8 @@ public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T>
 
     @Override
     public String getDefaultUnstartedDescription(Task<T> task) {
-        if (!(task instanceof EnterRegionWithItemTaskType.EnterRegionWithItemTask))
+        if (!(task instanceof EnterRegionWithItemTask t))
             return null;
-        EnterRegionWithItemTask t = (EnterRegionWithItemTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.UNSTARTED), null);
         if (txt == null) {
@@ -170,9 +169,8 @@ public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T>
 
     @Override
     public String getDefaultProgressDescription(Task<T> task) {
-        if (!(task instanceof EnterRegionWithItemTaskType.EnterRegionWithItemTask))
+        if (!(task instanceof EnterRegionWithItemTask t))
             return null;
-        EnterRegionWithItemTask t = (EnterRegionWithItemTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.PROGRESS), null);
         if (txt == null) {
@@ -185,9 +183,8 @@ public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T>
 
     @Override
     public String getDefaultCompleteDescription(Task<T> task) {
-        if (!(task instanceof EnterRegionWithItemTaskType.EnterRegionWithItemTask))
+        if (!(task instanceof EnterRegionWithItemTask t))
             return null;
-        EnterRegionWithItemTask t = (EnterRegionWithItemTask) task;
         YMLSection config = getProvider().getTypeConfig(this);
         String txt = config.getString(Paths.TASK_PHASE_DESCRIPTION(Phase.COMPLETE), null);
         if (txt == null) {

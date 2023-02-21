@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class AReward<T extends User<T>> extends AQuestComponent<T> implements Reward<T> {
 
@@ -34,10 +35,7 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
     public void setHidden(Boolean value) {
         if (value != null && isHidden == value)
             return;
-        if (value == null)
-            isHidden = getType().getDefaultIsHidden();
-        else
-            isHidden = value;
+        isHidden = Objects.requireNonNullElse(value, getType().getDefaultIsHidden());
         getConfig().set(Paths.IS_HIDDEN, value == null ? null : isHidden);
     }
 
@@ -103,13 +101,13 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
             @Override
             public void onClick(Player clicker, ClickType click) {
                 switch (click) {
-                    case RIGHT:
-                    case SHIFT_RIGHT:
+                    case RIGHT, SHIFT_RIGHT -> {
                         setFeedback(null);
                         getGui().updateInventory();
                         return;
-                    default:
-                        break;
+                    }
+                    default -> {
+                    }
                 }
                 this.requestText(clicker, getRawFeedback(), "&6Set the Feedback");
             }

@@ -108,13 +108,13 @@ abstract class AQuestComponentWithCooldown<T extends User<T>> extends AQuestComp
             @Override
             public void onClick(Player clicker, ClickType click) {
                 switch (click) {
-                    case RIGHT:
-                    case SHIFT_RIGHT:
+                    case RIGHT, SHIFT_RIGHT -> {
                         setRepeatable(!isRepeatable());
                         updateInventory();
                         return;
-                    default:
-                        break;
+                    }
+                    default -> {
+                    }
                 }
                 super.onClick(clicker, click);
             }

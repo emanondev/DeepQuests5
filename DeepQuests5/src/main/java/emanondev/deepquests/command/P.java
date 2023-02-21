@@ -17,6 +17,8 @@ public class P {
     public static final Permission COMMAND_DEEPQUESTS_EDITOR = new PermissionBuilder("deepquests.command.deepquests.editor")
             .addChild(COMMAND_DEEPQUESTS_HELP, true)
             .buildAndRegister(Quests.get());
+    public static final Permission COMMAND_DEEPQUESTS_DQBACK = new PermissionBuilder("deepquests.command.deepquestback")
+            .buildAndRegister(Quests.get());
     public static final Permission COMMAND_DEEPQUESTS_OPENGUI = new PermissionBuilder("deepquests.command.deepquests.opengui")
             .addChild(COMMAND_DEEPQUESTS_HELP, true)
             .buildAndRegister(Quests.get());
