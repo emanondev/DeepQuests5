@@ -88,14 +88,14 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19.3-R0.1-SNAPSHOT</version>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <!-- JetBrains Annotations -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <version>24.0.1</version>
         </dependency>
         <!-- Vault -->
         <dependency>
@@ -133,7 +133,7 @@
         <dependency>
             <groupId>emanondev.core</groupId>
             <artifactId>DeepCore</artifactId>
-            <version>3.8.0</version>
+            <version>3.8.2</version>
             <scope>provided</scope>
         </dependency>
         <!-- Parties -->

@@ -1,6 +1,7 @@
 package emanondev.deepquests.config;
 
 import com.google.common.collect.Maps;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.nodes.Node;
@@ -11,6 +12,7 @@ import java.util.Map;
 class YmlConstructor extends SafeConstructor {
 
     public YmlConstructor() {
+        super(new LoaderOptions());
         this.yamlConstructors.put(Tag.MAP, new CustomObjectConstructor());
     }
 

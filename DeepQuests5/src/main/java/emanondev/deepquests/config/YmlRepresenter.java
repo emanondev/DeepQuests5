@@ -1,6 +1,7 @@
 package emanondev.deepquests.config;
 
 import com.google.common.collect.Maps;
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.representer.Representer;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 class YmlRepresenter extends Representer {
 
     public YmlRepresenter() {
+        super(new DumperOptions());
         this.multiRepresenters.put(Navigator.class, new RepresentMap() {
             @Override
             public Node representData(Object object) {

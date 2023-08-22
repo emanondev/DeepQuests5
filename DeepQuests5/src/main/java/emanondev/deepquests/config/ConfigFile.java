@@ -5,6 +5,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
+@Deprecated
 public class ConfigFile {
     private static final Plugin plugin = Quests.get();
     private final File file;
@@ -27,6 +28,7 @@ public class ConfigFile {
         this.nav = ConfigAPI.readFromResourceFile(this.file);
     }
 
+    @Deprecated
     public Navigator getNavigator() {
         return this.nav;
     }
