@@ -5,6 +5,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -13,9 +14,9 @@ import java.util.*;
 
 public abstract class ASubCommand {
     private final String permission;
-    private final List<String> aliases = new ArrayList<String>();
-    protected final HashMap<String, ASubCommand> subsByAlias = new HashMap<String, ASubCommand>();
-    protected final LinkedHashSet<ASubCommand> subs = new LinkedHashSet<ASubCommand>();
+    private final List<String> aliases = new ArrayList<>();
+    protected final HashMap<String, ASubCommand> subsByAlias = new HashMap<>();
+    protected final LinkedHashSet<ASubCommand> subs = new LinkedHashSet<>();
 
     /**
      * @param name       - nome di questo sottocomando (ex: /gemme bal - "bal" è il nome del sottocomando
@@ -120,9 +121,9 @@ public abstract class ASubCommand {
      */
     public ArrayList<String> onTab(ArrayList<String> params, CommandSender sender, String label, String[] args) {
         if (params == null || params.isEmpty() || subs.isEmpty())
-            return new ArrayList<String>();
+            return new ArrayList<>();
         if (params.size() == 1) {
-            ArrayList<String> list = new ArrayList<String>();
+            ArrayList<String> list = new ArrayList<>();
             for (ASubCommand sub : subs) {
                 if (sub.playersOnly() && !(sender instanceof Player))
                     continue;
@@ -133,11 +134,11 @@ public abstract class ASubCommand {
         }
 
         if (!subsByAlias.containsKey(params.get(0).toLowerCase()))
-            return new ArrayList<String>();
+            return new ArrayList<>();
 
         ASubCommand sub = subsByAlias.get(params.get(0).toLowerCase());
         if (!sub.hasPermission(sender))
-            return new ArrayList<String>();
+            return new ArrayList<>();
         params.remove(0);
         return sub.onTab(params, sender, label, args);
     }
@@ -222,9 +223,9 @@ public abstract class ASubCommand {
             setDescription((String) null);
             return;
         }
-        StringBuilder text = new StringBuilder("");
+        StringBuilder text = new StringBuilder();
         for (String line : list)
-            text.append("\n" + line);
+            text.append("\n").append(line);
         setDescription(text.toString().replaceFirst("\n", ""));
     }
 
@@ -255,11 +256,6 @@ public abstract class ASubCommand {
 
     /**
      * schermata di aiuto, si consiglia di non reimplementare
-     *
-     * @param params
-     * @param sender
-     * @param label
-     * @param args
      */
     public void onHelp(ArrayList<String> params, CommandSender sender, String label, String[] args) {
         String previusArgs = getPreviusParams(params, label, args);
@@ -273,7 +269,7 @@ public abstract class ASubCommand {
             comp.append("\n" + ChatColor.BLUE + " - /" + previusArgs + " [...]");
             if (getDescription() != null)
                 comp.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        new ComponentBuilder(Utils.fixString(getDescription(), null, true)).create()
+                        new Text(Utils.fixString(getDescription(), null, true))
                 ));
             comp.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + previusArgs));
 
@@ -287,7 +283,7 @@ public abstract class ASubCommand {
                         comp.append("\n" + ChatColor.DARK_AQUA + sub.getFirstAlias() + " " + ChatColor.AQUA + sub.getParams());
                     if (sub.getDescription() != null)
                         comp.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ComponentBuilder(Utils.fixString(sub.getDescription(), null, true)).create()
+                                new Text(Utils.fixString(sub.getDescription(), null, true))
                         ));
                     comp.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + previusArgs + " " + sub.getFirstAlias()));
                 } else if (showLockedSuggestions()) {
@@ -297,7 +293,7 @@ public abstract class ASubCommand {
                         comp.append("\n" + ChatColor.RED + sub.getFirstAlias() + " " + ChatColor.GOLD + sub.getParams());
                     if (getDescription() != null)
                         comp.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ComponentBuilder(Utils.fixString(getDescription(), null, true)).create()
+                                new Text(Utils.fixString(getDescription(), null, true))
                         ));
                 }
             }
@@ -313,13 +309,12 @@ public abstract class ASubCommand {
                 comp.append("\n" + ChatColor.RED + " - /" + previusArgs);
             if (getDescription() != null)
                 comp.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        new ComponentBuilder(Utils.fixString(getDescription(), null, true)).create()
+                        new Text(Utils.fixString(getDescription(), null, true))
                 ));
             comp.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + previusArgs));
 
         }
-        comp.append("\n");
-        comp.append("" + ChatColor.BLUE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "-----"
+        comp.append("\n").append("" + ChatColor.BLUE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "-----"
                 + ChatColor.GRAY + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "[--"
                 + ChatColor.BLUE + "   Help   "
                 + ChatColor.GRAY + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "--]"
@@ -332,7 +327,7 @@ public abstract class ASubCommand {
         int max = args.length - params.size();
         StringBuilder text = new StringBuilder(label);
         for (int i = 0; i < max; i++) {
-            text.append(" " + args[i]);
+            text.append(" ").append(args[i]);
         }
         return text.toString();
     }

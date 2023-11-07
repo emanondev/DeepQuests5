@@ -491,6 +491,6 @@ public class MapNavigator {
             set(path, null);
             return;
         }
-        set(path, new ArrayList<Integer>(value));
+        set(path, new ArrayList<>(value));
     }
 }

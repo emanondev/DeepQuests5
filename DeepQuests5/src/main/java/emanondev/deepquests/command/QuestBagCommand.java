@@ -1,8 +1,9 @@
 package emanondev.deepquests.command;
 
-import emanondev.core.CoreCommand;
 import emanondev.core.PermissionBuilder;
 import emanondev.core.UtilsMessages;
+import emanondev.core.command.CoreCommand;
+import emanondev.core.message.DMessage;
 import emanondev.deepquests.ItemEditUtils;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.gui.inventory.Gui;
@@ -14,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -28,11 +29,11 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
         super(manager.getName() + "questbag", Quests.get(),
                 new PermissionBuilder("deepquests.command." + manager.getName() + "questbag")
                         .setDescription("Allows to open and inspect your own questbag for manager " + manager.getName())
-                        .buildAndRegister(Quests.get(), true),
+                        .buildAndRegister(Quests.get()),
                 "allow to use /" + manager.getName() + "questbag command");
         SEE_OTHERS = new PermissionBuilder("deepquests.command." + manager.getName() + "questbag.others")
                 .addChild(this.getCommandPermission(), true)
-                .setDescription("Allows to open and inspect any questbag for manager " + manager.getName()).buildAndRegister(Quests.get(), true);
+                .setDescription("Allows to open and inspect any questbag for manager " + manager.getName()).buildAndRegister(Quests.get());
         this.manager = manager;
     }
 
@@ -47,21 +48,21 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
                 T u = manager.getUserManager().getUser(s);
                 if (u == null) {
                     // no user
-                    UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
-                            .loadMessage("command." + this.getID() + ".no-user", "&cNo bag found"));
+                    new DMessage(this.getPlugin(),sender).appendLang(
+                            "command." + this.getID() + ".no-user").send();
                     return;
                 }
                 if (u.getQuestBag() == null) {
                     // nobag
-                    UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
-                            .loadMessage("command." + this.getID() + ".no-bag", "&cNo bag found"));
+                    new DMessage(this.getPlugin(),sender).appendLang(
+                            "command." + this.getID() + ".no-bag").send();
                     return;
                 }
                 Map<String, Integer> map = u.getQuestBag().getQuestItems();
                 if (map.isEmpty()) {
                     // no items
-                    UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
-                            .loadMessage("command." + this.getID() + ".no-items", "&cThis bag has no items"));
+                    new DMessage(this.getPlugin(),sender).appendLang(
+                            "command." + this.getID() + ".no-items").send();
                     return;
                 }
                 Gui gui = ItemEditUtils.craftGui(u, map, s, this.getPlugin().getLanguageConfig(s)
@@ -85,36 +86,36 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
                 T u = manager.getUserManager().getUser(t);
                 if (u == null) {
                     // no user
-                    UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
-                            .loadMessage("command." + this.getID() + ".no-user", "&cNo user found"));
+                    new DMessage(this.getPlugin(),sender).appendLang(
+                            "command." + this.getID() + ".no-user").send();
                     return;
                 }
                 if (u.getQuestBag() == null) {
                     // nobag
-                    UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
-                            .loadMessage("command." + this.getID() + ".no-bag", "&cNo bag found"));
+                    new DMessage(this.getPlugin(),sender).appendLang(
+                            "command." + this.getID() + ".no-bag").send();
                     return;
                 }
                 Map<String, Integer> map = u.getQuestBag().getQuestItems();
                 if (map.isEmpty()) {
                     // noitems
-                    UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
-                            .loadMessage("command." + this.getID() + ".no-items", "&cThis bag has no items"));
+                    new DMessage(this.getPlugin(),sender).appendLang(
+                            "command." + this.getID() + ".no-items").send();
                     return;
                 }
                 Gui gui = ItemEditUtils.craftGui(u, map, s, this.getPlugin().getLanguageConfig(s)
                         .loadMessage("command." + this.getID() + ".gui-title", "&9Quest Bag"));
                 s.openInventory(gui.getInventory());
             }
-            default -> UtilsMessages.sendMessage(sender, this.getPlugin().getLanguageConfig(sender)
-                    .loadMessage("command." + this.getID() + ".help", "&c/%alias% [player]", "%alias%", alias));
+            default -> new DMessage(this.getPlugin(),sender).appendLang(
+                    "command." + this.getID() + ".help", "%alias%", alias).send();
         }
     }
 
     @Override
     public List<String> onComplete(@NotNull CommandSender sender, @NotNull String alias, String[] args, Location loc) {
         if (args.length != 1 || !sender.hasPermission(SEE_OTHERS))
-            return new ArrayList<>();
+            return Collections.emptyList();
         return this.completePlayerNames(sender, args[0]);
     }
 

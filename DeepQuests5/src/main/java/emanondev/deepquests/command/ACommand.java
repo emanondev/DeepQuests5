@@ -6,6 +6,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class ACommand extends ASubCommand implements TabExecutor {
@@ -40,13 +41,12 @@ public abstract class ACommand extends ASubCommand implements TabExecutor {
      */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-        ArrayList<String> params = new ArrayList<String>();
+        ArrayList<String> params = new ArrayList<>();
         if (!hasPermission(sender))
             return params;
         if (playersOnly() && !(sender instanceof Player))
             return params;
-        for (String arg : args)
-            params.add(arg);
+        Collections.addAll(params, args);
 
         return onTab(params, sender, label, args);
     }
@@ -65,9 +65,8 @@ public abstract class ACommand extends ASubCommand implements TabExecutor {
             CmdUtils.playersOnly(sender);
             return true;
         }
-        ArrayList<String> params = new ArrayList<String>();
-        for (String arg : args)
-            params.add(arg);
+        ArrayList<String> params = new ArrayList<>();
+        Collections.addAll(params, args);
 
         onCmd(params, sender, label, args);
         return true;

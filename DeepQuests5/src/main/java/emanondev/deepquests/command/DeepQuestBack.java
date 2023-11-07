@@ -21,9 +21,11 @@ public class DeepQuestBack extends CoreCommand {
 
     @Override
     public void onExecute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player p))
+        if (!(sender instanceof Player p)) {
             this.playerOnlyNotify(sender);
-        else if (GuiHandler.getLastUsedGui(p) != null)
+            return;
+        }
+        if (GuiHandler.getLastUsedGui(p) != null)
             p.openInventory(GuiHandler.getLastUsedGui(p).getInventory());
     }
 

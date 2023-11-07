@@ -1,21 +1,35 @@
 package emanondev.deepquests.command;
 
+import emanondev.core.command.CoreCommand;
+import emanondev.deepquests.Quests;
 import emanondev.deepquests.gui.inventory.QuestsMenu;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-public class CommandQuests extends ACommand {
+public class CommandQuests extends CoreCommand {
     public CommandQuests() {
-        super("quests", Arrays.asList("quest", "q"), null);
-        this.setPlayersOnly(true);
+        super("quests", Quests.get(),null,"Open available quests",Arrays.asList("quest", "q"));
     }
 
     @Override
-    public void onCmd(ArrayList<String> params, CommandSender sender, String label, String[] args) {
-        Player p = (Player) sender;
+    public void onExecute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player p)){
+            this.playerOnlyNotify(sender);
+            return;
+        }
         p.openInventory(new QuestsMenu(p, null, null).getInventory());
+    }
+
+    @Override
+    public @Nullable List<String> onComplete(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args, @Nullable Location location) {
+        return Collections.emptyList();
     }
 }

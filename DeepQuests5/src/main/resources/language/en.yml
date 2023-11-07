@@ -1,0 +1,49 @@
+command:
+  deepquests:
+    database:
+      swapplayers:
+        invalid_player_HOLDERS: '%alias% %player%'
+        invalid_player: '&4[&c✗&4] &cTarget &6%player% &cnever joined the server'
+        failed_HOLDERS: '%player1% %player2%'
+        failed: '&4[&c✗&4] &cUnable to swap players &6%player1% &cand &6%player2%'
+        success_HOLDERS: '%player1% %player2%'
+        # PlaceHolders: %player1% %player2%
+        success: '&b[&a✓&b] &aSwapped players &e%player1% &aand &e%player2%'
+    manager:
+      wrong_params_HOLDERS: '%alias%'
+      wrong_params: '&4[&c✘&4] &c/%alias% manager <manager>'
+    opengui:
+      wrong_params_HOLDERS: '%alias%'
+      wrong_params: '&4[&c✘&4] &c/%alias% opengui &6<player>'
+    questbag:
+      success:
+        add_HOLDERS: '%amount% %id% %user%'
+        add: '&2[&a✔&2] &aAdded &e%amount% &aof &e%id% &ato &e%user% &aquestbag'
+        remove_HOLDERS: '%amount% %id% %user%'
+        remove: '&2[&a✔&2] &aRemoved &e%amount% &aof &e%id% &ato &e%user% &aquestbag'
+      has_no_items: '&2[&a✔&2] &e%user% &ahas no &e%id% &aon his questbag'
+      wrong_params: '&4[&c✘&4] &c/%alias% questbag <manager> <user> <add/remove> <id>
+        [amount]'
+  playersquestbag:
+    no-bag: "&cNo bag found"
+    no-user: '&cNo bag found'
+    no-items: '&cLo zaino non ha oggetti'
+    gui-title: '&9Zaino oggetti delle missioni'
+    help: '&c/%alias% [player]'
+    lack_permission: '&cYou lack of permission %permission%'
+  townsquestbag:
+    no-bag: "&cNo bag found"
+    no-user: '&cNo bag found'
+    no-items: '&cThis bag has no items'
+    help: '&c/%alias% [player]'
+    gui-title: '&9Zaino oggetti delle missioni'
+  nationsquestbag:
+    no-bag: "&cNo bag found"
+    no-user: '&cNo bag found'
+    no-items: '&cThis bag has no items'
+    help: '&c/%alias% [player]'
+    gui-title: '&9Zaino oggetti delle missioni'
+command-generic:
+  lack_permission: '&cYou lack of permission %permission%'
+generic:
+  lack_permission: '&cYou lack of permission %permission%'

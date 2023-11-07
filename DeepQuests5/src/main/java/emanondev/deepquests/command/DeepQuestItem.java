@@ -1,5 +1,7 @@
 package emanondev.deepquests.command;
 
+import emanondev.core.command.CoreCommand;
+import emanondev.deepquests.Quests;
 import emanondev.deepquests.gui.button.ItemEditorButton;
 import emanondev.deepquests.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
@@ -7,49 +9,27 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.hover.content.Text;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-@Deprecated
-public class DeepQuestItem extends ACommand {
+public class DeepQuestItem extends CoreCommand {
     private static final HashMap<Player, ItemEditorButton> map = new HashMap<>();
 
     public DeepQuestItem() {
-        super("deepquestitem", List.of("dqitem"), null);
-        this.setPlayersOnly(true);
+        super("deepquestitem", Quests.get(), P.COMMAND_DEEPQUESTS_DQITEM, null, List.of("dqitem"));
     }
 
-
-    @Override
-    public List<String> onTabComplete(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public void onCmd(ArrayList<String> params, CommandSender sender, String label, String[] args) {
-        Player p = (Player) sender;
-        if (!map.containsKey(p)) {
-            p.sendMessage(Utils.fixString("&cNo item is requested", null, true));
-            return;
-        }
-        p.openInventory(map.get(p).getGui().getInventory());
-        ItemStack item = p.getInventory().getItemInMainHand();
-        if (item == null || item.getType() == Material.AIR) {
-            map.get(p).onReicevedItem(null);
-        } else
-            map.get(p).onReicevedItem(new ItemStack(item));
-        map.remove(p);
-        return;
-    }
-
-    private static void requestItem(Player p, BaseComponent[] description, ItemEditorButton button) {
+    private static void requestItem(Player p, Text description, ItemEditorButton button) {
         map.put(p, button);
         p.closeInventory();
         ComponentBuilder comp = new ComponentBuilder(
@@ -66,14 +46,33 @@ public class DeepQuestItem extends ACommand {
 
     /**
      * use \n on description for multiple lines
-     *
-     * @param p
-     * @param description
-     * @param button
      */
     public static void requestItem(Player p, String description, ItemEditorButton button) {
-        requestItem(p, new ComponentBuilder(
-                ChatColor.translateAlternateColorCodes('&', description)).create(), button);
+        requestItem(p, new Text(
+                ChatColor.translateAlternateColorCodes('&', description)), button);
     }
 
+    @Override
+    public void onExecute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player p)) {
+            this.playerOnlyNotify(sender);
+            return;
+        }
+        if (!map.containsKey(p)) {
+            p.sendMessage(Utils.fixString("&cNo item is requested", null, true));
+            return;
+        }
+        p.openInventory(map.get(p).getGui().getInventory());
+        ItemStack item = p.getInventory().getItemInMainHand();
+        if (item.getType() == Material.AIR) {
+            map.get(p).onReicevedItem(null);
+        } else
+            map.get(p).onReicevedItem(new ItemStack(item));
+        map.remove(p);
+    }
+
+    @Override
+    public @Nullable List<String> onComplete(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings, @Nullable Location location) {
+        return Collections.emptyList();
+    }
 }
