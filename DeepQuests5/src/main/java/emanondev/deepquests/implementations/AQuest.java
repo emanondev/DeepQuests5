@@ -116,12 +116,12 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
     }
 
     @Override
-    public final Collection<Mission<T>> getMissions() {
+    public final @NotNull Collection<Mission<T>> getMissions() {
         return Collections.unmodifiableCollection(missions.values());
     }
 
     @Override
-    public final boolean addMission(Mission<T> mission) {
+    public final boolean addMission(@NotNull Mission<T> mission) {
         if (missions.containsKey(mission.getID()))
             throw new IllegalArgumentException();
         missions.put(mission.getID(), mission);
@@ -129,12 +129,12 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
     }
 
     @Override
-    public final boolean removeMission(Mission<T> mission) {
+    public final boolean removeMission(@NotNull Mission<T> mission) {
         return missions.remove(mission.getID()) != null;
     }
 
     @Override
-    public final Collection<Require<T>> getRequires() {
+    public final @NotNull Collection<Require<T>> getRequires() {
         return Collections.unmodifiableCollection(requires.values());
     }
 
@@ -144,7 +144,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
     }
 
     @Override
-    public final boolean addRequire(Require<T> require) {
+    public final boolean addRequire(@NotNull Require<T> require) {
         if (requires.containsKey(require.getID()))
             throw new IllegalArgumentException();
         requires.put(require.getID(), require);
@@ -152,7 +152,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
     }
 
     @Override
-    public final boolean removeRequire(Require<T> require) {
+    public final boolean removeRequire(@NotNull Require<T> require) {
         return requires.remove(require.getID()) != null;
     }
 

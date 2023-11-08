@@ -7,6 +7,7 @@ import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.interfaces.RequireType;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public abstract class ARequire<T extends User<T>> extends AQuestComponent<T> imp
     }
 
     @Override
-    public final RequireType<T> getType() {
+    public final @NotNull RequireType<T> getType() {
         return type;
     }
 

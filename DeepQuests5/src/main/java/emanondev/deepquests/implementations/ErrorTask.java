@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,7 +33,7 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
     }
 
     @Override
-    public Mission<T> getMission() {
+    public @NotNull Mission<T> getMission() {
         return mission;
     }
 
@@ -56,7 +57,7 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
     }
 
     @Override
-    public TaskType<T> getType() {
+    public @NotNull TaskType<T> getType() {
         return null;
     }
 
@@ -98,7 +99,7 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
     }
 
     @Override
-    public Collection<Reward<T>> getCompleteRewards() {
+    public @NotNull Collection<Reward<T>> getCompleteRewards() {
         return null;
     }
 
@@ -108,32 +109,32 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
     }
 
     @Override
-    public boolean addCompleteReward(Reward<T> reward) {
+    public boolean addCompleteReward(@NotNull Reward<T> reward) {
         return false;
     }
 
     @Override
-    public boolean removeCompleteReward(Reward<T> reward) {
+    public boolean removeCompleteReward(@NotNull Reward<T> reward) {
         return false;
     }
 
     @Override
-    public Collection<Reward<T>> getProgressRewards() {
+    public @NotNull Collection<Reward<T>> getProgressRewards() {
         return null;
     }
 
     @Override
-    public Reward<T> getProgressReward(int id) {
+    public @NotNull Reward<T> getProgressReward(int id) {
         return null;
     }
 
     @Override
-    public boolean addProgressReward(Reward<T> reward) {
+    public boolean addProgressReward(@NotNull Reward<T> reward) {
         return false;
     }
 
     @Override
-    public boolean removeProgressReward(Reward<T> reward) {
+    public boolean removeProgressReward(@NotNull Reward<T> reward) {
         return false;
     }
 

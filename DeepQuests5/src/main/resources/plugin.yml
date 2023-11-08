@@ -7,31 +7,11 @@ softdepend: [ ItemEdit,Factions,Towny,SuperVanish,PremiumVanish,Mcmmo,VirginBloc
 api-version: 1.13
 
 commands:
-  quests:
-    description: reload the config
-    usage: "§cUsage: /quests"
-    permission: deepquests.commands.quests
-    aliases: [ quest,q ]
   deepquests:
     description: reload the config
     permission: deepquests.admin.editor
     usage: "§cUsage: /deepquests"
     aliases: [ dq,deepquest,questadmin,qa ]
-  deepquesttext:
-    description: when a string is requested
-    usage: "§cUsage: /deepquesttext"
-    permission: deepquests.admin.editor
-    aliases: [ dqtext ]
-  deepquestitem:
-    description: when an item is requested
-    usage: "§cUsage: /deepquestitem"
-    permission: deepquests.admin.editor
-    aliases: [ dqitem ]
-  deepquestback:
-    description: when an item is requested
-    usage: "§cUsage: /deepquestback"
-    permission: deepquests.admin.editor
-    aliases: [ dqback ]
   deepquestimport:
     description: import old database
     usage: "§cUsage: /deepquestimport"

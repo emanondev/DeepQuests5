@@ -2,35 +2,32 @@ package emanondev.deepquests.interfaces;
 
 import emanondev.core.YMLSection;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 public interface TaskType<T extends User<T>> extends QuestComponentType<T, Task<T>>, Listener {
 
 
     default String getDefaultPhaseDescription(Task.Phase phase, Task<T> task) {
-        switch (phase) {
-            case COMPLETE:
-                return getDefaultCompleteDescription(task);
-            case PROGRESS:
-                return getDefaultProgressDescription(task);
-            case UNSTARTED:
-                return getDefaultUnstartedDescription(task);
-            default:
-                throw new IllegalStateException();
-        }
+        return switch (phase) {
+            case COMPLETE -> getDefaultCompleteDescription(task);
+            case PROGRESS -> getDefaultProgressDescription(task);
+            case UNSTARTED -> getDefaultUnstartedDescription(task);
+            default -> throw new IllegalStateException();
+        };
     }
 
     @Deprecated
-    String getDefaultUnstartedDescription(Task<T> task);
+    String getDefaultUnstartedDescription(@NotNull Task<T> task);
 
     @Deprecated
-    String getDefaultProgressDescription(Task<T> task);
+    String getDefaultProgressDescription(@NotNull Task<T> task);
 
     @Deprecated
-    String getDefaultCompleteDescription(Task<T> task);
+    String getDefaultCompleteDescription(@NotNull Task<T> task);
 
-    Task<T> getInstance(int id, Mission<T> mission, YMLSection nav);
+    @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection nav);
 
-    default TaskProvider<T> getProvider() {
+    default @NotNull TaskProvider<T> getProvider() {
         return getManager().getTaskProvider();
     }
 }

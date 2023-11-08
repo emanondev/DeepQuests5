@@ -1,5 +1,6 @@
 package emanondev.deepquests.generic.tasktypes;
 
+import emanondev.core.Hooks;
 import emanondev.core.YMLSection;
 import emanondev.deepquests.Holders;
 import emanondev.deepquests.Translations;
@@ -8,7 +9,6 @@ import emanondev.deepquests.data.DropData;
 import emanondev.deepquests.data.ToolData;
 import emanondev.deepquests.data.VirginBlockData;
 import emanondev.deepquests.gui.inventory.Gui;
-import emanondev.deepquests.hooks.Hooks;
 import emanondev.deepquests.implementations.ATask;
 import emanondev.deepquests.implementations.ATaskType;
 import emanondev.deepquests.implementations.Paths;
@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,7 +150,7 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new BreakBlockTask(id, mission, section);
     }
 
@@ -159,7 +160,7 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof BreakBlockTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -173,7 +174,7 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof BreakBlockTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -188,7 +189,7 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof BreakBlockTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);

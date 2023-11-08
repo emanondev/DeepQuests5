@@ -8,6 +8,8 @@ import emanondev.deepquests.utils.DisplayState;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -17,12 +19,12 @@ public interface Quest<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasC
      * @param id id of the mission
      * @return selected mission or null
      */
-    Mission<T> getMission(int id);
+    @Nullable Mission<T> getMission(int id);
 
     /**
      * @return immutable collection of missions of this
      */
-    Collection<Mission<T>> getMissions();
+    @NotNull Collection<Mission<T>> getMissions();
 
 
     /**
@@ -31,24 +33,24 @@ public interface Quest<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasC
      * @throws IllegalArgumentException if mission.getParent() != null
      * @throws IllegalArgumentException if getMission(mission.getKey()) != null
      */
-    boolean addMission(Mission<T> mission);
+    boolean addMission(@NotNull Mission<T> mission);
 
     /**
      * @param mission target to remove
      * @return true if successfully removed
      */
-    boolean removeMission(Mission<T> mission);
+    boolean removeMission(@NotNull Mission<T> mission);
 
     /**
      * @return get requires of this
      */
-    Collection<Require<T>> getRequires();
+    @NotNull Collection<Require<T>> getRequires();
 
     /**
      * @param id key of require
      * @return get require with key or null
      */
-    Require<T> getRequire(int id);
+    @Nullable Require<T> getRequire(int id);
 
     /**
      * @param require the requirement to add
@@ -56,16 +58,16 @@ public interface Quest<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasC
      * @throws IllegalArgumentException if require.getParent() != null
      * @throws IllegalArgumentException if getRequire(require.getKey()) != null
      */
-    boolean addRequire(Require<T> require);
+    boolean addRequire(@NotNull Require<T> require);
 
     /**
      * @param require target to remove
      * @return true if successfully removed
      */
-    boolean removeRequire(Require<T> require);
+    boolean removeRequire(@NotNull Require<T> require);
 
     /**
-     * @return
+     * @return true if Quest is on developing stage (aka hidden)
      */
     boolean isDeveloped();
 

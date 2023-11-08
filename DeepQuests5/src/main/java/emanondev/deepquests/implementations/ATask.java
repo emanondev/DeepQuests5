@@ -17,6 +17,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -98,7 +99,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
         info.add("&9Priority: &e" + getPriority());
         info.add("&9Max Progress: &e" + getMaxProgress());
         info.add("&9Progress Chance: &e" + StringUtils.getDecimalFormat().format(getProgressChance() * 100) + "%");
-        if (showBossBar)
+        if (showBossBar())
             info.add("&9Show BossBar onProgress: &cfalse");
         else {
             info.add("&9Show BossBar onProgress: &atrue");
@@ -143,7 +144,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     }
 
     @Override
-    public TaskType<T> getType() {
+    public @NotNull TaskType<T> getType() {
         return type;
     }
 
@@ -165,12 +166,12 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     }
 
     @Override
-    public final Mission<T> getMission() {
+    public final @NotNull Mission<T> getMission() {
         return mission;
     }
 
     @Override
-    public final Collection<Reward<T>> getCompleteRewards() {
+    public final @NotNull Collection<Reward<T>> getCompleteRewards() {
         return Collections.unmodifiableCollection(completeRewards.values());
     }
 
@@ -180,7 +181,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     }
 
     @Override
-    public final boolean addCompleteReward(Reward<T> reward) {
+    public final boolean addCompleteReward(@NotNull Reward<T> reward) {
         if (completeRewards.containsKey(reward.getID()))
             return false;
         completeRewards.put(reward.getID(), reward);
@@ -188,7 +189,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     }
 
     @Override
-    public final boolean removeCompleteReward(Reward<T> reward) {
+    public final boolean removeCompleteReward(@NotNull Reward<T> reward) {
         if (!completeRewards.containsKey(reward.getID()))
             return false;
         completeRewards.remove(reward.getID());
@@ -196,17 +197,17 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     }
 
     @Override
-    public final Collection<Reward<T>> getProgressRewards() {
+    public final @NotNull Collection<Reward<T>> getProgressRewards() {
         return Collections.unmodifiableCollection(progressRewards.values());
     }
 
     @Override
-    public final Reward<T> getProgressReward(int id) {
+    public final @NotNull Reward<T> getProgressReward(int id) {
         return progressRewards.get(id);
     }
 
     @Override
-    public final boolean addProgressReward(Reward<T> reward) {
+    public final boolean addProgressReward(@NotNull Reward<T> reward) {
         if (progressRewards.containsKey(reward.getID()))
             return false;
         progressRewards.put(reward.getID(), reward);
@@ -214,7 +215,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     }
 
     @Override
-    public final boolean removeProgressReward(Reward<T> reward) {
+    public final boolean removeProgressReward(@NotNull Reward<T> reward) {
         if (!progressRewards.containsKey(reward.getID()))
             return false;
         progressRewards.remove(reward.getID());
@@ -371,9 +372,15 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             this.putButton(9, new MaxProgressButton());
             this.putButton(10, new ProgressChanceButton());
             this.putButton(14, new HiddenButton());
-            this.putButton(15, new PhaseDescriptionButton(Phase.UNSTARTED));
-            this.putButton(16, new PhaseDescriptionButton(Phase.PROGRESS));
-            this.putButton(17, new PhaseDescriptionButton(Phase.COMPLETE));
+            PhaseDescriptionButton b = new PhaseDescriptionButton(Phase.UNSTARTED);
+            b.update();
+            this.putButton(15, b);
+            b =  new PhaseDescriptionButton(Phase.PROGRESS);
+            b.update();
+            this.putButton(16, b);
+            b =  new PhaseDescriptionButton(Phase.COMPLETE);
+            b.update();
+            this.putButton(17, b);
 
             this.putButton(24, new ProgressRewardCreate());
             this.putButton(25, new ProgressRewardSelector());

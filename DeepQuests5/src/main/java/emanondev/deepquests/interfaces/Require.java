@@ -5,15 +5,15 @@ import emanondev.deepquests.gui.button.GuiElementButton;
 import emanondev.deepquests.gui.button.SortableButton;
 import emanondev.deepquests.gui.inventory.Gui;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 public interface Require<T extends User<T>> extends QuestComponent<T> {
     /**
      * @return the Type
      */
-    RequireType<T> getType();
+    @NotNull RequireType<T> getType();
 
     /**
-     * @param user
      * @return true if user satisfy this require
      */
     boolean isAllowed(T user);
@@ -37,7 +37,7 @@ public interface Require<T extends User<T>> extends QuestComponent<T> {
         return new GuiElementButton<>(parent, this);
     }
 
-    QuestManager<T> getManager();
+    @NotNull QuestManager<T> getManager();
 
     default String getTypeName() {
         return getType().getKeyID();

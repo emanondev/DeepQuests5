@@ -22,6 +22,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +61,8 @@ public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
         List<Task<T>> tasks = user.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            NPCKillTask task = (NPCKillTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            NPCKillTask task = (NPCKillTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.npcData.isValidNPC(event.getNPC())
                     && task.toolData.isValidTool(p.getInventory().getItemInMainHand(), p)) {
                 if (task.onProgress(user, 1, p, false) > 0) {
@@ -99,7 +100,7 @@ public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
             return toolData;
         }
 
-        public NPCKillTaskType<T> getType() {
+        public @NotNull NPCKillTaskType<T> getType() {
             return NPCKillTaskType.this;
         }
 
@@ -136,12 +137,12 @@ public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new NPCKillTask(id, mission, section);
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof NPCKillTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -155,7 +156,7 @@ public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof NPCKillTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -170,7 +171,7 @@ public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof NPCKillTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);

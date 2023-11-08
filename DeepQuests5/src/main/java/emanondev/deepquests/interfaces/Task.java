@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -25,18 +26,18 @@ import java.util.Collection;
  */
 public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
 
-    Mission<T> getMission();
+    @NotNull Mission<T> getMission();
 
     /**
      * @return ordered list of rewards
      */
-    Collection<Reward<T>> getCompleteRewards();
+    @NotNull Collection<Reward<T>> getCompleteRewards();
 
     /**
      * @param id - key of the reward
      * @return the reward with key or null
      */
-    Reward<T> getCompleteReward(int id);
+    @Nullable Reward<T> getCompleteReward(int id);
 
     /**
      * @param reward - the reward to add
@@ -44,24 +45,24 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
      * @throws IllegalArgumentException if reward.getParent() != null
      * @throws IllegalArgumentException if getReward(reward.getKey()) != null
      */
-    boolean addCompleteReward(Reward<T> reward);
+    boolean addCompleteReward(@NotNull Reward<T> reward);
 
     /**
      * @param reward - the reward to remove
      * @return true if successfully removed
      */
-    boolean removeCompleteReward(Reward<T> reward);
+    boolean removeCompleteReward(@NotNull Reward<T> reward);
 
     /**
      * @return ordered list of rewards
      */
-    Collection<Reward<T>> getProgressRewards();
+    @NotNull Collection<Reward<T>> getProgressRewards();
 
     /**
      * @param id - key of the reward
      * @return the reward with key or null
      */
-    Reward<T> getProgressReward(int id);
+    @NotNull Reward<T> getProgressReward(int id);
 
     /**
      * @param reward - the reward to add
@@ -69,13 +70,13 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
      * @throws IllegalArgumentException if reward.getParent() != null
      * @throws IllegalArgumentException if getReward(reward.getKey()) != null
      */
-    boolean addProgressReward(Reward<T> reward);
+    boolean addProgressReward(@NotNull Reward<T> reward);
 
     /**
      * @param reward - the reward to remove
      * @return true if successfully removed
      */
-    boolean removeProgressReward(Reward<T> reward);
+    boolean removeProgressReward(@NotNull Reward<T> reward);
 
     /**
      * ProgressChance is the probability to Obtain a progress <br>
@@ -109,7 +110,7 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
     /**
      * @return the TaskType of this
      */
-    TaskType<T> getType();
+    @NotNull TaskType<T> getType();
 
     /**
      * @return BossBar style of this
@@ -198,9 +199,9 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
         if (data.isCompleted())
             list[1] = list[3];
         else if (user.getMissionData(this.getMission()).isStarted())
-            list[1] = list[5];
-        else
             list[1] = list[7];
+        else
+            list[1] = list[5];
 
         return list;
     }

@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new BreedMobTask(id, mission, section);
     }
 
@@ -54,8 +55,8 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
         List<Task<T>> tasks = user.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            BreedMobTask task = (BreedMobTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            BreedMobTask task = (BreedMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidEntity(event.getEntity())
                     && task.toolData.isValidTool(event.getBredWith(), p))
                 if (task.onProgress(user, 1, p, false) > 0) {
@@ -91,7 +92,7 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
         }
 
         @Override
-        public BreedMobTaskType<T> getType() {
+        public @NotNull BreedMobTaskType<T> getType() {
             return BreedMobTaskType.this;
         }
 
@@ -132,7 +133,7 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof BreedMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -146,7 +147,7 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof BreedMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -161,7 +162,7 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof BreedMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);

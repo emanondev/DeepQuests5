@@ -21,6 +21,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,8 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
         List<Task<T>> tasks = user.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            FishingTask task = (FishingTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            FishingTask task = (FishingTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld())
                     && task.fishingRod.isValidTool(getFishingRod(event.getPlayer()), event.getPlayer())) {
                 if (!task.fishedItem.isEnabled() || (event.getCaught() instanceof Item
@@ -52,7 +53,7 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
                         if (task.dropsData.removeExpDrops())
                             event.setExpToDrop(0);
                         if (task.dropsData.removeItemDrops()) {
-                            event.getHook();
+                            //event.getHook();
                             event.getHook().remove();
                         }
                     }
@@ -96,7 +97,7 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
         }
 
         @Override
-        public FishingTaskType<T> getType() {
+        public @NotNull FishingTaskType<T> getType() {
             return FishingTaskType.this;
         }
 
@@ -148,12 +149,12 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new FishingTask(id, mission, section);
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof FishingTaskType.FishingTask))
             return null;
         // FishingTask t = (FishingTask) task;
@@ -168,7 +169,7 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof FishingTaskType.FishingTask))
             return null;
         // FishingTask t = (FishingTask) task;
@@ -184,7 +185,7 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof FishingTaskType.FishingTask))
             return null;
         // FishingTask t = (FishingTask) task;

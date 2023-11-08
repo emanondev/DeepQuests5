@@ -14,9 +14,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -125,7 +127,6 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
     }
 
     /**
-     * @param state
      * @param item  - setting as null revert to default
      */
     @Override
@@ -154,7 +155,6 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
     }
 
     /**
-     * @param state
      * @param hide  - if null revert to default
      */
     @Override
@@ -174,11 +174,10 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
     }
 
     /**
-     * @param state
      * @param desc  - if null revert to default
      */
     @Override
-    public void setDescription(@NotNull DisplayState state, List<String> desc) {
+    public void setDescription(@NotNull DisplayState state, @Nullable List<String> desc) {
         if (desc == null) {
             desc = getDefaultDescription(state);
             isDefDesc.put(state, true);
@@ -265,6 +264,15 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
                 public boolean onStringListChange(List<String> list) {
                     ADisplayInfo.this.setDescription(state, list);
                     return true;
+                }
+                @Override
+                public void onClick(Player clicker, ClickType click) {
+                    if(click==ClickType.SHIFT_RIGHT) {
+                        ADisplayInfo.this.setDescription(state,null);
+                        getGui().updateInventory();
+                        return;
+                    }
+                    super.onClick(clicker,click);
                 }
 
             }

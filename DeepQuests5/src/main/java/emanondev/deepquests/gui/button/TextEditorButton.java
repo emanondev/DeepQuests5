@@ -31,7 +31,7 @@ public abstract class TextEditorButton extends AButton {
     }
 
     protected void requestText(Player p, String textBase, String description) {
-        DeepQuestText.requestText(p, textBase, description, this);
+        DeepQuestText.requestText(p, textBase.replace("§","&"), description, this);
     }
 
     public abstract void onReicevedText(String text);

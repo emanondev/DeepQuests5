@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,21 +44,20 @@ public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new PlaceBlockTask(id, mission, section);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     private void onBlockPlace(BlockPlaceEvent event) {
-        event.getPlayer();
         T user = getManager().getUserManager().getUser(event.getPlayer());
         if (user == null)
             return;
         List<Task<T>> tasks = user.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            PlaceBlockTask task = (PlaceBlockTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            PlaceBlockTask task = (PlaceBlockTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld())
                     && task.blockData.isValidMaterial(event.getBlock().getType()))
                 task.onProgress(user, 1, event.getPlayer(), false);
@@ -78,7 +78,7 @@ public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
             return blockData;
         }
 
-        public PlaceBlockTaskType<T> getType() {
+        public @NotNull PlaceBlockTaskType<T> getType() {
             return PlaceBlockTaskType.this;
         }
 
@@ -109,7 +109,7 @@ public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof PlaceBlockTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -123,7 +123,7 @@ public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof PlaceBlockTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -138,7 +138,7 @@ public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof PlaceBlockTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);

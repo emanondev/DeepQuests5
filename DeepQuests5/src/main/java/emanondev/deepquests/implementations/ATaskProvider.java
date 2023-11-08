@@ -8,6 +8,7 @@ import emanondev.deepquests.interfaces.*;
 import emanondev.deepquests.interfaces.Task.Phase;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -77,7 +78,7 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
         if (mission == null)
             throw new NullPointerException();
         try {

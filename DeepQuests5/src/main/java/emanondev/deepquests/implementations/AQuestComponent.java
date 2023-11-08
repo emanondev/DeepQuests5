@@ -13,6 +13,7 @@ import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +93,7 @@ abstract class AQuestComponent<T extends User<T>> implements QuestComponent<T> {
     }
 
     @Override
-    public final QuestManager<T> getManager() {
+    public final @NotNull QuestManager<T> getManager() {
         return manager;
     }
 

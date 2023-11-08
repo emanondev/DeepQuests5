@@ -58,6 +58,9 @@ public class ABossBarManager<T extends User<T>> implements BossBarManager<T> {
     }
 
     public void onProgress(@NotNull T user, @NotNull Task<T> task) {
+        //TODO ignore if task doesn't showboss bar
+        if (!task.showBossBar())
+            return;
         Collection<Player> targets = getPlayers(user, task);
         if (targets.isEmpty())
             return;

@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityTameEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +53,8 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
         List<Task<T>> tasks = user.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            TameMobTask task = (TameMobTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            TameMobTask task = (TameMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidEntity(event.getEntity())) {
                 task.onProgress(user, 1, p, false);
             }
@@ -73,7 +74,7 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
             return entityData;
         }
 
-        public TameMobTaskType<T> getType() {
+        public @NotNull TameMobTaskType<T> getType() {
             return TameMobTaskType.this;
         }
 
@@ -100,12 +101,12 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new TameMobTask(id, mission, section);
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof TameMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -119,7 +120,7 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof TameMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -134,7 +135,7 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof TameMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);

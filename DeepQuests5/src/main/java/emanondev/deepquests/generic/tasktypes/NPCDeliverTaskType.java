@@ -26,6 +26,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +59,8 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
         List<Task<T>> tasks = user.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            NPCDeliverTask task = (NPCDeliverTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            NPCDeliverTask task = (NPCDeliverTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.npcData.isValidNPC(event.getNPC())) {
                 ItemStack targetItem = task.itemData.getItem();
                 if (targetItem == null)
@@ -92,7 +93,7 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
             return itemData;
         }
 
-        public NPCDeliverTaskType<T> getType() {
+        public @NotNull NPCDeliverTaskType<T> getType() {
             return NPCDeliverTaskType.this;
         }
 
@@ -108,6 +109,7 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
                 info.add("  &9Material: &e" + item.getType());
                 if (item.hasItemMeta()) {
                     ItemMeta meta = item.getItemMeta();
+                    assert meta != null;
                     if (meta.hasDisplayName())
                         info.add("  &9DisplayName: &e" + meta.getDisplayName());
                     if (meta.hasLore()) {
@@ -148,12 +150,12 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new NPCDeliverTask(id, mission, section);
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof NPCDeliverTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -164,7 +166,7 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof NPCDeliverTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -175,7 +177,7 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof NPCDeliverTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);

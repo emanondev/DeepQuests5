@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +53,8 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
         List<Task<T>> tasks = user.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            DeliverQuestItemTask task = (DeliverQuestItemTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            DeliverQuestItemTask task = (DeliverQuestItemTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.npcData.isValidNPC(event.getNPC())) {
                 if (task.getQuestItemData().getQuestItemID() == null)
                     continue;
@@ -88,7 +89,7 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
             return itemData;
         }
 
-        public DeliverQuestItemTaskType<T> getType() {
+        public @NotNull DeliverQuestItemTaskType<T> getType() {
             return DeliverQuestItemTaskType.this;
         }
 
@@ -115,12 +116,12 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new DeliverQuestItemTask(id, mission, section);
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof DeliverQuestItemTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -135,7 +136,7 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof DeliverQuestItemTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -151,7 +152,7 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof DeliverQuestItemTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);

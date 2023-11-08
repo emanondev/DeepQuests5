@@ -8,6 +8,7 @@ import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.interfaces.RequireType;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ErrorRequire<T extends User<T>> extends AQuestComponent<T> implemen
     }
 
     @Override
-    public RequireType<T> getType() {
+    public @NotNull RequireType<T> getType() {
         return null;
     }
 

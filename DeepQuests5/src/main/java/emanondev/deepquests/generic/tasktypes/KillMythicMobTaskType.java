@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +57,12 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
         List<Task<T>> tasks = qPlayer.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            KillMythicMobTask task = (KillMythicMobTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            KillMythicMobTask task = (KillMythicMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidMythicMob(event.getMob())) {
                 if (task.onProgress(qPlayer, 1, p, false) > 0) {
                     if (task.dropsData.removeItemDrops())
-                        event.setDrops(new ArrayList<ItemStack>());
+                        event.setDrops(new ArrayList<>());
                     // if (task.dropsData.removeExpDrops())
                     // event..setExp(0);
                 }
@@ -71,9 +72,9 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
 
     public class KillMythicMobTask extends ATask<T> {
 
-        private MythicMobsData<T, KillMythicMobTask> entityData = null;
-        private DropData<T, KillMythicMobTask> dropsData = null;
-        private ToolData<T, KillMythicMobTask> toolData = null;
+        private final MythicMobsData<T, KillMythicMobTask> entityData;
+        private final DropData<T, KillMythicMobTask> dropsData;
+        private final ToolData<T, KillMythicMobTask> toolData;
 
         public KillMythicMobTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, KillMythicMobTaskType.this, section);
@@ -96,7 +97,7 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
         }
 
         @Override
-        public KillMythicMobTaskType<T> getType() {
+        public @NotNull KillMythicMobTaskType<T> getType() {
             return KillMythicMobTaskType.this;
         }
 
@@ -146,12 +147,12 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new KillMythicMobTask(id, mission, section);
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof KillMythicMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -166,7 +167,7 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof KillMythicMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -182,7 +183,7 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof KillMythicMobTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);

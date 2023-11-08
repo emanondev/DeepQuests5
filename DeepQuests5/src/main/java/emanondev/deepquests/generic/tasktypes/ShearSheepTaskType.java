@@ -22,6 +22,7 @@ import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +54,8 @@ public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
         List<Task<T>> tasks = user.getActiveTasks(this);
         if (tasks == null || tasks.isEmpty())
             return;
-        for (int i = 0; i < tasks.size(); i++) {
-            ShearSheepTask task = (ShearSheepTask) tasks.get(i);
+        for (Task<T> tTask : tasks) {
+            ShearSheepTask task = (ShearSheepTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld()) && task.entityData.isValidEntity(event.getEntity())) {
                 if (task.onProgress(user, 1, event.getPlayer(), false) > 0 && task.dropsData.removeItemDrops()
                         && event.getEntity() instanceof Sheep) {
@@ -85,7 +86,7 @@ public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
             return dropsData;
         }
 
-        public ShearSheepTaskType<T> getType() {
+        public @NotNull ShearSheepTaskType<T> getType() {
             return ShearSheepTaskType.this;
         }
 
@@ -116,12 +117,12 @@ public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new ShearSheepTask(id, mission, section);
     }
 
     @Override
-    public String getDefaultUnstartedDescription(Task<T> task) {
+    public String getDefaultUnstartedDescription(@NotNull Task<T> task) {
         if (!(task instanceof ShearSheepTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -135,7 +136,7 @@ public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultCompleteDescription(Task<T> task) {
+    public String getDefaultCompleteDescription(@NotNull Task<T> task) {
         if (!(task instanceof ShearSheepTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
@@ -150,7 +151,7 @@ public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
     }
 
     @Override
-    public String getDefaultProgressDescription(Task<T> task) {
+    public String getDefaultProgressDescription(@NotNull Task<T> task) {
         if (!(task instanceof ShearSheepTask t))
             return null;
         YMLSection config = getProvider().getTypeConfig(this);
