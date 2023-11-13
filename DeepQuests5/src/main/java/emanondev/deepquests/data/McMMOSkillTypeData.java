@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class McMMOSkillTypeData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
-    private PrimarySkillType skillType = null;
+    private PrimarySkillType skillType;
 
     public McMMOSkillTypeData(E parent, YMLSection section) {
         super(parent, section);

@@ -46,12 +46,6 @@ public class VirginBlockData<T extends User<T>, E extends QuestComponent<T>> ext
 
     private class VirginStatus extends StaticFlagButton {
 
-        public ItemStack getItem() {
-            if (!Hooks.isVirginBlockPluginEnabled())
-                return null;
-            return super.getItem();
-        }
-
         public VirginStatus(Gui parent) {
             super(Utils.setDescription(new ItemBuilder(Material.STONE_BRICKS).setGuiProperty().build(),
                             Arrays.asList("&6Virgin Check", "&9Status: &cDisabled", "",
@@ -62,6 +56,12 @@ public class VirginBlockData<T extends User<T>, E extends QuestComponent<T>> ext
                                     "&7Check that block hasn't been placed by a player", "&7Click to toggle"),
                             null, true),
                     parent);
+        }
+
+        public ItemStack getItem() {
+            if (!Hooks.isVirginBlockPluginEnabled())
+                return null;
+            return super.getItem();
         }
 
         @Override

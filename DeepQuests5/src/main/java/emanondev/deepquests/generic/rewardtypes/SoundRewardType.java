@@ -12,10 +12,13 @@ import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class SoundRewardType<T extends User<T>> extends ARewardType<T> {
+    private final static String ID = "sound";
+
     public SoundRewardType(QuestManager<T> manager) {
         super(ID, manager);
     }
@@ -24,8 +27,6 @@ public class SoundRewardType<T extends User<T>> extends ARewardType<T> {
     protected boolean getStandardHiddenValue() {
         return true;
     }
-
-    private final static String ID = "sound";
 
     @Override
     public Material getGuiMaterial() {
@@ -42,6 +43,21 @@ public class SoundRewardType<T extends User<T>> extends ARewardType<T> {
         return new SoundReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<T> reward) {
+        if (!(reward instanceof SoundReward r))
+            return null;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:playing} &e{sound}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+
+        }
+        return Translations.replaceAll(txt).replace("{sound}",
+                r.getSoundData().getSound() == null ? "?" : r.getSoundData().getSound().toString().toLowerCase());
+    }
+
     public class SoundReward extends AReward<T> {
         private final SoundData<T, SoundReward> soundData;
 
@@ -50,7 +66,7 @@ public class SoundRewardType<T extends User<T>> extends ARewardType<T> {
             soundData = new SoundData<>(this, getConfig().loadSection(Paths.REWARD_INFO_SOUND));
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(soundData.getInfo());
             return info;
@@ -78,7 +94,7 @@ public class SoundRewardType<T extends User<T>> extends ARewardType<T> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -91,20 +107,5 @@ public class SoundRewardType<T extends User<T>> extends ARewardType<T> {
                 this.putButton(29, soundData.getPitchEditorButton(this));
             }
         }
-    }
-
-    @Override
-    public String getDefaultFeedback(Reward<T> reward) {
-        if (!(reward instanceof SoundReward r))
-            return null;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:playing} &e{sound}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-
-        }
-        return Translations.replaceAll(txt).replace("{sound}",
-                r.getSoundData().getSound() == null ? "?" : r.getSoundData().getSound().toString().toLowerCase());
     }
 }

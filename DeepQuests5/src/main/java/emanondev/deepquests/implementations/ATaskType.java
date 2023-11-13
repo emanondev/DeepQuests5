@@ -8,10 +8,13 @@ import emanondev.deepquests.interfaces.TaskType;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ATaskType<T extends User<T>> extends AType<T, Task<T>> implements TaskType<T> {
 
-    public ATaskType(String id, QuestManager<T> manager) {
+    private final Permission editPermission;
+
+    public ATaskType(@NotNull String id, @NotNull QuestManager<T> manager) {
         super(id, manager);
         this.editPermission = new PermissionBuilder(
                 "deepquests.editor." + this.getManager().getName() + ".tasktype." + this.getKeyID())
@@ -19,9 +22,7 @@ public abstract class ATaskType<T extends User<T>> extends AType<T, Task<T>> imp
                 .setAccess(PermissionDefault.FALSE).buildAndRegister(getManager().getPlugin(), true);
     }
 
-    private final Permission editPermission;
-
-    public final Permission getEditorPermission() {
+    public final @NotNull Permission getEditorPermission() {
         return editPermission;
     }
 

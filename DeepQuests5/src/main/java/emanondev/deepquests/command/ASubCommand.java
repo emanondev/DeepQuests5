@@ -13,10 +13,14 @@ import java.util.*;
 
 
 public abstract class ASubCommand {
-    private final String permission;
-    private final List<String> aliases = new ArrayList<>();
     protected final HashMap<String, ASubCommand> subsByAlias = new HashMap<>();
     protected final LinkedHashSet<ASubCommand> subs = new LinkedHashSet<>();
+    private final String permission;
+    private final List<String> aliases = new ArrayList<>();
+    private boolean playerOnly = false;
+    private String params = null;
+    private String description;
+    private boolean showLockedSuggestions = true;
 
     /**
      * @param name       - nome di questo sottocomando (ex: /gemme bal - "bal" è il nome del sottocomando
@@ -143,8 +147,6 @@ public abstract class ASubCommand {
         return sub.onTab(params, sender, label, args);
     }
 
-    private boolean playerOnly = false;
-
     /**
      * metodo da usare nel costruttore per impedire l'uso ai non player,
      * se settato true quando un non giocatore usa il comando stamperà che il comando è solo per player
@@ -190,8 +192,6 @@ public abstract class ASubCommand {
         return permission;
     }
 
-    private String params = null;
-
     public String getParams() {
         return params;
     }
@@ -206,8 +206,6 @@ public abstract class ASubCommand {
         this.params = params;
         return this;
     }
-
-    private String description;
 
     public String getDescription() {
         return description;
@@ -251,8 +249,6 @@ public abstract class ASubCommand {
     protected void setShowLockedSuggestions(boolean value) {
         showLockedSuggestions = value;
     }
-
-    private boolean showLockedSuggestions = true;
 
     /**
      * schermata di aiuto, si consiglia di non reimplementare

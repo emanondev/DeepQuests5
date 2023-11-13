@@ -67,6 +67,8 @@ public abstract class GuiElementSelectorButton<T extends GuiElement> extends ABu
         clicker.openInventory(new ListEditorGui(clicker).getInventory());
     }
 
+    public abstract void onElementSelectRequest(T element, Player p);
+
     private class ListEditorGui extends SortedListGui<ElementButton> {
         public ListEditorGui(Player clicker) {
             super(subGuiTitle, 6, clicker, GuiElementSelectorButton.this.getGui(), 1);
@@ -185,6 +187,4 @@ public abstract class GuiElementSelectorButton<T extends GuiElement> extends ABu
             });
         }
     }
-
-    public abstract void onElementSelectRequest(T element, Player p);
 }

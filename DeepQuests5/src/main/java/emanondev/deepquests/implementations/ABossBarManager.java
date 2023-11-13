@@ -28,7 +28,7 @@ public class ABossBarManager<T extends User<T>> implements BossBarManager<T> {
     private BarStyle defaultStyle = BarStyle.SEGMENTED_20;
     private boolean defaultShowBossBar = true;
 
-    public ABossBarManager(QuestManager<T> questManager) {
+    public ABossBarManager(@NotNull QuestManager<T> questManager) {
         this.questManager = questManager;
         config = getManager().getConfig("bossbar-config.yml");
         reload();

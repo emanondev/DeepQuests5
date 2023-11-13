@@ -29,11 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
+    private final static String ID = "break_block";
+
+
     public BreakBlockTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "break_block";
 
     @Override
     public List<String> getDescription() {
@@ -44,15 +45,11 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onBlockBreak(BlockBreakEvent event) {
-        event.getPlayer();
         T user = getManager().getUserManager().getUser(event.getPlayer());
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (int i = 0; i < tasks.size(); i++) {
-            BreakBlockTask task = (BreakBlockTask) tasks.get(i);
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
+            BreakBlockTask task = (BreakBlockTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld())
                     && task.blockData.isValidMaterial(event.getBlock().getType())
                     && task.virginBlockData.isValidBlock(event.getBlock()) && task.toolData
@@ -63,89 +60,6 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
                     if (task.dropsData.removeItemDrops())
                         event.setDropItems(false);
                 }
-        }
-    }
-
-    public class BreakBlockTask extends ATask<T> {
-
-        private final BlockTypeData<T, BreakBlockTask> blockData;
-        private final VirginBlockData<T, BreakBlockTask> virginBlockData;
-        private final DropData<T, BreakBlockTask> dropsData;
-        private final ToolData<T, BreakBlockTask> toolData;
-
-        public BreakBlockTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, BreakBlockTaskType.this, section);
-            blockData = new BlockTypeData<>(this,
-                    getConfig().loadSection(Paths.TASK_INFO_BLOCKDATA));
-            virginBlockData = new VirginBlockData<>(this,
-                    getConfig().loadSection(Paths.TASK_INFO_VIRGINBLOCKDATA));
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-        }
-
-        public BlockTypeData<T, BreakBlockTask> getBlockTypeData() {
-            return blockData;
-        }
-
-        public VirginBlockData<T, BreakBlockTask> getVirginBlockData() {
-            return virginBlockData;
-        }
-
-        public DropData<T, BreakBlockTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, BreakBlockTask> getToolData() {
-            return toolData;
-        }
-
-        /*
-         * public Navigator getNavigator() { super.getNavigator();
-         * blockData.getNavigator(); virginBlockData.getNavigator();
-         * dropsData.getNavigator(); toolData.getNavigator(); return nav; }
-         */
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            if (blockData.areMaterialsWhitelist()) {
-                info.add("&9Materials &aAllowed&9:");
-            } else {
-                info.add("&9Materials &cUnallowed&9:");
-            }
-            for (Material mat : blockData.getMaterials())
-                info.add("&9  - &e" + mat.toString());
-            if (Hooks.isVirginBlockPluginEnabled()) {
-                if (virginBlockData.isVirginCheckEnabled())
-                    info.add("&9Check Block is Virgin: &eEnabled");
-                else
-                    info.add("&9Check Block is Virgin: &cDisabled");
-            }
-            if (dropsData.removeExpDrops())
-                info.add("&9Exp Drops: &cDisabled");
-            if (dropsData.removeItemDrops())
-                info.add("&9Item Drops: &cDisabled");
-            if (toolData.isEnabled()) {
-                info.add("&9Tool Check:");
-                info.addAll(toolData.getInfo());
-            }
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                this.putButton(27, blockData.getBlockEditorButton(this));
-                this.putButton(28, virginBlockData.getVirginStatusEditor(this));
-                this.putButton(36, dropsData.getItemDropsFlagButton(this));
-                this.putButton(37, dropsData.getExpDropsFlagButton(this));
-                toolData.setupButtons("&6Tool Button", this, 45);
-            }
         }
     }
 
@@ -201,6 +115,89 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt.replace("{blocks}", DataUtils.getBlockHolder(t.getBlockTypeData())));
+    }
+
+    public class BreakBlockTask extends ATask<T> {
+
+        private final BlockTypeData<T, BreakBlockTask> blockData;
+        private final VirginBlockData<T, BreakBlockTask> virginBlockData;
+        private final DropData<T, BreakBlockTask> dropsData;
+        private final ToolData<T, BreakBlockTask> toolData;
+
+        public BreakBlockTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, BreakBlockTaskType.this, section);
+            blockData = new BlockTypeData<>(this,
+                    getConfig().loadSection(Paths.TASK_INFO_BLOCKDATA));
+            virginBlockData = new VirginBlockData<>(this,
+                    getConfig().loadSection(Paths.TASK_INFO_VIRGINBLOCKDATA));
+            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
+        }
+
+        public BlockTypeData<T, BreakBlockTask> getBlockTypeData() {
+            return blockData;
+        }
+
+        public VirginBlockData<T, BreakBlockTask> getVirginBlockData() {
+            return virginBlockData;
+        }
+
+        public DropData<T, BreakBlockTask> getDropData() {
+            return dropsData;
+        }
+
+        public ToolData<T, BreakBlockTask> getToolData() {
+            return toolData;
+        }
+
+        /*
+         * public Navigator getNavigator() { super.getNavigator();
+         * blockData.getNavigator(); virginBlockData.getNavigator();
+         * dropsData.getNavigator(); toolData.getNavigator(); return nav; }
+         */
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            if (blockData.areMaterialsWhitelist()) {
+                info.add("&9Materials &aAllowed&9:");
+            } else {
+                info.add("&9Materials &cUnallowed&9:");
+            }
+            for (Material mat : blockData.getMaterials())
+                info.add("&9  - &e" + mat.toString());
+            if (Hooks.isVirginBlockPluginEnabled()) {
+                if (virginBlockData.isVirginCheckEnabled())
+                    info.add("&9Check Block is Virgin: &eEnabled");
+                else
+                    info.add("&9Check Block is Virgin: &cDisabled");
+            }
+            if (dropsData.removeExpDrops())
+                info.add("&9Exp Drops: &cDisabled");
+            if (dropsData.removeItemDrops())
+                info.add("&9Item Drops: &cDisabled");
+            if (toolData.isEnabled()) {
+                info.add("&9Tool Check:");
+                info.addAll(toolData.getInfo());
+            }
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                this.putButton(27, blockData.getBlockEditorButton(this));
+                this.putButton(28, virginBlockData.getVirginStatusEditor(this));
+                this.putButton(36, dropsData.getItemDropsFlagButton(this));
+                this.putButton(37, dropsData.getExpDropsFlagButton(this));
+                toolData.setupButtons("&6Tool Button", this, 45);
+            }
+        }
     }
 
 }

@@ -11,6 +11,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 public abstract class ARewardType<T extends User<T>> extends AType<T, Reward<T>> implements RewardType<T> {
 
+    private final Permission editPermission;
+
     public ARewardType(String id, QuestManager<T> manager) {
         super(id, manager);
         this.editPermission = new PermissionBuilder(
@@ -18,8 +20,6 @@ public abstract class ARewardType<T extends User<T>> extends AType<T, Reward<T>>
                 .setDescription("Allows to edit rewards with type " + getKeyID() + " for manager " + this.getManager().getName())
                 .setAccess(PermissionDefault.FALSE).buildAndRegister(getManager().getPlugin(), true);
     }
-
-    private final Permission editPermission;
 
     public final Permission getEditorPermission() {
         return editPermission;

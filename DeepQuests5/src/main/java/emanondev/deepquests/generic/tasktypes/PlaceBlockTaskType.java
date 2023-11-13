@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
+    private final static String ID = "place_block";
+
     public PlaceBlockTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "place_block";
 
     @Override
     public Material getGuiMaterial() {
@@ -53,58 +53,11 @@ public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
         T user = getManager().getUserManager().getUser(event.getPlayer());
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             PlaceBlockTask task = (PlaceBlockTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld())
                     && task.blockData.isValidMaterial(event.getBlock().getType()))
                 task.onProgress(user, 1, event.getPlayer(), false);
-        }
-    }
-
-    public class PlaceBlockTask extends ATask<T> {
-
-        private final BlockTypeData<T, PlaceBlockTask> blockData;
-
-        public PlaceBlockTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, PlaceBlockTaskType.this, section);
-            blockData = new BlockTypeData<>(this,
-                    getConfig().loadSection(Paths.TASK_INFO_BLOCKDATA));
-        }
-
-        public BlockTypeData<T, PlaceBlockTask> getBlockTypeData() {
-            return blockData;
-        }
-
-        public @NotNull PlaceBlockTaskType<T> getType() {
-            return PlaceBlockTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            if (blockData.areMaterialsWhitelist()) {
-                info.add("&9Materials &aAllowed&9:");
-            } else {
-                info.add("&9Materials &cUnallowed&9:");
-            }
-            for (Material mat : blockData.getMaterials())
-                info.add("&9  - &e" + mat.toString());
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                this.putButton(27, blockData.getBlockEditorButton(this));
-            }
         }
     }
 
@@ -150,5 +103,49 @@ public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt).replace("{blocks}", DataUtils.getBlockHolder(t.getBlockTypeData()));
+    }
+
+    public class PlaceBlockTask extends ATask<T> {
+
+        private final BlockTypeData<T, PlaceBlockTask> blockData;
+
+        public PlaceBlockTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, PlaceBlockTaskType.this, section);
+            blockData = new BlockTypeData<>(this,
+                    getConfig().loadSection(Paths.TASK_INFO_BLOCKDATA));
+        }
+
+        public BlockTypeData<T, PlaceBlockTask> getBlockTypeData() {
+            return blockData;
+        }
+
+        public @NotNull PlaceBlockTaskType<T> getType() {
+            return PlaceBlockTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            if (blockData.areMaterialsWhitelist()) {
+                info.add("&9Materials &aAllowed&9:");
+            } else {
+                info.add("&9Materials &cUnallowed&9:");
+            }
+            for (Material mat : blockData.getMaterials())
+                info.add("&9  - &e" + mat.toString());
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                this.putButton(27, getBlockTypeData().getBlockEditorButton(this));
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 package emanondev.deepquests.utils;
 
-import emanondev.deepquests.hooks.Hooks;
+import emanondev.core.Hooks;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;

@@ -8,24 +8,23 @@ import org.jetbrains.annotations.NotNull;
 
 public class TaskProgressEvent<T extends User<T>> extends UserEventWithRewards<T> implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-
-    public @NotNull HandlerList getHandlers() {
-        return handlers;
+    private final Task<T> task;
+    private final int limit;
+    private int progress;
+    private boolean cancelled = false;
+    public TaskProgressEvent(T user, Task<T> task, int progress, int limit) {
+        super(user, task.getProgressRewards());
+        this.task = task;
+        this.progress = progress;
+        this.limit = limit;
     }
 
     public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    private final Task<T> task;
-    private int progress;
-    private final int limit;
-
-    public TaskProgressEvent(T user, Task<T> task, int progress, int limit) {
-        super(user, task.getProgressRewards());
-        this.task = task;
-        this.progress = progress;
-        this.limit = limit;
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
     }
 
     public int getProgress() {
@@ -39,8 +38,6 @@ public class TaskProgressEvent<T extends User<T>> extends UserEventWithRewards<T
     public Task<T> getTask() {
         return task;
     }
-
-    private boolean cancelled = false;
 
     public boolean isCancelled() {
         return cancelled;

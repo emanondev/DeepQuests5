@@ -17,22 +17,6 @@ public class MapNavigator {
     private String localPath;
     private boolean dirty = false;
 
-    public String getCurrentPath() {
-        return globalPath == null ? ("" + localPath == null ? "" : localPath)
-                : (globalPath + (localPath == null ? "" : "." + localPath));
-    }
-
-    public void setDirty(boolean value) {
-        if (this.dirty == value)
-            return;
-        this.dirty = value;
-        if (value == true && this.parent != null && this.isAlive())
-            this.parent.setDirty(true);
-        if (value == false)
-            for (MapNavigator son : sons)
-                son.setDirty(false);
-    }
-
     public MapNavigator(Map<String, Object> map) {
         if (map == null)
             map = new LinkedHashMap<>();
@@ -52,6 +36,22 @@ public class MapNavigator {
         this.localPath = null;
         this.localMap = parent.getOrLoadMap(path);
         this.currentMap = this.localMap;
+    }
+
+    public String getCurrentPath() {
+        return globalPath == null ? ("" + localPath == null ? "" : localPath)
+                : (globalPath + (localPath == null ? "" : "." + localPath));
+    }
+
+    public void setDirty(boolean value) {
+        if (this.dirty == value)
+            return;
+        this.dirty = value;
+        if (value == true && this.parent != null && this.isAlive())
+            this.parent.setDirty(true);
+        if (value == false)
+            for (MapNavigator son : sons)
+                son.setDirty(false);
     }
 
     @SuppressWarnings("unchecked")

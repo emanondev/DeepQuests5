@@ -18,6 +18,7 @@ public class TaskBossBar<T extends User<T>> {
 
     private final BossBar bar;
     private final TaskData<T> taskData;
+    private long lastUpdate = 0;
 
     public TaskBossBar(TaskData<T> taskData) {
         this.taskData = taskData;
@@ -57,8 +58,6 @@ public class TaskBossBar<T extends User<T>> {
     public void setColor(BarColor color) {
         bar.setColor(color);
     }
-
-    private long lastUpdate = 0;
 
     public void updateProgress() {
         int progress = taskData.getProgress();

@@ -9,12 +9,12 @@ public interface QuestComponent<T extends User<T>> extends Navigable, Comparable
     /**
      * @return recap of info about this
      */
-    List<String> getInfo();
+    @NotNull List<String> getInfo();
 
     /**
      * @return the QuestManager of this
      */
-    QuestManager<T> getManager();
+    @NotNull QuestManager<T> getManager();
 
     /**
      * @return the unique id

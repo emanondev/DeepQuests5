@@ -140,6 +140,14 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
         return new XCoordButton(gui);
     }
 
+    public Button getYButton(Gui gui) {
+        return new YCoordButton(gui);
+    }
+
+    public Button getZButton(Gui gui) {
+        return new ZCoordButton(gui);
+    }
+
     public class XCoordButton extends AmountSelectorButton {
 
         public XCoordButton(Gui parent) {
@@ -168,10 +176,6 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
 
     }
 
-    public Button getYButton(Gui gui) {
-        return new YCoordButton(gui);
-    }
-
     public class YCoordButton extends AmountSelectorButton {
 
         public YCoordButton(Gui parent) {
@@ -198,10 +202,6 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
             return true;
         }
 
-    }
-
-    public Button getZButton(Gui gui) {
-        return new ZCoordButton(gui);
     }
 
     public class ZCoordButton extends AmountSelectorButton {

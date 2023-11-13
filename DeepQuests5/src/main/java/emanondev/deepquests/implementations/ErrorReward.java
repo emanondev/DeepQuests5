@@ -8,6 +8,7 @@ import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.interfaces.RewardType;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ErrorReward<T extends User<T>> extends AQuestComponent<T> implement
     }
 
     @Override
-    public Gui getEditorGui(Player target, Gui parent) {
+    public @NotNull Gui getEditorGui(Player target, Gui parent) {
         return new PagedMapGui("&4Corrupted Reward", 6, target, parent);
     }
 
@@ -39,7 +40,7 @@ public class ErrorReward<T extends User<T>> extends AQuestComponent<T> implement
     }
 
     @Override
-    public List<String> getInfo() {
+    public @NotNull List<String> getInfo() {
         return Arrays.asList("&cThis reward couldn't be loaded correctly", "&cMaybe a plugin wasn't loaded correctly",
                 "&cExample: NPCKillTask and Citizen not loading", "&cIf error wasn't caused by a plugin you can delete",
                 "&cthis task or fix it manually editing the database file");

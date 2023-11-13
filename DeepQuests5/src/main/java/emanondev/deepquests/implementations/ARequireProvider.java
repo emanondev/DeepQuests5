@@ -20,6 +20,7 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     private final Map<String, RequireType<T>> taskTypes = new LinkedHashMap<>();
     private final Map<String, RequireType<T>> types = new LinkedHashMap<>();
     private final YMLConfig config;
+    private final Permission editPermission;
 
     public ARequireProvider(QuestManager<T> manager) {
         if (manager == null)
@@ -59,8 +60,6 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     public Collection<RequireType<T>> getTypes() {
         return types.values();
     }
-
-    private final Permission editPermission;
 
     @Override
     public void registerQuestType(RequireType<T> type) {

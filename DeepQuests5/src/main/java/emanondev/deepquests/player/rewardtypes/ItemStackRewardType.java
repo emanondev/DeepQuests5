@@ -17,11 +17,14 @@ import emanondev.deepquests.player.QuestPlayer;
 import emanondev.deepquests.utils.DataUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ItemStackRewardType extends ARewardType<QuestPlayer> {
+    private final static String ID = "itemstack";
+
     public ItemStackRewardType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
     }
@@ -30,8 +33,6 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
     protected boolean getStandardHiddenValue() {
         return false;
     }
-
-    private final static String ID = "itemstack";
 
     @Override
     public Material getGuiMaterial() {
@@ -48,6 +49,22 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
         return new ItemStackReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<QuestPlayer> reward) {
+        if (!(reward instanceof ItemStackRewardType.ItemStackReward))
+            return null;
+        ItemStackReward r = (ItemStackReward) reward;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:obtained} &e{item} &ax &e{amount}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+
+        }
+        return Translations.replaceAll(txt).replace("{item}", DataUtils.getItemsHolder(r.getItemStackData()))
+                .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
+    }
+
     public class ItemStackReward extends AReward<QuestPlayer> {
         private ItemStackData<QuestPlayer, ItemStackReward> stackData;
         private AmountData<QuestPlayer, ItemStackReward> amountData;
@@ -60,7 +77,7 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
                     getConfig().loadSection(Paths.REWARD_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.add("  &9Amount: &e" + amountData.getAmount());
             info.addAll(stackData.getInfo());
@@ -84,7 +101,7 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -99,21 +116,5 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
                                 new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
             }
         }
-    }
-
-    @Override
-    public String getDefaultFeedback(Reward<QuestPlayer> reward) {
-        if (!(reward instanceof ItemStackRewardType.ItemStackReward))
-            return null;
-        ItemStackReward r = (ItemStackReward) reward;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:obtained} &e{item} &ax &e{amount}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-
-        }
-        return Translations.replaceAll(txt).replace("{item}", DataUtils.getItemsHolder(r.getItemStackData()))
-                .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 }

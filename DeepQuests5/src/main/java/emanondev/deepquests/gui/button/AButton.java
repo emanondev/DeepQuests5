@@ -1,15 +1,16 @@
 package emanondev.deepquests.gui.button;
 
 import emanondev.deepquests.gui.inventory.Gui;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class AButton implements Button {
     private final Gui parent;
 
-    public AButton(Gui parent) {
+    public AButton(@NotNull Gui parent) {
         this.parent = parent;
     }
 
-    public Gui getGui() {
+    public @NotNull Gui getGui() {
         return parent;
     }
 }

@@ -14,10 +14,10 @@ import java.util.List;
 
 public class AmountData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
 
-    private int amount;
     private final int minAmount;
     private final int maxAmount;
     private final int defaultAmount;
+    private int amount;
 
     public AmountData(E parent, YMLSection section) {
         this(parent, section, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);

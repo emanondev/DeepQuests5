@@ -331,35 +331,41 @@ public class DeepQuestsNewCommand extends CoreCommand {
                         Arrays.asList("swapplayers", "manager", "listmanagers", "opengui", "editor", "reload", "questbag"));
             case 2:
                 switch (args[0].toLowerCase()) {
-                    case "swapplayers":
+                    case "swapplayers" -> {
                         if (sender.hasPermission(P.COMMAND_DEEPQUESTS_SWAPPLAYERS))
                             return this.completePlayerNames(sender, args[1]);
                         return Collections.emptyList();
-                    case "opengui":
+                    }
+                    case "opengui" -> {
                         if (sender.hasPermission(P.COMMAND_DEEPQUESTS_OPENGUI))
                             return this.completePlayerNames(sender, args[1]);
                         return Collections.emptyList();
-                    case "questbag":
+                    }
+                    case "questbag" -> {
                         if (sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
                             return this.complete(args[1], Quests.get().getManagersNames());
                         return Collections.emptyList();
-                    case "seequestbag":
+                    }
+                    case "seequestbag" -> {
                         if (sender.hasPermission(P.COMMAND_DEEPQUESTS_SEEQUESTBAG))
                             return this.complete(args[1], Quests.get().getManagersNames());
                         return Collections.emptyList();
-                    case "manager":
+                    }
+                    case "manager" -> {
                         if (sender.hasPermission(P.COMMAND_DEEPQUESTS_MANAGER))
                             return this.complete(args[1], Quests.get().getManagersNames());
                         return Collections.emptyList();
+                    }
                 }
                 return Collections.emptyList();
             case 3:
                 switch (args[0].toLowerCase()) {
-                    case "swapplayers":
+                    case "swapplayers" -> {
                         if (sender.hasPermission(P.COMMAND_DEEPQUESTS_SWAPPLAYERS))
                             return this.completePlayerNames(sender, args[2]);
                         return Collections.emptyList();
-                    case "questbag": {
+                    }
+                    case "questbag" -> {
                         if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
                             return Collections.emptyList();
                         QuestManager qm = Quests.get().getQuestManager(args[1]);
@@ -367,7 +373,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
                             return Collections.emptyList();
                         return this.complete(args[2], qm.getUsersArguments());
                     }
-                    case "seequestbag": {
+                    case "seequestbag" -> {
                         if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_SEEQUESTBAG))
                             return Collections.emptyList();
                         QuestManager qm = Quests.get().getQuestManager(args[1]);

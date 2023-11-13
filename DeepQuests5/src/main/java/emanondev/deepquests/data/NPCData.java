@@ -22,7 +22,7 @@ public class NPCData<T extends User<T>, E extends QuestComponent<T>> extends Que
     public NPCData(E parent, YMLSection section) {
         super(parent, section);
         isListWhitelist = getConfig().getBoolean(Paths.DATA_NPC_ID_LIST_IS_WHITELIST, true);
-        ids.addAll(getConfig().getIntegerList(Paths.DATA_NPC_ID_LIST, new ArrayList<Integer>()));
+        ids.addAll(getConfig().getIntegerList(Paths.DATA_NPC_ID_LIST, new ArrayList<>()));
     }
 
     public void toggleNPC(NPC npc) {
@@ -70,6 +70,38 @@ public class NPCData<T extends User<T>, E extends QuestComponent<T>> extends Que
         return new NPCSelectorButton(gui);
     }
 
+    public ArrayList<String> getInfo() {
+        ArrayList<String> info = new ArrayList<>();
+        if (areNpcIdsWhitelist()) {
+            info.add("&9Npcs &aAllowed&9:");
+            for (int id : getNpcIds()) {
+                NPC npc = CitizensAPI.getNPCRegistry().getById(id);
+                if (npc != null) {
+                    info.add(" &9- &a" + id + " &r" + npc.getFullName());
+                    info.add(" &9  location: &e" + npc.getStoredLocation().getWorld().getName() + " "
+                            + npc.getStoredLocation().getBlockX() + " " + npc.getStoredLocation().getBlockY() + " "
+                            + npc.getStoredLocation().getBlockZ());
+                } else
+                    info.add(" &9- &a" + id);
+            }
+        } else {
+            info.add("&9Npcs &cUnallowed&9:");
+            for (int id : getNpcIds()) {
+
+                NPC npc = CitizensAPI.getNPCRegistry().getById(id);
+                if (npc != null) {
+                    info.add(" &9- &c" + id + " &r" + npc.getFullName());
+                    info.add(" &9  location: &e" + npc.getStoredLocation().getWorld().getName() + " "
+                            + npc.getStoredLocation().getBlockX() + " " + npc.getStoredLocation().getBlockY() + " "
+                            + npc.getStoredLocation().getBlockZ());
+                } else
+                    info.add(" &9- &c" + id);
+            }
+        }
+
+        return info;
+    }
+
     private class NPCSelectorButton extends CollectionSelectorButton<Integer> {
 
         public NPCSelectorButton(Gui parent) {
@@ -79,9 +111,7 @@ public class NPCData<T extends User<T>, E extends QuestComponent<T>> extends Que
         @Override
         public Collection<Integer> getPossibleValues() {
             TreeSet<Integer> set = new TreeSet<>();
-            CitizensAPI.getNPCRegistry().forEach((npc) -> {
-                set.add(npc.getId());
-            });
+            CitizensAPI.getNPCRegistry().forEach((npc) -> set.add(npc.getId()));
             return set;
         }
 
@@ -140,37 +170,5 @@ public class NPCData<T extends User<T>, E extends QuestComponent<T>> extends Que
             return true;
         }
 
-    }
-
-    public ArrayList<String> getInfo() {
-        ArrayList<String> info = new ArrayList<>();
-        if (areNpcIdsWhitelist()) {
-            info.add("&9Npcs &aAllowed&9:");
-            for (int id : getNpcIds()) {
-                NPC npc = CitizensAPI.getNPCRegistry().getById(id);
-                if (npc != null) {
-                    info.add(" &9- &a" + id + " &r" + npc.getFullName());
-                    info.add(" &9  location: &e" + npc.getStoredLocation().getWorld().getName() + " "
-                            + npc.getStoredLocation().getBlockX() + " " + npc.getStoredLocation().getBlockY() + " "
-                            + npc.getStoredLocation().getBlockZ());
-                } else
-                    info.add(" &9- &a" + id);
-            }
-        } else {
-            info.add("&9Npcs &cUnallowed&9:");
-            for (int id : getNpcIds()) {
-
-                NPC npc = CitizensAPI.getNPCRegistry().getById(id);
-                if (npc != null) {
-                    info.add(" &9- &c" + id + " &r" + npc.getFullName());
-                    info.add(" &9  location: &e" + npc.getStoredLocation().getWorld().getName() + " "
-                            + npc.getStoredLocation().getBlockX() + " " + npc.getStoredLocation().getBlockY() + " "
-                            + npc.getStoredLocation().getBlockZ());
-                } else
-                    info.add(" &9- &c" + id);
-            }
-        }
-
-        return info;
     }
 }

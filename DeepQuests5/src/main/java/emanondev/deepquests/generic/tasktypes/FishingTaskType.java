@@ -27,11 +27,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
+    private static final String ID = "fishing";
+
     public FishingTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
 
-    private static final String ID = "fishing";
+    private static ItemStack getFishingRod(Player p) {
+        ItemStack hand = p.getInventory().getItemInMainHand();
+        if (hand.getType() == Material.FISHING_ROD)
+            return hand;
+        ItemStack offHand = p.getInventory().getItemInOffHand();
+        if (offHand.getType() == Material.FISHING_ROD)
+            return offHand;
+        return hand;
+    }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     private void onFishing(PlayerFishEvent event) {
@@ -40,10 +50,7 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
         T user = getManager().getUserManager().getUser(event.getPlayer());
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             FishingTask task = (FishingTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld())
                     && task.fishingRod.isValidTool(getFishingRod(event.getPlayer()), event.getPlayer())) {
@@ -58,80 +65,6 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private static ItemStack getFishingRod(Player p) {
-        ItemStack hand = p.getInventory().getItemInMainHand();
-        if (hand.getType() == Material.FISHING_ROD)
-            return hand;
-        ItemStack offHand = p.getInventory().getItemInOffHand();
-        if (offHand.getType() == Material.FISHING_ROD)
-            return offHand;
-        return hand;
-    }
-
-    public class FishingTask extends ATask<T> {
-        private final DropData<T, FishingTask> dropsData;
-        private final ToolData<T, FishingTask> fishingRod;
-        private final ToolData<T, FishingTask> fishedItem;
-
-        public FishingTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, FishingTaskType.this, section);
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-            fishingRod = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-            fishedItem = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA_TARGET));
-        }
-
-        public DropData<T, FishingTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, FishingTask> getFishingRodData() {
-            return fishingRod;
-        }
-
-        public ToolData<T, FishingTask> getFishedItemData() {
-            return fishedItem;
-        }
-
-        @Override
-        public @NotNull FishingTaskType<T> getType() {
-            return FishingTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            if (dropsData.removeExpDrops())
-                info.add("&9Exp Drops: &cDisabled");
-            if (dropsData.removeItemDrops())
-                info.add("&9Item Drops: &cDisabled");
-            if (fishingRod.isEnabled()) {
-                info.add("&9Fishing Rod:");
-                info.addAll(fishingRod.getInfo());
-            }
-
-            if (fishedItem.isEnabled()) {
-                info.add("&9Fished Item:");
-                info.addAll(fishedItem.getInfo());
-            }
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                this.putButton(36, dropsData.getItemDropsFlagButton(this));
-                this.putButton(37, dropsData.getExpDropsFlagButton(this));
-                fishingRod.setupButtons("&6Fishing Rod Button", this, 45);
-                fishedItem.setupButtons("&6Fished Item Button", this, 72);
             }
         }
     }
@@ -197,6 +130,70 @@ public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt);
+    }
+
+    public class FishingTask extends ATask<T> {
+        private final DropData<T, FishingTask> dropsData;
+        private final ToolData<T, FishingTask> fishingRod;
+        private final ToolData<T, FishingTask> fishedItem;
+
+        public FishingTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, FishingTaskType.this, section);
+            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            fishingRod = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
+            fishedItem = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA_TARGET));
+        }
+
+        public DropData<T, FishingTask> getDropData() {
+            return dropsData;
+        }
+
+        public ToolData<T, FishingTask> getFishingRodData() {
+            return fishingRod;
+        }
+
+        public ToolData<T, FishingTask> getFishedItemData() {
+            return fishedItem;
+        }
+
+        @Override
+        public @NotNull FishingTaskType<T> getType() {
+            return FishingTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            if (dropsData.removeExpDrops())
+                info.add("&9Exp Drops: &cDisabled");
+            if (dropsData.removeItemDrops())
+                info.add("&9Item Drops: &cDisabled");
+            if (fishingRod.isEnabled()) {
+                info.add("&9Fishing Rod:");
+                info.addAll(fishingRod.getInfo());
+            }
+
+            if (fishedItem.isEnabled()) {
+                info.add("&9Fished Item:");
+                info.addAll(fishedItem.getInfo());
+            }
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                this.putButton(36, dropsData.getItemDropsFlagButton(this));
+                this.putButton(37, dropsData.getExpDropsFlagButton(this));
+                fishingRod.setupButtons("&6Fishing Rod Button", this, 45);
+                fishedItem.setupButtons("&6Fished Item Button", this, 72);
+            }
+        }
     }
 
 }

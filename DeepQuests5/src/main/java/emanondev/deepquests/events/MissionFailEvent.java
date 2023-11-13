@@ -7,20 +7,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class MissionFailEvent<T extends User<T>> extends UserEventWithRewards<T> {
     private static final HandlerList handlers = new HandlerList();
+    private final Mission<T> mission;
 
-    public @NotNull HandlerList getHandlers() {
-        return handlers;
+    public MissionFailEvent(T user, Mission<T> mission) {
+        super(user, mission.getFailRewards());
+        this.mission = mission;
     }
 
     public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    private final Mission<T> mission;
-
-    public MissionFailEvent(T user, Mission<T> mission) {
-        super(user, mission.getFailRewards());
-        this.mission = mission;
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
     }
 
     public Mission<T> getMission() {

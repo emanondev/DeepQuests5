@@ -11,9 +11,9 @@ import java.util.*;
 
 @Deprecated
 public class Navigator {
+    protected final Map<String, Object> localMap;
     private final Navigator parent;
     private final HashSet<Navigator> sons = new HashSet<>();
-    protected final Map<String, Object> localMap;
     private String globalPath;
     private boolean dirty = false;
 
@@ -21,22 +21,6 @@ public class Navigator {
 	public String getCurrentPath() {
 		return globalPath == null ? "":globalPath;
 	}*/
-
-    public String getGlobalPathTo(String path) {
-        pathValidator(path);
-        return globalPath == null ? path : globalPath + "." + path;
-    }
-
-    public void setDirty(boolean value) {
-        if (this.dirty == value)
-            return;
-        this.dirty = value;
-        if (value && this.parent != null && this.isAlive())
-            this.parent.setDirty(true);
-        if (!value)
-            for (Navigator son : sons)
-                son.setDirty(false);
-    }
 
     public Navigator() {
         this(null);
@@ -56,6 +40,22 @@ public class Navigator {
         this.localMap = parent.getOrLoadMap(path);
         this.dirty = parent.dirty;
         this.globalPath = parent.getGlobalPathTo(path);
+    }
+
+    public String getGlobalPathTo(String path) {
+        pathValidator(path);
+        return globalPath == null ? path : globalPath + "." + path;
+    }
+
+    public void setDirty(boolean value) {
+        if (this.dirty == value)
+            return;
+        this.dirty = value;
+        if (value && this.parent != null && this.isAlive())
+            this.parent.setDirty(true);
+        if (!value)
+            for (Navigator son : sons)
+                son.setDirty(false);
     }
 
     @SuppressWarnings("unchecked")

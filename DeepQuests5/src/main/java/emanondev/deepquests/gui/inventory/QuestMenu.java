@@ -14,8 +14,10 @@ import java.util.Collections;
 
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class MissionMenu extends ListGui<MissionButton> {
-    public MissionMenu(Player player, Gui previousHolder, Quest quest, User user) {
+public class QuestMenu extends ListGui<MissionButton> {
+    private final ArrayList<MissionButton> rawMissionButtons = new ArrayList<>();
+
+    public QuestMenu(Player player, Gui previousHolder, Quest quest, User user) {
         super(GuiConfig.Generic.getMissionsMenuTitle(player), 6, player, previousHolder, 1);
         if (user == null || quest == null)
             throw new NullPointerException();
@@ -32,8 +34,6 @@ public class MissionMenu extends ListGui<MissionButton> {
         updateInventory();
     }
 
-    private final ArrayList<MissionButton> rawMissionButtons = new ArrayList<>();
-
     public boolean updateInventory() {
         this.clearButtons();
         for (MissionButton button : rawMissionButtons)
@@ -43,10 +43,12 @@ public class MissionMenu extends ListGui<MissionButton> {
         return super.updateInventory();
     }
 
+    @Override
     protected int loadPreviousPageButtonPosition() {
         return 6;
     }
 
+    @Override
     protected int loadNextPageButtonPosition() {
         return 7;
     }

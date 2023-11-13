@@ -28,11 +28,11 @@ import java.util.List;
 
 public class KillMobTaskType<T extends User<T>> extends ATaskType<T> {
 
+    private final static String ID = "kill_mob";
+
     public KillMobTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "kill_mob";
 
     @Override
     public Material getGuiMaterial() {
@@ -56,10 +56,7 @@ public class KillMobTaskType<T extends User<T>> extends ATaskType<T> {
         T user = getManager().getUserManager().getUser(p);
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             KillMobTask task = (KillMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidEntity(event.getEntity())
                     && task.toolData.isValidTool(p.getInventory().getItemInMainHand(), p)) {
@@ -69,70 +66,6 @@ public class KillMobTaskType<T extends User<T>> extends ATaskType<T> {
                     if (task.dropsData.removeExpDrops())
                         event.setDroppedExp(0);
                 }
-            }
-        }
-
-    }
-
-    public class KillMobTask extends ATask<T> {
-
-        private final EntityData<T, KillMobTask> entityData;
-        private final DropData<T, KillMobTask> dropsData;
-        private final ToolData<T, KillMobTask> toolData;
-
-        public KillMobTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, KillMobTaskType.this, section);
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-            entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
-            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-        }
-
-        public DropData<T, KillMobTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, KillMobTask> getWeaponData() {
-            return toolData;
-        }
-
-        public EntityData<T, KillMobTask> getEntityData() {
-            return entityData;
-        }
-
-        @Override
-        public @NotNull KillMobTaskType<T> getType() {
-            return KillMobTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            info.addAll(entityData.getInfo());
-            if (dropsData.removeExpDrops())
-                info.add("&9Exp Drops: &cDisabled");
-            if (dropsData.removeItemDrops())
-                info.add("&9Item Drops: &cDisabled");
-            if (toolData.isEnabled()) {
-                info.add("&9Weapon Check:");
-                info.addAll(toolData.getInfo());
-            }
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                this.putButton(27, entityData.getEntityTypeButton(this));
-                this.putButton(28, entityData.getSpawnReasonButton(this));
-                this.putButton(36, entityData.getIgnoreNPCFlagButton(this));
-                this.putButton(37, dropsData.getExpDropsFlagButton(this));
-                this.putButton(38, dropsData.getItemDropsFlagButton(this));
-                toolData.setupButtons("&6Breeding Item Button", this, 45);
             }
         }
 
@@ -185,5 +118,69 @@ public class KillMobTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt).replace("{entities}", DataUtils.getEntityHolder(t.getEntityData()));
+    }
+
+    public class KillMobTask extends ATask<T> {
+
+        private final EntityData<T, KillMobTask> entityData;
+        private final DropData<T, KillMobTask> dropsData;
+        private final ToolData<T, KillMobTask> toolData;
+
+        public KillMobTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, KillMobTaskType.this, section);
+            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
+            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
+        }
+
+        public DropData<T, KillMobTask> getDropData() {
+            return dropsData;
+        }
+
+        public ToolData<T, KillMobTask> getWeaponData() {
+            return toolData;
+        }
+
+        public EntityData<T, KillMobTask> getEntityData() {
+            return entityData;
+        }
+
+        @Override
+        public @NotNull KillMobTaskType<T> getType() {
+            return KillMobTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            info.addAll(entityData.getInfo());
+            if (dropsData.removeExpDrops())
+                info.add("&9Exp Drops: &cDisabled");
+            if (dropsData.removeItemDrops())
+                info.add("&9Item Drops: &cDisabled");
+            if (toolData.isEnabled()) {
+                info.add("&9Weapon Check:");
+                info.addAll(toolData.getInfo());
+            }
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                this.putButton(27, getEntityData().getEntityTypeButton(this));
+                this.putButton(28, getEntityData().getSpawnReasonButton(this));
+                this.putButton(36, getEntityData().getIgnoreNPCFlagButton(this));
+                this.putButton(37, getDropData().getExpDropsFlagButton(this));
+                this.putButton(38, getDropData().getItemDropsFlagButton(this));
+                getWeaponData().setupButtons("&6Killing Item Button", this, 45);
+            }
+        }
+
     }
 }

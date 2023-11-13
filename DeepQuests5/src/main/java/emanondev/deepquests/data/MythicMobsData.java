@@ -122,6 +122,10 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
         return true;
     }
 
+    public Button getMythicMobsSelectorButton(Gui gui) {
+        return new MythicMobsSelectorButton(gui);
+    }
+
     private class MinLevelButton extends AmountSelectorButton {
 
         public MinLevelButton(Gui parent) {
@@ -210,10 +214,6 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
         public boolean onValueChangeRequest(boolean value) {
             return toggleLevelCheck();
         }
-    }
-
-    public Button getMythicMobsSelectorButton(Gui gui) {
-        return new MythicMobsSelectorButton(gui);
     }
 
     private class MythicMobsSelectorButton extends CollectionSelectorButton<String> {

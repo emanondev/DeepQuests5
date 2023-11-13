@@ -15,17 +15,18 @@ import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.player.QuestPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class McmmoLevelRequireType extends ARequireType<QuestPlayer> {
 
+    private static final String ID = "mcmmo_level";
+
     public McmmoLevelRequireType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
     }
-
-    private static final String ID = "mcmmo_level";
 
     @Override
     public Material getGuiMaterial() {
@@ -44,14 +45,14 @@ public class McmmoLevelRequireType extends ARequireType<QuestPlayer> {
 
     public class McmmoLevelRequire extends ARequire<QuestPlayer> {
 
-        private McMMOSkillTypeData<QuestPlayer, McmmoLevelRequire> skillData = null;
-        private AmountData<QuestPlayer, McmmoLevelRequire> amountData = null;
+        private final McMMOSkillTypeData<QuestPlayer, McmmoLevelRequire> skillData;
+        private final AmountData<QuestPlayer, McmmoLevelRequire> amountData;
 
         public McmmoLevelRequire(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, McmmoLevelRequireType.this, section);
-            skillData = new McMMOSkillTypeData<QuestPlayer, McmmoLevelRequire>(this,
+            skillData = new McMMOSkillTypeData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_MCMMODATA));
-            amountData = new AmountData<QuestPlayer, McmmoLevelRequire>(this,
+            amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
         }
 
@@ -68,16 +69,14 @@ public class McmmoLevelRequireType extends ARequireType<QuestPlayer> {
                 return false;
             try {
                 McMMOPlayer mcmmoPlayer = UserManager.getPlayer(p.getPlayer());
-                if (mcmmoPlayer.getSkillLevel(skillData.getSkillType()) >= amountData.getAmount())
-                    return true;
-                return false;
+                return mcmmoPlayer.getSkillLevel(skillData.getSkillType()) >= amountData.getAmount();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return false;
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(skillData.getInfo());
             info.add("&9Required Level: &e" + amountData.getAmount());
@@ -85,7 +84,7 @@ public class McmmoLevelRequireType extends ARequireType<QuestPlayer> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -93,9 +92,9 @@ public class McmmoLevelRequireType extends ARequireType<QuestPlayer> {
 
             public GuiEditor(Player player, Gui previusHolder) {
                 super(player, previusHolder);
-                this.putButton(27, skillData.getSkillTypeSelector(this));
+                this.putButton(27, getMcMMOSkillTypeData().getSkillTypeSelector(this));
                 this.putButton(28,
-                        amountData.getAmountEditorButton("&9Select required Level",
+                        getAmountData().getAmountEditorButton("&9Select required Level",
                                 Arrays.asList("&6Required Level Selector", "&9Level: &e%amount%"),
                                 new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
             }

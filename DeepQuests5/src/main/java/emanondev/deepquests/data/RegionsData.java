@@ -30,6 +30,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
+    private final static BaseComponent[] chatText = new ComponentBuilder(
+            ChatColor.GOLD + "****************************\n" + ChatColor.GOLD + " Click Me and write the name\n"
+                    + ChatColor.GOLD + "****************************")
+            .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/dqtext "))
+            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.GOLD
+                    + "Write the region name\n" + ChatColor.YELLOW + "/dqtext <region name>")))
+            .create();
     private final Set<String> regionNames = new TreeSet<>();
     private boolean isRegionListWhitelist;
 
@@ -38,6 +45,37 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
         regionNames.addAll(getConfig().getStringList(Paths.DATA_REGION_LIST, new ArrayList<>()));
         isRegionListWhitelist = getConfig().getBoolean(Paths.DATA_REGION_LIST_IS_WHITELIST, true);
 
+    }
+
+    private static Set<String> getRegionNames(Player p) {
+        Set<String> regionNames = new LinkedHashSet<>();
+        Set<String> sortedSet = new TreeSet<>();
+
+        World userWorld = null;
+        if (p != null) {
+            userWorld = p.getWorld();
+            RegionManager rgManager = getRegionManager(userWorld);
+            if (rgManager != null)
+                for (ProtectedRegion region : rgManager.getRegions().values())
+                    sortedSet.add(region.getId());
+            regionNames.addAll(sortedSet);
+            sortedSet.clear();
+        }
+        for (World world : Quests.get().getServer().getWorlds()) {
+            if (world.equals(userWorld))
+                continue;
+            RegionManager rgManager = getRegionManager(world);
+            if (rgManager != null)
+                for (ProtectedRegion region : rgManager.getRegions().values())
+                    sortedSet.add(region.getId());
+            regionNames.addAll(sortedSet);
+            sortedSet.clear();
+        }
+        return regionNames;
+    }
+
+    private static RegionManager getRegionManager(World world) {
+        return WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
     }
 
     public boolean isValidRegion(ProtectedRegion region) {
@@ -80,37 +118,6 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
 
     public Button getRegionSelectorButton(Gui parent) {
         return new RegionSelectorButton(parent);
-    }
-
-    private static Set<String> getRegionNames(Player p) {
-        Set<String> regionNames = new LinkedHashSet<>();
-        Set<String> sortedSet = new TreeSet<>();
-
-        World userWorld = null;
-        if (p != null) {
-            userWorld = p.getWorld();
-            RegionManager rgManager = getRegionManager(userWorld);
-            if (rgManager != null)
-                for (ProtectedRegion region : rgManager.getRegions().values())
-                    sortedSet.add(region.getId());
-            regionNames.addAll(sortedSet);
-            sortedSet.clear();
-        }
-        for (World world : Quests.get().getServer().getWorlds()) {
-            if (world.equals(userWorld))
-                continue;
-            RegionManager rgManager = getRegionManager(world);
-            if (rgManager != null)
-                for (ProtectedRegion region : rgManager.getRegions().values())
-                    sortedSet.add(region.getId());
-            regionNames.addAll(sortedSet);
-            sortedSet.clear();
-        }
-        return regionNames;
-    }
-
-    private static RegionManager getRegionManager(World world) {
-        return WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
     }
 
     public List<String> getInfo() {
@@ -180,29 +187,6 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
             super.onClick(clicker, click);
         }
 
-        private class RegionWriterButton extends TextEditorButton {
-
-            public RegionWriterButton(Gui parent) {
-                super(new ItemBuilder(Material.END_CRYSTAL).setGuiProperty().build(), parent);
-            }
-
-            @Override
-            public List<String> getButtonDescription() {
-                return new ArrayList<>();
-            }
-
-            @Override
-            public void onReicevedText(String text) {
-                onToggleElementRequest(text);
-            }
-
-            @Override
-            public void onClick(Player clicker, ClickType click) {
-                requestText(clicker, chatText);
-            }
-
-        }
-
         @Override
         public Collection<String> getPossibleValues() {
             return getRegionNames(getGui().getTargetPlayer());
@@ -230,14 +214,29 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
             return true;
         }
 
-    }
+        private class RegionWriterButton extends TextEditorButton {
 
-    private final static BaseComponent[] chatText = new ComponentBuilder(
-            ChatColor.GOLD + "****************************\n" + ChatColor.GOLD + " Click Me and write the name\n"
-                    + ChatColor.GOLD + "****************************")
-            .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/dqtext "))
-            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.GOLD
-                    + "Write the region name\n" + ChatColor.YELLOW + "/dqtext <region name>")))
-            .create();
+            public RegionWriterButton(Gui parent) {
+                super(new ItemBuilder(Material.END_CRYSTAL).setGuiProperty().build(), parent);
+            }
+
+            @Override
+            public List<String> getButtonDescription() {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public void onReicevedText(String text) {
+                onToggleElementRequest(text);
+            }
+
+            @Override
+            public void onClick(Player clicker, ClickType click) {
+                requestText(clicker, chatText);
+            }
+
+        }
+
+    }
 
 }

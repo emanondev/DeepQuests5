@@ -34,14 +34,6 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     private final EnumMap<PhaseChange, Boolean> messageIsDefault = new EnumMap<>(PhaseChange.class);
     private final EnumMap<PhaseChange, Boolean> showMessage = new EnumMap<>(PhaseChange.class);
 
-    private String getPhaseShowMessagePath(PhaseChange phase) {
-        return "show-" + phase.toString() + "-message";
-    }
-
-    private String getPhaseMessagePath(PhaseChange phase) {
-        return phase.toString() + "-message";
-    }
-
     public AMission(int id, Quest<T> quest, YMLSection section) {
         super(id, section, quest.getManager());
         this.parent = quest;
@@ -57,6 +49,28 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
         }
     }
 
+    private static Material guiFullMaterial(PhaseChange phase) {
+        return switch (phase) {
+            case COMPLETE -> Material.GREEN_TERRACOTTA;
+            case FAIL -> Material.RED_TERRACOTTA;
+            case PAUSE -> Material.LIME_TERRACOTTA;
+            case START -> Material.BLUE_TERRACOTTA;
+            case UNPAUSE -> Material.BLUE_TERRACOTTA;
+            default -> throw new IllegalStateException();
+        };
+    }
+
+    private static Material guiGlassMaterial(PhaseChange phase) {
+        return switch (phase) {
+            case COMPLETE -> Material.GREEN_STAINED_GLASS;
+            case FAIL -> Material.RED_STAINED_GLASS;
+            case PAUSE -> Material.LIME_STAINED_GLASS;
+            case START -> Material.BLUE_STAINED_GLASS;
+            case UNPAUSE -> Material.BLUE_STAINED_GLASS;
+            default -> throw new IllegalStateException();
+        };
+    }
+
     /*
      * @Override public Navigator getNavigator() { super.getNavigator();
      * nav.setNavigator(Paths.QUESTCOMPONENT_DISPLAY_INFO,
@@ -69,6 +83,14 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
      * this.rawMessages.get(phase)); } return nav; }
      */
 
+    private String getPhaseShowMessagePath(PhaseChange phase) {
+        return "show-" + phase.toString() + "-message";
+    }
+
+    private String getPhaseMessagePath(PhaseChange phase) {
+        return phase.toString() + "-message";
+    }
+
     @Override
     public long getCooldownLeft(@NotNull T user) {
         MissionData<T> data = user.getMissionData(this);
@@ -76,7 +98,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public List<String> getInfo() {
+    public @NotNull List<String> getInfo() {
         List<String> info = new ArrayList<>();
         info.add("&9&lMission: &6" + this.getDisplayName());
         info.add("&8ID: " + this.getID());
@@ -266,7 +288,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public Gui getEditorGui(Player target, Gui parent) {
+    public @NotNull Gui getEditorGui(Player target, Gui parent) {
         return new AMissionGuiEditor(target, parent);
     }
 
@@ -847,28 +869,6 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
                 return getManager().getRewardProvider().getMissionTypes();
             }
         }
-    }
-
-    private static Material guiFullMaterial(PhaseChange phase) {
-        return switch (phase) {
-            case COMPLETE -> Material.GREEN_TERRACOTTA;
-            case FAIL -> Material.RED_TERRACOTTA;
-            case PAUSE -> Material.LIME_TERRACOTTA;
-            case START -> Material.BLUE_TERRACOTTA;
-            case UNPAUSE -> Material.BLUE_TERRACOTTA;
-            default -> throw new IllegalStateException();
-        };
-    }
-
-    private static Material guiGlassMaterial(PhaseChange phase) {
-        return switch (phase) {
-            case COMPLETE -> Material.GREEN_STAINED_GLASS;
-            case FAIL -> Material.RED_STAINED_GLASS;
-            case PAUSE -> Material.LIME_STAINED_GLASS;
-            case START -> Material.BLUE_STAINED_GLASS;
-            case UNPAUSE -> Material.BLUE_STAINED_GLASS;
-            default -> throw new IllegalStateException();
-        };
     }
 
     /*

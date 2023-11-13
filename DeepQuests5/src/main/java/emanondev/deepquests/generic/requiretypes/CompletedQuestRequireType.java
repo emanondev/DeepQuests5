@@ -14,17 +14,18 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class CompletedQuestRequireType<T extends User<T>> extends ARequireType<T> {
 
+    public static final String ID = "completed_quest";
+
     public CompletedQuestRequireType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    public static final String ID = "completed_quest";
 
     @Override
     public Material getGuiMaterial() {
@@ -75,7 +76,7 @@ public class CompletedQuestRequireType<T extends User<T>> extends ARequireType<T
             return amountData;
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(targetQuest.getInfo());
             if (amountData.getAmount() != 1)
@@ -84,7 +85,7 @@ public class CompletedQuestRequireType<T extends User<T>> extends ARequireType<T
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -92,8 +93,8 @@ public class CompletedQuestRequireType<T extends User<T>> extends ARequireType<T
 
             public GuiEditor(Player player, Gui previousHolder) {
                 super(player, previousHolder);
-                this.putButton(27, targetQuest.getQuestSelectorButton(this));
-                this.putButton(28, amountData.getAmountEditorButton("&9Completed Times Selector",
+                this.putButton(27, getTargetQuestData().getQuestSelectorButton(this));
+                this.putButton(28, getAmountData().getAmountEditorButton("&9Completed Times Selector",
                         Arrays.asList("&6Completed Times Selector", "&9Amount: &e%amount%"),
                         new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
             }

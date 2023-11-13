@@ -14,7 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -29,9 +28,8 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
     private final static String PATH_DESC = "description";
     private final static String PATH_ITEM = "item";
     private final static String PATH_HIDE = "hide";
-    private final E parent;
     protected final YMLSection section;
-
+    private final E parent;
     private final EnumMap<DisplayState, Boolean> isDefHidden = new EnumMap<>(DisplayState.class);
     private final EnumMap<DisplayState, Boolean> isDefItem = new EnumMap<>(DisplayState.class);
     private final EnumMap<DisplayState, Boolean> isDefDesc = new EnumMap<>(DisplayState.class);
@@ -127,7 +125,7 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
     }
 
     /**
-     * @param item  - setting as null revert to default
+     * @param item - setting as null revert to default
      */
     @Override
     public void setItem(@NotNull DisplayState state, ItemStack item) {
@@ -155,7 +153,7 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
     }
 
     /**
-     * @param hide  - if null revert to default
+     * @param hide - if null revert to default
      */
     @Override
     public void setHide(@NotNull DisplayState state, Boolean hide) {
@@ -174,7 +172,7 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
     }
 
     /**
-     * @param desc  - if null revert to default
+     * @param desc - if null revert to default
      */
     @Override
     public void setDescription(@NotNull DisplayState state, @Nullable List<String> desc) {
@@ -265,14 +263,15 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
                     ADisplayInfo.this.setDescription(state, list);
                     return true;
                 }
+
                 @Override
                 public void onClick(Player clicker, ClickType click) {
-                    if(click==ClickType.SHIFT_RIGHT) {
-                        ADisplayInfo.this.setDescription(state,null);
+                    if (click == ClickType.SHIFT_RIGHT) {
+                        ADisplayInfo.this.setDescription(state, null);
                         getGui().updateInventory();
                         return;
                     }
-                    super.onClick(clicker,click);
+                    super.onClick(clicker, click);
                 }
 
             }

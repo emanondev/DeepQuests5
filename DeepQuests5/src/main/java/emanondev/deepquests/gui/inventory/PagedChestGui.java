@@ -13,6 +13,10 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 
 public abstract class PagedChestGui extends ChestGui implements PagedGui {
+    private final String rawTitle;
+    private final Button[] controlButtons = new Button[9];
+    private int page;
+
     public PagedChestGui(String title, int rows, Player player, Gui previusHolder, int page) {
         super(Utils.fixString(title, player, true, GuiConfig.PAGE_HOLDER, String.valueOf(Math.max(page, 1))), rows, player, previusHolder);
         if (rows == 1)
@@ -33,14 +37,10 @@ public abstract class PagedChestGui extends ChestGui implements PagedGui {
             setControlButton(loadBackButtonPosition(), new BackButton(this));
     }
 
-    private final String rawTitle;
-
     private Inventory getInventory(int page) {
         return Bukkit.createInventory(this, getInventorySize(),
                 Utils.fixString(rawTitle, getTargetPlayer(), true, GuiConfig.PAGE_HOLDER, String.valueOf(page)));
     }
-
-    private int page;
 
     @Override
     public int getPage() {
@@ -68,9 +68,6 @@ public abstract class PagedChestGui extends ChestGui implements PagedGui {
             if (controlButtons[i] != null)
                 getInventory().setItem(getInventorySize() - 9 + i, controlButtons[i].getItem());
     }
-
-
-    private final Button[] controlButtons = new Button[9];
 
     /**
      * control buttons are the last line buttons

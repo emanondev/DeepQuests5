@@ -20,6 +20,11 @@ public class PlayerInfoManager implements Listener {
 
     private final Map<UUID, PlayerInfoSqlite> users = new HashMap<>();
 
+    PlayerInfoManager() {
+        loadAll();
+        Bukkit.getPluginManager().registerEvents(this, Quests.get());
+    }
+
     public void disable() {
         for (PlayerInfoSqlite user : users.values())
             try {
@@ -27,11 +32,6 @@ public class PlayerInfoManager implements Listener {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-    }
-
-    PlayerInfoManager() {
-        loadAll();
-        Bukkit.getPluginManager().registerEvents(this, Quests.get());
     }
 
     public PlayerInfo getPlayerInfo(OfflinePlayer p) {
@@ -75,6 +75,11 @@ public class PlayerInfoManager implements Listener {
 
     public static class PlayerInfoSqlite implements PlayerInfo {
 
+        private final UUID player;
+        private final boolean[] canSeeQuestState = new boolean[DisplayState.values().length];
+        private final boolean[] canSeeMissionState = new boolean[DisplayState.values().length];
+        private ProgressBarType type = ProgressBarType.BOSSBAR;
+        private ProgressBarStyle style = ProgressBarStyle.NUMERIC;
         public PlayerInfoSqlite(UUID player) {
             if (player == null)
                 throw new NullPointerException();
@@ -93,10 +98,6 @@ public class PlayerInfoManager implements Listener {
             this.type = type;
         }
 
-        private final UUID player;
-        private ProgressBarType type = ProgressBarType.BOSSBAR;
-        private ProgressBarStyle style = ProgressBarStyle.NUMERIC;
-
         public Player getPlayer() {
             return Bukkit.getPlayer(player);
         }
@@ -108,9 +109,6 @@ public class PlayerInfoManager implements Listener {
         public OfflinePlayer getOfflinePlayer() {
             return Bukkit.getOfflinePlayer(player);
         }
-
-        private final boolean[] canSeeQuestState = new boolean[DisplayState.values().length];
-        private final boolean[] canSeeMissionState = new boolean[DisplayState.values().length];
 
         public boolean canSeeQuestState(DisplayState state) {
             return canSeeQuestState[state.ordinal()];

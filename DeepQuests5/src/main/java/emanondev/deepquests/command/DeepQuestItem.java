@@ -5,7 +5,6 @@ import emanondev.deepquests.Quests;
 import emanondev.deepquests.gui.button.ItemEditorButton;
 import emanondev.deepquests.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;

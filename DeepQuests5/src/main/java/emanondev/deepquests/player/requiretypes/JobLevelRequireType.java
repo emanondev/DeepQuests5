@@ -15,17 +15,18 @@ import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.player.QuestPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class JobLevelRequireType extends ARequireType<QuestPlayer> {
 
+    private static final String ID = "job_level";
+
     public JobLevelRequireType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
     }
-
-    private static final String ID = "job_level";
 
     @Override
     public Material getGuiMaterial() {
@@ -75,7 +76,7 @@ public class JobLevelRequireType extends ARequireType<QuestPlayer> {
         }
 
         @Override
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(jobData.getInfo());
             info.add("&9Required Level: &e" + amountData.getAmount());
@@ -83,7 +84,7 @@ public class JobLevelRequireType extends ARequireType<QuestPlayer> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -91,9 +92,9 @@ public class JobLevelRequireType extends ARequireType<QuestPlayer> {
 
             public GuiEditor(Player player, Gui previousHolder) {
                 super(player, previousHolder);
-                this.putButton(27, jobData.getJobSelector(this));
+                this.putButton(27, getJobTypeData().getJobSelector(this));
                 this.putButton(28,
-                        amountData.getAmountEditorButton("&9Select required Level",
+                        getAmountData().getAmountEditorButton("&9Select required Level",
                                 Arrays.asList("&6Required Level Selector", "&9Level: &e%amount%"),
                                 new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
             }

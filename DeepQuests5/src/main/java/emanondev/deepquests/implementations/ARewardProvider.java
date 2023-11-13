@@ -20,6 +20,7 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
     private final Map<String, RewardType<T>> taskTypes = new LinkedHashMap<>();
     private final Map<String, RewardType<T>> types = new LinkedHashMap<>();
     private final YMLConfig config;
+    private final Permission editPermission;
 
     public ARewardProvider(QuestManager<T> manager) {
         if (manager == null)
@@ -30,8 +31,6 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
                 .buildAndRegister(manager.getPlugin(), true);
         config = getManager().getConfig("rewardtype_config.yml");
     }
-
-    private final Permission editPermission;
 
     public void reload() {
         config.reload();

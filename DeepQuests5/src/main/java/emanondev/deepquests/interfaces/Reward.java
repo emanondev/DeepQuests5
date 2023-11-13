@@ -6,6 +6,7 @@ import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public interface Reward<T extends User<T>> extends QuestComponent<T> {
     /**
@@ -26,7 +27,7 @@ public interface Reward<T extends User<T>> extends QuestComponent<T> {
     void apply(T user, int amount);
 
     @Override
-    default Material getGuiMaterial() {
+    default @NotNull Material getGuiMaterial() {
         return Material.GOLD_INGOT;
     }
 
@@ -35,7 +36,7 @@ public interface Reward<T extends User<T>> extends QuestComponent<T> {
         return new GuiElementButton<>(parent, this);
     }
 
-    QuestManager<T> getManager();
+    @NotNull QuestManager<T> getManager();
 
     default String getTypeName() {
         return getType().getKeyID();

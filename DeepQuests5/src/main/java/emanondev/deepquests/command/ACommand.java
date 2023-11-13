@@ -11,6 +11,8 @@ import java.util.List;
 
 public abstract class ACommand extends ASubCommand implements TabExecutor {
 
+    private final String name;
+
     /**
      * @param commandName - nome del comando (ex: /heal <- nome = "heal")
      * @param aliases     - lista degli alias del comando (facoltativa può essere null)
@@ -25,8 +27,6 @@ public abstract class ACommand extends ASubCommand implements TabExecutor {
             throw new IllegalArgumentException("Command Name '" + commandName + "' contains spaces");
         this.name = commandName.toLowerCase();
     }
-
-    private final String name;
 
     /**
      * @return restituisce il nome del comando

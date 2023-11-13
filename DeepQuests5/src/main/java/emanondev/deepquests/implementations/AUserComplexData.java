@@ -8,6 +8,11 @@ import java.util.Date;
 
 public abstract class AUserComplexData<T extends User<T>> extends AUserData<T> implements ComplexData<T> {
 
+    private long lastStarted;
+    private long lastCompleted;
+    private int completedTimes;
+    private long lastFailed;
+    private int failedTimes;
     public AUserComplexData(T user, YMLSection section) {
         super(user, section);
         lastStarted = Math.max(0, getConfig().getLong(Paths.USERDATA_LAST_STARTED, 0L));
@@ -16,14 +21,6 @@ public abstract class AUserComplexData<T extends User<T>> extends AUserData<T> i
         lastFailed = Math.max(0, getConfig().getLong(Paths.USERDATA_FAILED_TIMES, 0L));
         failedTimes = Math.max(0, getConfig().getInteger(Paths.USERDATA_LAST_FAILED, 0));
     }
-
-    private long lastStarted;
-
-    private long lastCompleted;
-    private int completedTimes;
-
-    private long lastFailed;
-    private int failedTimes;
 
     @Override
     public boolean isFailed() {

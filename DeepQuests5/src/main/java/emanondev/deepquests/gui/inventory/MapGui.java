@@ -8,11 +8,11 @@ import java.util.HashMap;
 
 public class MapGui extends ChestGui {
 
+    protected HashMap<Integer, Button> buttonsMap = new HashMap<Integer, Button>();
+
     public MapGui(String title, int rows, Player p, Gui previusHolder) {
         super(title, rows, p, previusHolder);
     }
-
-    protected HashMap<Integer, Button> buttonsMap = new HashMap<Integer, Button>();
 
     public void putButton(int pos, Button button) {
         if (pos < 0)

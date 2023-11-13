@@ -7,6 +7,7 @@ import emanondev.deepquests.interfaces.Mission;
 import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.UserManager;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
@@ -20,17 +21,17 @@ public class QuestNation extends AUser<QuestNation> {
     }
 
     @Override
-    public Collection<Player> getPlayers() {
+    public @NotNull Collection<Player> getPlayers() {
         return TownyAPI.getInstance().getOnlinePlayers(nation);
     }
 
     @Override
-    public boolean canProgress(Task<QuestNation> task, Player player) {
+    public boolean canProgress(@NotNull Task<QuestNation> task, Player player) {
         return true;
     }
 
     @Override
-    public boolean canStart(Mission<QuestNation> mission, Player targetPlayer) {
+    public boolean canStart(@NotNull Mission<QuestNation> mission, Player targetPlayer) {
         return true;
     }
 

@@ -20,6 +20,7 @@ public class GuiConfig {
     public static final String AMOUNT_HOLDER = "%amount%";
 
     private static final ConfigFile guiConfig = new ConfigFile("guiconfig");
+    private static final ItemStack defaultItem = new ItemBuilder(Material.BARRIER).setGuiProperty().build();
 
     public static void reload() {
 
@@ -41,13 +42,40 @@ public class GuiConfig {
         return guiConfig.getNavigator().getString(path, null, true);
     }
 
-    private static final ItemStack defaultItem = new ItemBuilder(Material.BARRIER).setGuiProperty().build();
-
     private static ItemStack getItem(String path) {
         return guiConfig.getNavigator().getItemStack(path, new ItemStack(defaultItem));
     }
 
     public static class Generic {
+        private static final String BASE_PATH = "generic.";
+        public static List<String> AMOUNT_SELECTOR_ADD;
+        public static List<String> AMOUNT_SELECTOR_REMOVE;
+        public static List<String> AMOUNT_SELECTOR_SHOW;
+        public static List<String> NEXT_PAGE;
+        public static ItemStack NEXT_PAGE_ITEM;
+        public static List<String> PREVIUS_PAGE;
+        public static ItemStack PREVIUS_PAGE_ITEM;
+        public static List<String> BACK_INVENTORY;
+        public static ItemStack BACK_INVENTORY_ITEM;
+        public static List<String> CLOSE_INVENTORY;
+        public static ItemStack CLOSE_INVENTORY_ITEM;
+        public static ItemStack EMPTY_BUTTON_ITEM;
+        public static String COMMAND_FOR_PLAYERS_ONLY;
+        public static String LACK_OF_PERMISSION;
+        public static List<String> WHITELIST_DESCRIPTION;
+        public static List<String> BLACKLIST_DESCRIPTION;
+        public static List<String> NULL_ELEMENT;
+        public static String NO_VALUE_SET;
+        public static String INVALID_NUMBER;
+        public static String INVALID_INPUT;
+        public static String NOT_A_NUMBER;
+        public static String NO_TEXT_CHANGES;
+        public static String CONFIRM_CLICK_GUI_TITLE;
+        public static List<String> CONFIRM_BUTTON_DESCRIPTION;
+        public static List<String> UNCONFIRM_BUTTON_DESCRIPTION;
+        public static ItemStack CONFIRM_BUTTON_ITEM;
+        public static ItemStack UNCONFIRM_BUTTON_ITEM;
+
         private static List<String> getStringList(String path) {
             return GuiConfig.getStringList(BASE_PATH + path);
         }
@@ -59,8 +87,6 @@ public class GuiConfig {
         private static ItemStack getItem(String path) {
             return GuiConfig.getItem(BASE_PATH + path);
         }
-
-        private static final String BASE_PATH = "generic.";
 
         private static void reload() {
 
@@ -107,35 +133,6 @@ public class GuiConfig {
             UNCONFIRM_BUTTON_ITEM = getItem("unconfirm_button_item");
         }
 
-        public static List<String> AMOUNT_SELECTOR_ADD;
-        public static List<String> AMOUNT_SELECTOR_REMOVE;
-        public static List<String> AMOUNT_SELECTOR_SHOW;
-        public static List<String> NEXT_PAGE;
-        public static ItemStack NEXT_PAGE_ITEM;
-        public static List<String> PREVIUS_PAGE;
-        public static ItemStack PREVIUS_PAGE_ITEM;
-        public static List<String> BACK_INVENTORY;
-        public static ItemStack BACK_INVENTORY_ITEM;
-        public static List<String> CLOSE_INVENTORY;
-        public static ItemStack CLOSE_INVENTORY_ITEM;
-        public static ItemStack EMPTY_BUTTON_ITEM;
-        public static String COMMAND_FOR_PLAYERS_ONLY;
-        public static String LACK_OF_PERMISSION;
-        public static List<String> WHITELIST_DESCRIPTION;
-        public static List<String> BLACKLIST_DESCRIPTION;
-        public static List<String> NULL_ELEMENT;
-        public static String NO_VALUE_SET;
-        public static String INVALID_NUMBER;
-        public static String INVALID_INPUT;
-        public static String NOT_A_NUMBER;
-        public static String NO_TEXT_CHANGES;
-        public static String CONFIRM_CLICK_GUI_TITLE;
-
-        public static List<String> CONFIRM_BUTTON_DESCRIPTION;
-        public static List<String> UNCONFIRM_BUTTON_DESCRIPTION;
-        public static ItemStack CONFIRM_BUTTON_ITEM;
-        public static ItemStack UNCONFIRM_BUTTON_ITEM;
-
         public static ItemStack getConfirmButtonItem(Player p) {
             return Utils.setDescription(CONFIRM_BUTTON_ITEM, CONFIRM_BUTTON_DESCRIPTION, p, true);
         }
@@ -156,6 +153,16 @@ public class GuiConfig {
     }
 
     public static class PlayerQuests {
+        private static final String BASE_PATH = "playerquests.";
+        public static EnumMap<DisplayState, ItemStack> QUEST_ACTIVE_DISPLAY_FLAG = new EnumMap<>(
+                DisplayState.class);
+        public static EnumMap<DisplayState, ItemStack> QUEST_INACTIVE_DISPLAY_FLAG = new EnumMap<>(
+                DisplayState.class);
+        public static EnumMap<DisplayState, ItemStack> MISSION_ACTIVE_DISPLAY_FLAG = new EnumMap<>(
+                DisplayState.class);
+        public static EnumMap<DisplayState, ItemStack> MISSION_INACTIVE_DISPLAY_FLAG = new EnumMap<>(
+                DisplayState.class);
+
         private static List<String> getStringList(String path) {
             return GuiConfig.getStringList(BASE_PATH + path);
         }
@@ -168,8 +175,6 @@ public class GuiConfig {
         private static ItemStack getItem(String path) {
             return GuiConfig.getItem(BASE_PATH + path);
         }
-
-        private static final String BASE_PATH = "playerquests.";
 
         private static void reload() {
             for (DisplayState state : DisplayState.values()) {
@@ -205,15 +210,6 @@ public class GuiConfig {
                 return MISSION_ACTIVE_DISPLAY_FLAG.get(state);
             return MISSION_INACTIVE_DISPLAY_FLAG.get(state);
         }
-
-        public static EnumMap<DisplayState, ItemStack> QUEST_ACTIVE_DISPLAY_FLAG = new EnumMap<>(
-                DisplayState.class);
-        public static EnumMap<DisplayState, ItemStack> QUEST_INACTIVE_DISPLAY_FLAG = new EnumMap<>(
-                DisplayState.class);
-        public static EnumMap<DisplayState, ItemStack> MISSION_ACTIVE_DISPLAY_FLAG = new EnumMap<>(
-                DisplayState.class);
-        public static EnumMap<DisplayState, ItemStack> MISSION_INACTIVE_DISPLAY_FLAG = new EnumMap<>(
-                DisplayState.class);
 
     }
 

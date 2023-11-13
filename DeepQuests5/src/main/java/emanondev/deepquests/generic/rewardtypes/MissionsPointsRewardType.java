@@ -13,11 +13,14 @@ import emanondev.deepquests.interfaces.*;
 import emanondev.deepquests.utils.DataUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> {
+    private final static String ID = "missions_points";
+
     public MissionsPointsRewardType(QuestManager<T> manager) {
         super(ID, manager);
     }
@@ -26,8 +29,6 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
     protected boolean getStandardHiddenValue() {
         return false;
     }
-
-    private final static String ID = "missions_points";
 
     @Override
     public Material getGuiMaterial() {
@@ -44,6 +45,21 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
         return new MissionsPointsReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<T> reward) {
+        if (!(reward instanceof MissionsPointsReward r))
+            return null;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:obtained} &e{amount} &a{action:points} on &e{target}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+
+        }
+        return Translations.replaceAll(txt).replace("{target}", DataUtils.getTargetHolder(r.getTargetQuestData()))
+                .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
+    }
+
     public class MissionsPointsReward extends AReward<T> {
         private final TargetQuestData<T, MissionsPointsReward> questData;
         private final AmountData<T, MissionsPointsReward> amountData;
@@ -56,7 +72,7 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
                     getConfig().loadSection(Paths.REWARD_INFO_TARGET_QUEST));
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(questData.getInfo());
             info.add("&9Points: &e%amount%");
@@ -88,7 +104,7 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -103,21 +119,6 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
                                 new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
             }
         }
-    }
-
-    @Override
-    public String getDefaultFeedback(Reward<T> reward) {
-        if (!(reward instanceof MissionsPointsReward r))
-            return null;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:obtained} &e{amount} &a{action:points} on &e{target}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-
-        }
-        return Translations.replaceAll(txt).replace("{target}", DataUtils.getTargetHolder(r.getTargetQuestData()))
-                .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 
 }

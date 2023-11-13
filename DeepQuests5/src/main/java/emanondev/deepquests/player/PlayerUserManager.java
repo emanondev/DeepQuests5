@@ -20,12 +20,11 @@ import java.util.*;
 
 public class PlayerUserManager extends AUserManager<QuestPlayer> implements Listener {
 
+    private static final long AUTOSAVE_TIMER = 20 * 3600;
+    private final Map<UUID, QuestPlayer> users = Collections.synchronizedMap(new HashMap<>());
     private BukkitTask autosave;
     private BukkitTask saving;
-    private static final long AUTOSAVE_TIMER = 20 * 3600;
     private boolean enabled = false;
-
-    private final Map<UUID, QuestPlayer> users = Collections.synchronizedMap(new HashMap<>());
 
     public PlayerUserManager(PlayerQuestManager questManager) {
         super(questManager);

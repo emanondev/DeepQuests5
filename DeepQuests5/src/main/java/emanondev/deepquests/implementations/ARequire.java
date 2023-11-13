@@ -16,7 +16,15 @@ import java.util.Objects;
 
 public abstract class ARequire<T extends User<T>> extends AQuestComponent<T> implements Require<T> {
 
+    private final RequireType<T> type;
     private boolean isHidden;
+
+    public ARequire(int id, QuestManager<T> manager, RequireType<T> type, YMLSection section) {
+        super(id, section, manager);
+        this.type = type;
+        getConfig().set(Paths.TYPE_NAME, type.getKeyID());
+        isHidden = getConfig().getBoolean(Paths.IS_HIDDEN, getType().getDefaultIsHidden());
+    }
 
     public boolean isHidden() {
         return isHidden;
@@ -29,16 +37,7 @@ public abstract class ARequire<T extends User<T>> extends AQuestComponent<T> imp
         getConfig().set(Paths.IS_HIDDEN, value == null ? null : isHidden);
     }
 
-    private final RequireType<T> type;
-
-    public ARequire(int id, QuestManager<T> manager, RequireType<T> type, YMLSection section) {
-        super(id, section, manager);
-        this.type = type;
-        getConfig().set(Paths.TYPE_NAME, type.getKeyID());
-        isHidden = getConfig().getBoolean(Paths.IS_HIDDEN, getType().getDefaultIsHidden());
-    }
-
-    public List<String> getInfo() {
+    public @NotNull List<String> getInfo() {
         List<String> info = new ArrayList<>();
         info.add("&9&lRequire: &6" + this.getDisplayName());
         info.add("&8Type: &7" + (getType() != null ? getType().getKeyID() : "&cError"));

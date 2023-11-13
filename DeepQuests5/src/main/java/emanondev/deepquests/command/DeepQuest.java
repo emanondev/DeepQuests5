@@ -13,6 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ class SubCheckCicles extends ASubCommand {
 
             for (Quest quest : man.getQuests()) {
                 try {
-                    unloop(quest, new ArrayList<QuestComponent>());
+                    unloop(quest, new ArrayList<>());
                 } catch (Exception e) {
                     e.printStackTrace();
                     sender.sendMessage(e.getMessage());
@@ -55,7 +56,7 @@ class SubCheckCicles extends ASubCommand {
             }
             for (Mission mission : man.getMissions()) {
                 try {
-                    unloop(mission, new ArrayList<QuestComponent>());
+                    unloop(mission, new ArrayList<>());
                 } catch (Exception e) {
                     e.printStackTrace();
                     sender.sendMessage(e.getMessage());
@@ -81,10 +82,10 @@ class SubCheckCicles extends ASubCommand {
         for (Require req : ((Collection<Require>) quest.getRequires())) {
             if (req instanceof CurrentMissionStateRequire) {
                 unloop(((CurrentMissionStateRequire) req).getTargetMissionData().getMission(),
-                        new ArrayList<QuestComponent>(now));
+                        new ArrayList<>(now));
             } else if (req instanceof CurrentQuestStateRequire) {
                 unloop(((CurrentQuestStateRequire) req).getTargetQuestData().getQuest(),
-                        new ArrayList<QuestComponent>(now));
+                        new ArrayList<>(now));
             }
         }
 
@@ -106,10 +107,10 @@ class SubCheckCicles extends ASubCommand {
         for (Require req : ((Collection<Require>) mission.getRequires())) {
             if (req instanceof CurrentMissionStateRequire) {
                 unloop(((CurrentMissionStateRequire) req).getTargetMissionData().getMission(),
-                        new ArrayList<QuestComponent>(now));
+                        new ArrayList<>(now));
             } else if (req instanceof CurrentQuestStateRequire) {
                 unloop(((CurrentQuestStateRequire) req).getTargetQuestData().getQuest(),
-                        new ArrayList<QuestComponent>(now));
+                        new ArrayList<>(now));
             }
         }
     }
@@ -149,7 +150,7 @@ class SubManipulator extends ASubCommand {
         }
         Player target = Bukkit.getPlayer(params.get(0));
         if (target == null) {
-            sender.sendMessage(ChatColor.RED + "Player " + target + " not found");
+            sender.sendMessage(ChatColor.RED + "Player " + params.get(0) + " not found");
             return;
         }
         Player p = (Player) sender;
@@ -183,7 +184,7 @@ class SubOpengui extends ASubCommand {
         }
         Player target = Bukkit.getPlayer(params.get(0));
         if (target == null) {
-            sender.sendMessage(ChatColor.RED + "Player " + target + " not found");
+            sender.sendMessage(ChatColor.RED + "Player " + params.get(0) + " not found");
             return;
         }
         Player p = (Player) sender;
@@ -225,11 +226,11 @@ class SubEditor extends ASubCommand {
                 List<String> desc = Utils.fixList(man.getInfo(), null, true);
                 StringBuilder txt = new StringBuilder("");
                 for (String line : desc) {
-                    txt.append(line + "\n");
+                    txt.append(line).append("\n");
                 }
 
                 comp.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ComponentBuilder(txt.substring(0, txt.length() - 2)).create()))
+                                new Text(txt.substring(0, txt.length() - 2))))
                         .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
                                 "/" + label + " " + args[0] + " " + man.getName()));
                 color = !color;
@@ -249,7 +250,7 @@ class SubEditor extends ASubCommand {
 
     public ArrayList<String> onTab(ArrayList<String> params, CommandSender sender, String label, String[] args) {
         if (params.size() == 1) {
-            ArrayList<String> list = new ArrayList<String>();
+            ArrayList<String> list = new ArrayList<>();
             for (QuestManager man : Quests.get().getManagers())
                 if (man.getName().startsWith(params.get(0).toLowerCase()))
                     list.add(man.getName());
@@ -298,7 +299,7 @@ class SubEditorUser extends ASubCommand {
 
     public ArrayList<String> onTab(ArrayList<String> params, CommandSender sender, String label, String[] args) {
         if (params.size() == 1)
-            return new ArrayList<String>();
+            return new ArrayList<>();
         params.remove(0);
         return super.onTab(params, sender, label, args);
 
@@ -322,7 +323,7 @@ class SubEditorUserFailquest extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -363,7 +364,7 @@ class SubEditorUserResetquest extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -404,7 +405,7 @@ class SubEditorUserErasequest extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -445,7 +446,7 @@ class SubEditorUserCompletequest extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -486,7 +487,7 @@ class SubEditorUserResetmission extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -526,7 +527,7 @@ class SubEditorUserCompletemission extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -566,7 +567,7 @@ class SubEditorUserFailmission extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -606,7 +607,7 @@ class SubEditorUserStartmission extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -621,13 +622,13 @@ class SubEditorUserStartmission extends ASubCommand {
         User user = manager.getArgomentUser(args[3]);
         boolean forced = true;
         try {
-            forced = Boolean.valueOf(args[6]);
-        } catch (Exception e) {
+            forced = Boolean.parseBoolean(args[6]);
+        } catch (Exception ignored) {
 
         }
         boolean result = user.startMission(mission, null, forced);
         user.saveOnDisk();
-        if (result == true) {
+        if (result) {
             String msg = ChatColor.GREEN + "Mission " + ChatColor.YELLOW + id + ChatColor.GREEN + " of "
                     + ChatColor.YELLOW + manager.getName() + ChatColor.GREEN + " started for user " + ChatColor.YELLOW
                     + user.getUID();
@@ -655,7 +656,7 @@ class SubEditorUserErasemission extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -695,7 +696,7 @@ class SubEditorUserResettask extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -735,7 +736,7 @@ class SubEditorUserProgresstask extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
@@ -747,10 +748,10 @@ class SubEditorUserProgresstask extends ASubCommand {
             sender.sendMessage(ChatColor.RED + "Cound't find any task with ID " + ChatColor.GOLD + args[5]);
             return;
         }
-        int amount = 1;
+        int amount;
         if (args.length >= 7)
             try {
-                amount = Integer.valueOf(args[6]);
+                amount = Integer.parseInt(args[6]);
                 if (amount <= 0) {
                     sender.sendMessage(ChatColor.RED + "Amount (" + ChatColor.GOLD + amount + ChatColor.RED
                             + ") isn't a valid number, must be at least 1");
@@ -789,7 +790,7 @@ class SubEditorUserErasetask extends ASubCommand {
         }
         int id;
         try {
-            id = Integer.valueOf(args[5]);
+            id = Integer.parseInt(args[5]);
         } catch (Exception e) {
             sender.sendMessage(
                     ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");

@@ -21,6 +21,25 @@ import java.util.*;
 
 public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
 
+    private final EnumSet<ItemFlag> flagValues = EnumSet.noneOf(ItemFlag.class);
+    private final HashMap<Enchantment, EnchantCheck> enchMap = new HashMap<>();
+    private boolean enabled = false;
+    private ItemStack item = null;
+    private boolean doCheckAmount = false;
+    private int amountValue = 1;
+    private boolean doCheckDamage = false;
+    private int damageValue = 0;
+    private boolean easyCheck = true;
+    private boolean doCheckUnbreakable = true;
+    private boolean unbreakableValue = false;
+    private boolean doCheckDisplayName = true;
+    private String displayNameValue = null;
+    private boolean doCheckLore = true;
+    private List<String> loreValue = null;
+    private boolean doCheckFlags = true;
+    private boolean doCheckEnchants = true;
+    private boolean doCheckAttributes = true;
+    private boolean usePlaceHolder = true;
     public ToolData(E parent, YMLSection section) {
         super(parent, section);
         this.enabled = getConfig().getBoolean("is-enabled", this.enabled);
@@ -48,39 +67,9 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         return enabled;
     }
 
-    private boolean enabled = false;
-    private ItemStack item = null;
-
     public ItemStack getItem() {
         return item;
     }
-
-    private boolean doCheckAmount = false;
-    private int amountValue = 1;
-
-    private boolean doCheckDamage = false;
-    private int damageValue = 0;
-
-    private boolean easyCheck = true;
-
-    private boolean doCheckUnbreakable = true;
-    private boolean unbreakableValue = false;
-
-    private boolean doCheckDisplayName = true;
-    private String displayNameValue = null;
-
-    private boolean doCheckLore = true;
-    private List<String> loreValue = null;
-
-    private boolean doCheckFlags = true;
-    private final EnumSet<ItemFlag> flagValues = EnumSet.noneOf(ItemFlag.class);
-
-    private boolean doCheckEnchants = true;
-    private final HashMap<Enchantment, EnchantCheck> enchMap = new HashMap<>();
-
-    private boolean doCheckAttributes = true;
-
-    private boolean usePlaceHolder = true;
 
     public void setItem(ItemStack item) {
         this.item = item;
@@ -134,12 +123,9 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         item.setItemMeta(itemMeta);
 
         if (this.easyCheck) {
-            if (tool.isSimilar(item))
-                return true;
-            else
-                return false;
+            return tool.isSimilar(item);
         }
-        if (toolMeta.equals(itemMeta))
+        if (Objects.equals(toolMeta,itemMeta))
             return true;
         if (!this.doCheckDisplayName)
             itemMeta.setDisplayName(toolMeta.getDisplayName());
@@ -162,9 +148,7 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
             itemMeta.addItemFlags(toolMeta.getItemFlags().toArray(new ItemFlag[0]));
         }
 
-        if (toolMeta.equals(itemMeta))
-            return true;
-        return false;
+        return toolMeta.equals(itemMeta);
     }
 
     private boolean areValidEnchants(ItemMeta meta) {
@@ -172,66 +156,6 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
             if (!enchMap.get(ench).check(meta.getEnchantLevel(ench)))
                 return false;
         return true;
-    }
-
-    private static class EnchantCheck {
-        private EnchantCheckType type;
-        private int level;
-
-        private EnchantCheck(EnchantCheckType type, int level) {
-            if (type == null)
-                throw new NullPointerException();
-            this.type = type;
-            this.level = level;
-        }
-
-        private void setType(EnchantCheckType type) {
-            if (type == null)
-                throw new NullPointerException();
-            this.type = type;
-        }
-
-        private void setLevel(int level) {
-            this.level = level;
-        }
-
-        private boolean check(int level) {
-            return switch (type) {
-                case DIFFERENT -> this.level != level;
-                case EQUALS -> this.level == level;
-                case EQUALS_OR_HIGHTER -> this.level <= level;
-                case EQUALS_OR_LOWER -> this.level >= level;
-                case NONE -> true;
-                default -> throw new IllegalStateException();
-            };
-        }
-    }
-
-    private enum EnchantCheckType {
-        /**
-         * no check
-         */
-        NONE,
-
-        /**
-         * must be equals
-         */
-        EQUALS,
-
-        /**
-         * all enchants must be lower or equals
-         */
-        EQUALS_OR_LOWER,
-
-        /**
-         * tool might have highter or equals enchant levels only on
-         */
-        EQUALS_OR_HIGHTER,
-
-        /**
-         * tool must not have enchant or have different enchants
-         */
-        DIFFERENT,
     }
 
     /**
@@ -271,6 +195,149 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         getConfig().set("amount-value", this.amountValue);
     }
 
+    public List<String> getInfo() {
+        ArrayList<String> list = new ArrayList<>();
+        if (!enabled) {
+            list.add("  &9Check &cDisabled");
+            return list;
+        }
+        if (item == null) {
+            list.add("  &cNo tool should be used");
+            list.add("  &9(&eEmpty Hand&9)");
+            return list;
+        }
+        list.add("  &9Material: &e" + item.getType());
+        if (doCheckAmount)
+            list.add("  &9Amount: &e" + amountValue);
+        else
+            list.add("  &9Amount: &7Not Checked");
+        if ((item.getItemMeta()) instanceof Damageable) {
+            if (doCheckDamage)
+                list.add("  &9Damage: &e" + ((Damageable) item.getItemMeta()).getDamage());
+            else
+                list.add("  &9Damage: &7Not Checked");
+        }
+        if (easyCheck)
+            return list;
+        if (doCheckDisplayName)
+            list.add("  &9DisplayName: &e" + (displayNameValue == null ? "&cNONE" : displayNameValue));
+        else
+            list.add("  &9DisplayName: &7Not Checked");
+
+        if (doCheckLore)
+            if (loreValue == null)
+                list.add("  &9Lore: &cNONE");
+            else {
+                list.add("  &9Lore:");
+                for (String lore : loreValue)
+                    list.add("  &9- '&r" + lore + "&9'");
+            }
+        else
+            list.add("  &9Lore: &7Not Checked");
+
+        if (doCheckUnbreakable)
+            list.add("  &9Unbreakable: &7Not Checked");
+        else
+            list.add("  &9Unbreakable: &e" + unbreakableValue);
+
+        if (doCheckLore)
+            if (loreValue == null)
+                list.add("  &9ItemFlags: &cNONE");
+            else {
+                list.add("  &9ItemFlags:");
+                for (ItemFlag flag : item.getItemMeta().getItemFlags())
+                    list.add("  &9- '&r" + flag + "&9'");
+            }
+        else
+            list.add("  &9ItemFlags: &7Not Checked");
+
+        if (doCheckLore)
+            if (loreValue == null)
+                list.add("  &9ItemFlags: &cNONE");
+            else {
+                list.add("  &9ItemFlags:");
+                for (ItemFlag flag : item.getItemMeta().getItemFlags())
+                    list.add("  &9- '&r" + flag + "&9'");
+            }
+        else
+            list.add("  &9ItemFlags: &7Not Checked");
+
+        list.add("  &cInfo Not Completed");
+        return list;
+
+    }
+
+    private List<String> getInfo(String title) {
+        if (!enabled)
+            return Arrays.asList(title, "&cDisabled", "", "&6Click to Toggle");
+        ArrayList<String> list = new ArrayList<>();
+        list.add(title);
+        list.addAll(getInfo());
+        list.add("");
+        list.add("&6Click to Toggle");
+        return list;
+    }
+
+    private enum EnchantCheckType {
+        /**
+         * no check
+         */
+        NONE,
+
+        /**
+         * must be equals
+         */
+        EQUALS,
+
+        /**
+         * all enchants must be lower or equals
+         */
+        EQUALS_OR_LOWER,
+
+        /**
+         * tool might have highter or equals enchant levels only on
+         */
+        EQUALS_OR_HIGHTER,
+
+        /**
+         * tool must not have enchant or have different enchants
+         */
+        DIFFERENT,
+    }
+
+    private static class EnchantCheck {
+        private EnchantCheckType type;
+        private int level;
+
+        private EnchantCheck(EnchantCheckType type, int level) {
+            if (type == null)
+                throw new NullPointerException();
+            this.type = type;
+            this.level = level;
+        }
+
+        private void setType(EnchantCheckType type) {
+            if (type == null)
+                throw new NullPointerException();
+            this.type = type;
+        }
+
+        private void setLevel(int level) {
+            this.level = level;
+        }
+
+        private boolean check(int level) {
+            return switch (type) {
+                case DIFFERENT -> this.level != level;
+                case EQUALS -> this.level == level;
+                case EQUALS_OR_HIGHTER -> this.level <= level;
+                case EQUALS_OR_LOWER -> this.level >= level;
+                case NONE -> true;
+                default -> throw new IllegalStateException();
+            };
+        }
+    }
+
     private class SimpleCheckFlag extends StaticFlagButton {
 
         public SimpleCheckFlag(Gui parent) {
@@ -305,7 +372,6 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
             return super.getItem();
         }
     }
-
 
     private class EnableToolCheckFlag extends FlagButton {
         private final String title;
@@ -441,89 +507,6 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
             return super.getItem();
         }
 
-    }
-
-    public List<String> getInfo() {
-        ArrayList<String> list = new ArrayList<>();
-        if (!enabled) {
-            list.add("  &9Check &cDisabled");
-            return list;
-        }
-        if (item == null) {
-            list.add("  &cNo tool should be used");
-            list.add("  &9(&eEmpty Hand&9)");
-            return list;
-        }
-        list.add("  &9Material: &e" + item.getType());
-        if (doCheckAmount)
-            list.add("  &9Amount: &e" + amountValue);
-        else
-            list.add("  &9Amount: &7Not Checked");
-        if ((item.getItemMeta()) instanceof Damageable) {
-            if (doCheckDamage)
-                list.add("  &9Damage: &e" + ((Damageable) item.getItemMeta()).getDamage());
-            else
-                list.add("  &9Damage: &7Not Checked");
-        }
-        if (easyCheck)
-            return list;
-        if (doCheckDisplayName)
-            list.add("  &9DisplayName: &e" + (displayNameValue == null ? "&cNONE" : displayNameValue));
-        else
-            list.add("  &9DisplayName: &7Not Checked");
-
-        if (doCheckLore)
-            if (loreValue == null)
-                list.add("  &9Lore: &cNONE");
-            else {
-                list.add("  &9Lore:");
-                for (String lore : loreValue)
-                    list.add("  &9- '&r" + lore + "&9'");
-            }
-        else
-            list.add("  &9Lore: &7Not Checked");
-
-        if (doCheckUnbreakable)
-            list.add("  &9Unbreakable: &7Not Checked");
-        else
-            list.add("  &9Unbreakable: &e" + unbreakableValue);
-
-        if (doCheckLore)
-            if (loreValue == null)
-                list.add("  &9ItemFlags: &cNONE");
-            else {
-                list.add("  &9ItemFlags:");
-                for (ItemFlag flag : item.getItemMeta().getItemFlags())
-                    list.add("  &9- '&r" + flag + "&9'");
-            }
-        else
-            list.add("  &9ItemFlags: &7Not Checked");
-
-        if (doCheckLore)
-            if (loreValue == null)
-                list.add("  &9ItemFlags: &cNONE");
-            else {
-                list.add("  &9ItemFlags:");
-                for (ItemFlag flag : item.getItemMeta().getItemFlags())
-                    list.add("  &9- '&r" + flag + "&9'");
-            }
-        else
-            list.add("  &9ItemFlags: &7Not Checked");
-
-        list.add("  &cInfo Not Completed");
-        return list;
-
-    }
-
-    private List<String> getInfo(String title) {
-        if (!enabled)
-            return Arrays.asList(title, "&cDisabled", "", "&6Click to Toggle");
-        ArrayList<String> list = new ArrayList<>();
-        list.add(title);
-        list.addAll(getInfo());
-        list.add("");
-        list.add("&6Click to Toggle");
-        return list;
     }
 
     private class ItemDisplayButton extends AButton {

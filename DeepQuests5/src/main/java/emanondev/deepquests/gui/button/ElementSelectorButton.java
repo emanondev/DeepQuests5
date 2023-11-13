@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class ElementSelectorButton<E> extends AButton {
+    private static final ItemStack nullElement = getNullElement();
     private final ItemStack item;
     private final String subGuiTitle;
     private final boolean allowNull;
@@ -29,6 +30,10 @@ public abstract class ElementSelectorButton<E> extends AButton {
         this.subGuiTitle = subGuiTitle;
         this.requireConfirm = requireConfirm;
         update();
+    }
+
+    private static ItemStack getNullElement() {
+        return Utils.setDescription(new ItemStack(Material.BARRIER), GuiConfig.Generic.NULL_ELEMENT, null, true);
     }
 
     /**
@@ -167,11 +172,5 @@ public abstract class ElementSelectorButton<E> extends AButton {
                 }
             }
         }
-    }
-
-    private static final ItemStack nullElement = getNullElement();
-
-    private static ItemStack getNullElement() {
-        return Utils.setDescription(new ItemStack(Material.BARRIER), GuiConfig.Generic.NULL_ELEMENT, null, true);
     }
 }

@@ -23,6 +23,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -32,15 +34,20 @@ import java.util.*;
  * main class
  */
 public class Quests extends CorePlugin {
-    private static Quests instance;
     private static final Map<String, QuestManager<?>> managers = new HashMap<>();
-
+    private static Quests instance;
     private static PlayerInfoManager playerInfoManager;
+
+    /**
+     * @return an istance of the plugin
+     */
+    public static Quests get() {
+        return instance;
+    }
 
     /**
      * utility: register a command for this plugin
      *
-     * @param cmdManager
      */
     @Deprecated
     private void registerCommand(ACommand cmdManager) {
@@ -50,13 +57,6 @@ public class Quests extends CorePlugin {
         cmd.setTabCompleter(cmdManager);
         if (cmdManager.getAliases() != null && !cmdManager.getAliases().isEmpty())
             cmd.setAliases(cmdManager.getAliases());
-    }
-
-    /**
-     * @return an istance of the plugin
-     */
-    public static Quests get() {
-        return instance;
     }
 
     public void reload() {
@@ -85,37 +85,6 @@ public class Quests extends CorePlugin {
 
     public Gui getEditorGui(Player p, Gui previous) {
         return new Editor(p, previous);
-    }
-
-    private class Editor extends PagedMapGui {
-        private Editor(Player p, Gui previous) {
-            super("&9Editor", 6, p, previous);
-            this.putButton(2, new QuestManagerSelector());
-        }
-
-        private class QuestManagerSelector extends GuiElementSelectorButton<QuestManager<?>> {
-
-            public QuestManagerSelector() {
-                super("&9Select a Quest Manager", new ItemBuilder(Material.STRUCTURE_BLOCK).setGuiProperty().build(),
-                        Editor.this, false, true, false);
-            }
-
-            @Override
-            public List<String> getButtonDescription() {
-                return Arrays.asList("&6Click to select a Quest Manager", "", "&9Each quest manager refers quests",
-                        "&9for a different kind of user or", "&9group of users");
-            }
-
-            @Override
-            public Collection<QuestManager<?>> getValues() {
-                return getManagers();
-            }
-
-            @Override
-            public void onElementSelectRequest(QuestManager<?> element, Player p) {
-                p.openInventory(element.getEditorGui(p, Editor.this).getInventory());
-            }
-        }
     }
 
     @Override
@@ -165,7 +134,8 @@ public class Quests extends CorePlugin {
             registerCommand(new DeepQuestText());
             registerCommand(new DeepQuestItem());
             registerCommand(new DeepQuestBack());
-            registerCommand(new CommandQuests());
+            registerCommand(new QuestsCommand());
+            registerCommand(new MissionsCommand());
             registerCommand(new DeepQuestsNewCommand());
 
             Bukkit.getScheduler().runTaskLater(this, () -> {
@@ -192,9 +162,7 @@ public class Quests extends CorePlugin {
         instance = this;
     }
 
-    public final boolean registerQuestManager(QuestManager<?> questManager) {
-        if (questManager == null)
-            throw new NullPointerException();
+    public final boolean registerQuestManager(@NotNull QuestManager<?> questManager) {
         if (managers.containsValue(questManager)) {
             logIssue(
                     "Could not register QuestManager &e" + questManager.getName() + " &fbecause is already registered");
@@ -210,7 +178,7 @@ public class Quests extends CorePlugin {
         return true;
     }
 
-    public final boolean unregisterQuestManager(String name) {
+    public final boolean unregisterQuestManager(@NotNull String name) {
         if (!managers.containsKey(name)) {
             new IllegalArgumentException("Could not find QuestManager " + name).printStackTrace();
             return false;
@@ -223,21 +191,52 @@ public class Quests extends CorePlugin {
         return true;
     }
 
-    public final boolean unregisterQuestManager(QuestManager<?> questManager) {
+    public final boolean unregisterQuestManager(@NotNull QuestManager<?> questManager) {
         return unregisterQuestManager(questManager.getName());
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends User<T>> QuestManager<T> getQuestManager(String name) {
+    public final <T extends User<T>> @Nullable QuestManager<T> getQuestManager(@NotNull String name) {
         return (QuestManager<T>) managers.get(name);
     }
 
-    public final Collection<QuestManager<?>> getManagers() {
+    public final @NotNull Collection<QuestManager<?>> getManagers() {
         return Collections.unmodifiableCollection(managers.values());
     }
 
-    public final Collection<String> getManagersNames() {
+    public final @NotNull Collection<String> getManagersNames() {
         return Collections.unmodifiableCollection(managers.keySet());
+    }
+
+    private class Editor extends PagedMapGui {
+        private Editor(Player p, Gui previous) {
+            super("&9Editor", 6, p, previous);
+            this.putButton(2, new QuestManagerSelector());
+        }
+
+        private class QuestManagerSelector extends GuiElementSelectorButton<QuestManager<?>> {
+
+            public QuestManagerSelector() {
+                super("&9Select a Quest Manager", new ItemBuilder(Material.STRUCTURE_BLOCK).setGuiProperty().build(),
+                        Editor.this, false, true, false);
+            }
+
+            @Override
+            public List<String> getButtonDescription() {
+                return Arrays.asList("&6Click to select a Quest Manager", "", "&9Each quest manager refers quests",
+                        "&9for a different kind of user or", "&9group of users");
+            }
+
+            @Override
+            public Collection<QuestManager<?>> getValues() {
+                return getManagers();
+            }
+
+            @Override
+            public void onElementSelectRequest(QuestManager<?> element, Player p) {
+                p.openInventory(element.getEditorGui(p, Editor.this).getInventory());
+            }
+        }
     }
 
 }

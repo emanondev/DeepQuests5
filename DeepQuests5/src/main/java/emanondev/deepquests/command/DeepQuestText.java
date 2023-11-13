@@ -24,7 +24,7 @@ public class DeepQuestText extends CoreCommand {
     private static final HashMap<Player, TextEditorButton> map = new HashMap<>();
 
     public DeepQuestText() {
-        super("deepquesttext", Quests.get(), P.COMMAND_DEEPQUESTS_DQTEXT,"Used to set text",List.of("dqtext"));
+        super("deepquesttext", Quests.get(), P.COMMAND_DEEPQUESTS_DQTEXT, "Used to set text", List.of("dqtext"));
     }
 
     /**

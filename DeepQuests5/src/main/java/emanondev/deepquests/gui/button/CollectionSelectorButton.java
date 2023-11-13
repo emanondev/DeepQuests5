@@ -31,6 +31,18 @@ public abstract class CollectionSelectorButton<E> extends AButton {
         update();
     }
 
+    private static ItemStack createSelectedElementItem(ItemStack item) {
+        return new ItemBuilder(item).setGuiProperty().addEnchantment(Enchantment.DURABILITY, 1).build();
+    }
+
+    private static ItemStack createBlacklistItem() {
+        return new ItemBuilder(Material.BLACK_WOOL).setGuiProperty().build();
+    }
+
+    private static ItemStack createWhitelistItem() {
+        return new ItemBuilder(Material.WHITE_WOOL).setGuiProperty().build();
+    }
+
     public abstract Collection<E> getPossibleValues();
 
     /**
@@ -136,18 +148,6 @@ public abstract class CollectionSelectorButton<E> extends AButton {
         }
 
 
-    }
-
-    private static ItemStack createSelectedElementItem(ItemStack item) {
-        return new ItemBuilder(item).setGuiProperty().addEnchantment(Enchantment.DURABILITY, 1).build();
-    }
-
-    private static ItemStack createBlacklistItem() {
-        return new ItemBuilder(Material.BLACK_WOOL).setGuiProperty().build();
-    }
-
-    private static ItemStack createWhitelistItem() {
-        return new ItemBuilder(Material.WHITE_WOOL).setGuiProperty().build();
     }
 
 }

@@ -12,6 +12,8 @@ import java.util.List;
 public class SortedListGui<T extends Button & Comparable<? super T>> extends PagedChestGui {
 
 
+    private final ArrayList<T> buttons = new ArrayList<T>();
+
     /**
      * @param title         - title
      * @param rows          - amount of rows must be bigger or equals to 2
@@ -33,8 +35,6 @@ public class SortedListGui<T extends Button & Comparable<? super T>> extends Pag
     public SortedListGui(String title, int rows, @Nullable Player player, @Nullable Gui previusHolder, int page) {
         super(title, rows, player, previusHolder, page);
     }
-
-    private final ArrayList<T> buttons = new ArrayList<T>();
 
     /**
      * Adds a new Button to the gui

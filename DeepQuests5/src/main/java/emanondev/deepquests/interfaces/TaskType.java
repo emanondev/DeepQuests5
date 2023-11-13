@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public interface TaskType<T extends User<T>> extends QuestComponentType<T, Task<T>>, Listener {
 
 
-    default String getDefaultPhaseDescription(Task.Phase phase, Task<T> task) {
+    default String getDefaultPhaseDescription(@NotNull Task.Phase phase, @NotNull Task<T> task) {
         return switch (phase) {
             case COMPLETE -> getDefaultCompleteDescription(task);
             case PROGRESS -> getDefaultProgressDescription(task);
@@ -16,12 +16,21 @@ public interface TaskType<T extends User<T>> extends QuestComponentType<T, Task<
         };
     }
 
+    /**
+     * @see #getDefaultPhaseDescription(Task.Phase, Task)
+     */
     @Deprecated
     String getDefaultUnstartedDescription(@NotNull Task<T> task);
 
+    /**
+     * @see #getDefaultPhaseDescription(Task.Phase, Task)
+     */
     @Deprecated
     String getDefaultProgressDescription(@NotNull Task<T> task);
 
+    /**
+     * @see #getDefaultPhaseDescription(Task.Phase, Task)
+     */
     @Deprecated
     String getDefaultCompleteDescription(@NotNull Task<T> task);
 

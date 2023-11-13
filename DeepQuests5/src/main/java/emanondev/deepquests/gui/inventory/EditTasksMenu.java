@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class EditTasksMenu<T extends User<T>> extends ListGui<EditTaskButton<T>> {
+    private ArrayList<EditTaskButton<T>> rawTaskButtons = new ArrayList<>();
+
     public EditTasksMenu(Player player, Gui previusHolder, Mission<T> mission, T user) {
         super("tasks", 6, player, previusHolder, 1);
         if (user == null || mission == null)
@@ -19,8 +21,6 @@ public class EditTasksMenu<T extends User<T>> extends ListGui<EditTaskButton<T>>
         Collections.sort(rawTaskButtons);
         updateInventory();
     }
-
-    private ArrayList<EditTaskButton<T>> rawTaskButtons = new ArrayList<>();
 
     public boolean updateInventory() {
         this.clearButtons();

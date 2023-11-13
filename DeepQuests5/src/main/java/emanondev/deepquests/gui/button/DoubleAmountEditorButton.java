@@ -40,6 +40,19 @@ public abstract class DoubleAmountEditorButton extends AButton {
         update();
     }
 
+    private static ItemStack craftEditorAmountButtonItem(double amount) {
+        ItemStack item;
+        if (amount > 0) {
+            item = new ItemBuilder(Material.LIME_WOOL).build();
+            Utils.updateDescription(item, GuiConfig.Generic.AMOUNT_SELECTOR_ADD, null, true,
+                    GuiConfig.AMOUNT_HOLDER, amount + "");
+        } else {
+            item = new ItemBuilder(Material.RED_WOOL).build();
+            Utils.updateDescription(item, GuiConfig.Generic.AMOUNT_SELECTOR_REMOVE, null, true,
+                    GuiConfig.AMOUNT_HOLDER, -amount + "");
+        }
+        return item;
+    }
 
     /**
      * @return description of the item
@@ -124,20 +137,5 @@ public abstract class DoubleAmountEditorButton extends AButton {
                         getGui().updateInventory();
             }
         }
-    }
-
-
-    private static ItemStack craftEditorAmountButtonItem(double amount) {
-        ItemStack item;
-        if (amount > 0) {
-            item = new ItemBuilder(Material.LIME_WOOL).build();
-            Utils.updateDescription(item, GuiConfig.Generic.AMOUNT_SELECTOR_ADD, null, true,
-                    GuiConfig.AMOUNT_HOLDER, amount + "");
-        } else {
-            item = new ItemBuilder(Material.RED_WOOL).build();
-            Utils.updateDescription(item, GuiConfig.Generic.AMOUNT_SELECTOR_REMOVE, null, true,
-                    GuiConfig.AMOUNT_HOLDER, -amount + "");
-        }
-        return item;
     }
 }

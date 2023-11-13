@@ -10,6 +10,7 @@ import emanondev.deepquests.implementations.AQuestManager;
 import emanondev.deepquests.town.rewardtypes.ConsoleCommandRewardType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,8 +19,8 @@ import java.util.List;
 
 public class TownQuestManager extends AQuestManager<QuestTown> {
 
-    private final TownUserManager userManager;
     public final static String NAME = "towns";
+    private final TownUserManager userManager;
 
     public TownQuestManager(String name, CorePlugin plugin) {
         super(name, plugin);
@@ -40,7 +41,7 @@ public class TownQuestManager extends AQuestManager<QuestTown> {
     }
 
     @Override
-    public Gui getEditorGui(Player target, Gui parent) {
+    public @NotNull Gui getEditorGui(Player target, Gui parent) {
         return new EditorGui(target, parent);
     }
 
@@ -49,16 +50,8 @@ public class TownQuestManager extends AQuestManager<QuestTown> {
         return Arrays.asList("&6&lTowns", "&6Quests related to towns");
     }
 
-    protected class EditorGui extends AQuestManager<QuestTown>.EditorGui {
-
-        public EditorGui(Player player, Gui previousHolder) {
-            super(player, previousHolder);
-        }
-
-    }
-
     @Override
-    public Material getGuiMaterial() {
+    public @NotNull Material getGuiMaterial() {
         return Material.BRICK;
     }
 
@@ -73,11 +66,19 @@ public class TownQuestManager extends AQuestManager<QuestTown> {
     }
 
     @Override
-    public Collection<String> getUsersArguments() {
+    public @NotNull Collection<String> getUsersArguments() {
         HashSet<String> names = new HashSet<>();
         for (Town town : TownyUniverse.getInstance().getTowns())
             names.add(town.getName());
         return names;
+    }
+
+    protected class EditorGui extends AQuestManager<QuestTown>.EditorGui {
+
+        public EditorGui(Player player, Gui previousHolder) {
+            super(player, previousHolder);
+        }
+
     }
 
 }

@@ -7,6 +7,7 @@ import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -197,7 +198,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
     }
 
     // @SuppressWarnings("unchecked")
-    default List<String> getDisplayDescription(ArrayList<String> desc, T user, Player player) {
+    default @NotNull List<String> getDisplayDescription(ArrayList<String> desc, T user, Player player) {
         if (desc != null)
             for (int i = 0; i < desc.size(); i++) {
                 if (desc.get(i) != null) {
@@ -249,7 +250,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
     }
 
     @Override
-    default Material getGuiMaterial() {
+    default @NotNull Material getGuiMaterial() {
         return Material.BOOK;
     }
 

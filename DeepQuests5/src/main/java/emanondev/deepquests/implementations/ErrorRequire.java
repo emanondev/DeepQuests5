@@ -25,7 +25,7 @@ public class ErrorRequire<T extends User<T>> extends AQuestComponent<T> implemen
     }
 
     @Override
-    public Gui getEditorGui(Player target, Gui parent) {
+    public @NotNull Gui getEditorGui(Player target, Gui parent) {
         return new PagedMapGui("&4Corrupted Require", 6, target, parent);
     }
 
@@ -35,7 +35,7 @@ public class ErrorRequire<T extends User<T>> extends AQuestComponent<T> implemen
     }
 
     @Override
-    public List<String> getInfo() {
+    public @NotNull List<String> getInfo() {
         return Arrays.asList("&cThis require couldn't be loaded correctly",
                 "&cMaybe a plugin wasn't loaded correctly",
                 "&cExample: NPCKillTask and Citizen not loading",

@@ -19,8 +19,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class StringListEditorButton extends AButton {
+    private final static BaseComponent[] addLineChatText = new ComponentBuilder(
+            ChatColor.GOLD + "****************************\n" + ChatColor.GOLD + "   Click Me to add a new Line   \n"
+                    + ChatColor.GOLD + "****************************")
+            .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/dqtext "))
+            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                    new ComponentBuilder(ChatColor.GOLD + "Write the text to add on the new line\n"
+                            + ChatColor.GOLD + "Tip: use '&' for chat formats" + ChatColor.YELLOW
+                            + "/dqtext <new line>").create()))
+            .create();
     private final ItemStack buttonItem;
     private final String subGuiTitle;
+
+    public StringListEditorButton(String subGuiTitle, ItemStack item, Gui parent) {
+        super(parent);
+        this.buttonItem = item;
+        this.subGuiTitle = subGuiTitle;
+        update();
+    }
 
     private ArrayList<String> getSafeStringList() {
         List<String> rawList = getCurrentList();
@@ -34,13 +50,6 @@ public abstract class StringListEditorButton extends AButton {
             }
         }
         return list;
-    }
-
-    public StringListEditorButton(String subGuiTitle, ItemStack item, Gui parent) {
-        super(parent);
-        this.buttonItem = item;
-        this.subGuiTitle = subGuiTitle;
-        update();
     }
 
     public boolean update() {
@@ -209,12 +218,12 @@ public abstract class StringListEditorButton extends AButton {
                 for (int i = 0; i < list.size(); i++)
                     comp.append(ChatColor.GOLD + "  Click here to remove line " + (i + 1) + "  \n")
                             .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-                                    "/DQText " + (i + 1)))
+                                    "/dqtext " + (i + 1)))
                             .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     new ComponentBuilder(Utils.fixString(list.get(i), null, true) + "\n" + ChatColor.RED
                                             + "Warning: deleting can't be undone").create()));
                 comp.append("").append(ChatColor.GOLD + "    Click here to go back    \n")
-                        .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/DQText"))
+                        .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dqtext"))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                 new ComponentBuilder(ChatColor.GOLD + "Reopen the Gui").create()))
                         .append(ChatColor.GOLD + "****************************");
@@ -274,12 +283,12 @@ public abstract class StringListEditorButton extends AButton {
                 for (int i = 0; i < list.size(); i++)
                     comp.append(ChatColor.GOLD + "  Click here to set line " + (i + 1) + "  \n")
                             .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-                                    "/DQText " + (i + 1) + " " + list.get(i)))
+                                    "/dqtext " + (i + 1) + " " + list.get(i)))
                             .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     new ComponentBuilder(Utils.fixString(list.get(i), null, true) + "\n" + ChatColor.RED
                                             + "Warning: this action will replace previous line").create()));
                 comp.append("").append(ChatColor.GOLD + "    Click here to go back    \n")
-                        .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/DQText"))
+                        .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dqtext"))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                 new ComponentBuilder(ChatColor.GOLD + "Reopen the Gui").create()))
                         .append(ChatColor.GOLD + "****************************");
@@ -294,14 +303,4 @@ public abstract class StringListEditorButton extends AButton {
             }
         }
     }
-
-    private final static BaseComponent[] addLineChatText = new ComponentBuilder(
-            ChatColor.GOLD + "****************************\n" + ChatColor.GOLD + "   Click Me to add a new Line   \n"
-                    + ChatColor.GOLD + "****************************")
-            .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/dqtext "))
-            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder(ChatColor.GOLD + "Write the text to add on the new line\n"
-                            + ChatColor.GOLD + "Tip: use '&' for chat formats" + ChatColor.YELLOW
-                            + "/dqtext <new line>").create()))
-            .create();
 }

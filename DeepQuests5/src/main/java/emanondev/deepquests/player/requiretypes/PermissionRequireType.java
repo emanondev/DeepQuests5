@@ -11,16 +11,17 @@ import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.player.QuestPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class PermissionRequireType extends ARequireType<QuestPlayer> {
 
+    private static final String ID = "permission";
+
     public PermissionRequireType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
     }
-
-    private static final String ID = "permission";
 
     @Override
     public Material getGuiMaterial() {
@@ -56,14 +57,14 @@ public class PermissionRequireType extends ARequireType<QuestPlayer> {
         }
 
         @Override
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(permissionData.getInfo());
             return info;
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -71,7 +72,7 @@ public class PermissionRequireType extends ARequireType<QuestPlayer> {
 
             public GuiEditor(Player player, Gui previusHolder) {
                 super(player, previusHolder);
-                this.putButton(28, permissionData.getPermissionButtonEditor(this));
+                this.putButton(28, getPermissionData().getPermissionButtonEditor(this));
             }
         }
     }

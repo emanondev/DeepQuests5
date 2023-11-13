@@ -115,11 +115,13 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
     /**
      * @return BossBar style of this
      */
+    @NotNull
     BarStyle getBossBarStyle();
 
     /**
      * @return BossBar color of this
      */
+    @NotNull
     BarColor getBossBarColor();
 
     /**
@@ -127,14 +129,14 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
      *
      * @param barStyle value, use null to inherit default value
      */
-    void setBossBarStyle(BarStyle barStyle);
+    void setBossBarStyle(@Nullable BarStyle barStyle);
 
     /**
      * set BossBar color of this
      *
      * @param barColor value, use null to inherit default value
      */
-    void setBossBarColor(BarColor barColor);
+    void setBossBarColor(@Nullable BarColor barColor);
 
     /**
      * @return should BossBar be shown for this task progress?
@@ -147,7 +149,7 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
      * @param value should boss bar be shown to user for this task when progressing?
      *              set null to inherit default value
      */
-    void setShowBossBar(Boolean value);
+    void setShowBossBar(@Nullable Boolean value);
 
     /**
      * called when the task has progress of amount for user
@@ -158,7 +160,7 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
      * @param forced - avoid checking permission of player to progress
      * @return the final progress amount
      */
-    default int onProgress(T user, int amount, @Nullable Player player, boolean forced) {
+    default int onProgress(@NotNull T user, int amount, @Nullable Player player, boolean forced) {
         if (getProgressChance() >= 1)
             return user.progressTask(this, amount, player, forced);
         int counter = 0;
@@ -174,11 +176,11 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
     /**
      * @return taskType ID of this
      */
-    default String getTypeName() {
+    default @NotNull String getTypeName() {
         return getType().getKeyID();
     }
 
-    default String[] getHolders(T user) {
+    default @NotNull String[] getHolders(T user) {
         String[] list = new String[14];
         TaskData<T> data = user.getTaskData(this);
         list[0] = Holders.TASK_STATUS;
@@ -207,7 +209,7 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
     }
 
     @Override
-    default Material getGuiMaterial() {
+    default @NotNull Material getGuiMaterial() {
         return Material.PAPER;
     }
 
@@ -217,7 +219,7 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
     }
 
     @Override
-    default QuestManager<T> getManager() {
+    default @NotNull QuestManager<T> getManager() {
         return getMission().getManager();
     }
 

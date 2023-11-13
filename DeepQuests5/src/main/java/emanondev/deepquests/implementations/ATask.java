@@ -27,6 +27,8 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     private final TaskType<T> type;
     private final Map<Integer, Reward<T>> completeRewards = new HashMap<>();
     private final Map<Integer, Reward<T>> progressRewards = new HashMap<>();
+    private final EnumMap<Phase, String> phaseDescriptions = new EnumMap<>(Phase.class);
+    private final EnumMap<Phase, Boolean> phaseDescriptionIsDef = new EnumMap<>(Phase.class);
     private boolean isHidden;
     private double progressChance;
     private int maxProgress;
@@ -36,9 +38,6 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     private BarColor barColor;
     private boolean isShowBossBarDefault;
     private boolean showBossBar;
-
-    private final EnumMap<Phase, String> phaseDescriptions = new EnumMap<>(Phase.class);
-    private final EnumMap<Phase, Boolean> phaseDescriptionIsDef = new EnumMap<>(Phase.class);
 
     public ATask(int id, Mission<T> mission, TaskType<T> type, YMLSection section) {
         super(id, section, mission.getManager());
@@ -89,7 +88,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     }
 
     @Override
-    public List<String> getInfo() {
+    public @NotNull List<String> getInfo() {
         List<String> info = new ArrayList<>();
         info.add("&9&lTask: &6" + this.getDisplayName());
         info.add("&8Type: &7" + (getType() != null ? getType().getKeyID() : "&cError"));
@@ -261,14 +260,14 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     }
 
     @Override
-    public final BarStyle getBossBarStyle() {
+    public final @NotNull BarStyle getBossBarStyle() {
         if (isBarStyleDefault)
             barStyle = getManager().getBossBarManager().getBarStyle(this.getType());
         return barStyle;
     }
 
     @Override
-    public final BarColor getBossBarColor() {
+    public final @NotNull BarColor getBossBarColor() {
         if (isBarColorDefault)
             barColor = getManager().getBossBarManager().getBarColor(this.getType());
         return barColor;
@@ -375,10 +374,10 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             PhaseDescriptionButton b = new PhaseDescriptionButton(Phase.UNSTARTED);
             b.update();
             this.putButton(15, b);
-            b =  new PhaseDescriptionButton(Phase.PROGRESS);
+            b = new PhaseDescriptionButton(Phase.PROGRESS);
             b.update();
             this.putButton(16, b);
-            b =  new PhaseDescriptionButton(Phase.COMPLETE);
+            b = new PhaseDescriptionButton(Phase.COMPLETE);
             b.update();
             this.putButton(17, b);
 

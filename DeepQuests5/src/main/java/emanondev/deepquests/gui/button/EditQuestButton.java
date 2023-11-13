@@ -18,6 +18,7 @@ import java.util.*;
 public class EditQuestButton<T extends User<T>> extends QuestComponentButton<Quest<T>> {
     private final T user;
     private DisplayState state;
+    private Player clicker = null;
 
     public EditQuestButton(Gui parent, Quest<T> questComponent, T user) {
         super(parent, questComponent);
@@ -57,10 +58,28 @@ public class EditQuestButton<T extends User<T>> extends QuestComponentButton<Que
                 new EditMissionsMenu<>(getTargetPlayer(), getGui(), getQuestComponent(), user).getInventory());
     }
 
-    private Player clicker = null;
-
     public T getUser() {
         return user;
+    }
+
+    public void handle(ActionType element) {
+        switch (element) {
+            case COMPLETE:
+                getUser().completeQuest(getQuestComponent());
+                break;
+            case ERASE:
+                getUser().eraseQuestData(getQuestComponent());
+                break;
+            case FAIL:
+                getUser().failQuest(getQuestComponent());
+                break;
+            case RESET:
+                getUser().resetQuest(getQuestComponent());
+                break;
+        }
+        this.getGui().updateInventory();
+        if (clicker != null)
+            clicker.openInventory(getGui().getInventory());
     }
 
     private enum ActionType {
@@ -170,25 +189,5 @@ public class EditQuestButton<T extends User<T>> extends QuestComponentButton<Que
             return set;
         }
 
-    }
-
-    public void handle(ActionType element) {
-        switch (element) {
-            case COMPLETE:
-                getUser().completeQuest(getQuestComponent());
-                break;
-            case ERASE:
-                getUser().eraseQuestData(getQuestComponent());
-                break;
-            case FAIL:
-                getUser().failQuest(getQuestComponent());
-                break;
-            case RESET:
-                getUser().resetQuest(getQuestComponent());
-                break;
-        }
-        this.getGui().updateInventory();
-        if (clicker != null)
-            clicker.openInventory(getGui().getInventory());
     }
 }

@@ -18,10 +18,13 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class FailMissionRewardType<T extends User<T>> extends ARewardType<T> {
+    private final static String ID = "fail_mission";
+
     public FailMissionRewardType(QuestManager<T> manager) {
         super(ID, manager);
     }
@@ -30,8 +33,6 @@ public class FailMissionRewardType<T extends User<T>> extends ARewardType<T> {
     protected boolean getStandardHiddenValue() {
         return true;
     }
-
-    private final static String ID = "fail_mission";
 
     @Override
     public Material getGuiMaterial() {
@@ -54,6 +55,20 @@ public class FailMissionRewardType<T extends User<T>> extends ARewardType<T> {
         return new FailMissionReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<T> reward) {
+        if (!(reward instanceof FailMissionReward r))
+            return null;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:failed} &e{target}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+
+        }
+        return Translations.replaceAll(txt).replace("{target}", DataUtils.getTargetHolder(r.getTargetMissionData()));
+    }
+
     public class FailMissionReward extends AReward<T> {
         private final TargetMissionData<T, FailMissionReward> missionData;
 
@@ -63,23 +78,15 @@ public class FailMissionRewardType<T extends User<T>> extends ARewardType<T> {
                     getConfig().loadSection(Paths.REWARD_INFO_TARGET_MISSION));
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(missionData.getInfo());
             return info;
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ARewardGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                this.putButton(27, missionData.getMissionSelectorButton(this));
-            }
         }
 
         public TargetMissionData<T, FailMissionReward> getTargetMissionData() {
@@ -101,20 +108,14 @@ public class FailMissionRewardType<T extends User<T>> extends ARewardType<T> {
             }
         }
 
-    }
+        private class GuiEditor extends ARewardGuiEditor {
 
-    @Override
-    public String getDefaultFeedback(Reward<T> reward) {
-        if (!(reward instanceof FailMissionReward r))
-            return null;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:failed} &e{target}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                this.putButton(27, getTargetMissionData().getMissionSelectorButton(this));
+            }
         }
-        return Translations.replaceAll(txt).replace("{target}", DataUtils.getTargetHolder(r.getTargetMissionData()));
+
     }
 
 }

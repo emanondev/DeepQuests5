@@ -50,10 +50,12 @@ public class QuestsMenu extends ListGui<QuestButton> {
         return super.updateInventory();
     }
 
-    protected int loadPreviusPageButtonPosition() {
+    @Override
+    protected int loadPreviousPageButtonPosition() {
         return 6;
     }
 
+    @Override
     protected int loadNextPageButtonPosition() {
         return 7;
     }

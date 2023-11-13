@@ -21,11 +21,7 @@ import java.util.List;
 abstract class AQuestComponentWithCooldown<T extends User<T>> extends AQuestComponentWithWorlds<T>
         implements HasCooldown<T> {
 
-    public AQuestComponentWithCooldown(int id, YMLSection section, QuestManager<T> manager) {
-        super(id, section, manager);
-        cooldownMinutes = Math.max(0L, getConfig().loadLong(Paths.COOLDOWN_MINUTES, 1440L));
-        repeatable = getConfig().loadBoolean(Paths.REPEATABLE, false);
-    }
+    private long cooldownMinutes;
 	
 	/*
 	public Navigator getNavigator() {
@@ -34,9 +30,12 @@ abstract class AQuestComponentWithCooldown<T extends User<T>> extends AQuestComp
 		nav.setBoolean(Paths.REPEATABLE,repeatable);
 		return nav;
 	}*/
-
-    private long cooldownMinutes;
     private boolean repeatable;
+    public AQuestComponentWithCooldown(int id, YMLSection section, QuestManager<T> manager) {
+        super(id, section, manager);
+        cooldownMinutes = Math.max(0L, getConfig().loadLong(Paths.COOLDOWN_MINUTES, 1440L));
+        repeatable = getConfig().loadBoolean(Paths.REPEATABLE, false);
+    }
 
     @Override
     public long getCooldownMinutes() {

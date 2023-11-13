@@ -12,13 +12,13 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
     // protected final Navigator nav;
     private final QuestManager<T> manager;
     private final YMLConfig config;
-
-    private int questPoints;
     private final Map<Integer, QuestData<T>> questDatas = new HashMap<>();
     private final Map<Integer, MissionData<T>> missionDatas = new HashMap<>();
     private final Map<Integer, TaskData<T>> taskDatas = new HashMap<>();
     private final Set<Mission<T>> activeMissions = new HashSet<>();
     private final Map<TaskType<T>, List<Task<T>>> activeTasks = new HashMap<>();
+    private final AQuestBag<T> bag;
+    private int questPoints;
     private Integer missionLimit = null;
 
     @SuppressWarnings("unchecked")
@@ -49,8 +49,6 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
         return config;
     }
 
-    private final AQuestBag<T> bag;
-
     public @NotNull QuestManager<T> getManager() {
         return manager;
     }
@@ -71,7 +69,7 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
             getConfig().set(key, null);
     }
 
-    public void register(Mission<T> mission) {
+    public void register(@NotNull Mission<T> mission) {
         if (activeMissions.contains(mission))
             return;
 
@@ -80,7 +78,7 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
             register(task);
     }
 
-    public void unregister(Mission<?> mission) {
+    public void unregister(@NotNull Mission<?> mission) {
         if (!activeMissions.contains(mission))
             return;
         activeMissions.remove(mission);
@@ -100,12 +98,12 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
         return false;
     }
 
-    public final void unregister(Task<?> task) {
+    public final void unregister(@NotNull Task<?> task) {
         if (activeTasks.get(task.getType()) != null)
             activeTasks.get(task.getType()).remove(task);
     }
 
-    public final List<Task<T>> getActiveTasks(TaskType<T> type) {
+    public final @NotNull List<Task<T>> getActiveTasks(@NotNull TaskType<T> type) {
         List<Task<T>> list = activeTasks.get(type);
         if (list == null) {
             list = new Vector<>();
@@ -146,17 +144,17 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
     }
 
     @Override
-    public final Collection<QuestData<T>> getQuestDatas() {
+    public final @NotNull Collection<QuestData<T>> getQuestDatas() {
         return questDatas.values();
     }
 
     @Override
-    public final Collection<MissionData<T>> getMissionDatas() {
+    public final @NotNull Collection<MissionData<T>> getMissionDatas() {
         return missionDatas.values();
     }
 
     @Override
-    public final Collection<TaskData<T>> getTaskDatas() {
+    public final @NotNull Collection<TaskData<T>> getTaskDatas() {
         return taskDatas.values();
     }
 

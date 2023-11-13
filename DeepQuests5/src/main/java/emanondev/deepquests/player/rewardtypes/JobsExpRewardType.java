@@ -17,11 +17,14 @@ import emanondev.deepquests.player.QuestPlayer;
 import emanondev.deepquests.utils.DataUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class JobsExpRewardType extends ARewardType<QuestPlayer> {
+    private final static String ID = "jobs_exp";
+
     public JobsExpRewardType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
     }
@@ -31,8 +34,6 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
         return false;
     }
 
-    private final static String ID = "jobs_exp";
-
     @Override
     public Material getGuiMaterial() {
         return Material.IRON_PICKAXE;
@@ -40,7 +41,7 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
 
     @Override
     public List<String> getDescription() {
-        return Arrays.asList("&7Reward the player with an Item");
+        return List.of("&7Reward the player with an Item");
     }
 
     @Override
@@ -48,9 +49,25 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
         return new JobsExpReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<QuestPlayer> reward) {
+        if (!(reward instanceof JobsExpRewardType.JobsExpReward))
+            return null;
+        JobsExpReward r = (JobsExpReward) reward;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:obtained} &e{amount} &a{action:experience} {conjun:on} {jobs}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+
+        }
+        return Translations.replaceAll(txt).replace("{jobs}", DataUtils.getJobsHolder(r.getJobsData()))
+                .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
+    }
+
     public class JobsExpReward extends AReward<QuestPlayer> {
-        private JobTypeData<QuestPlayer, JobsExpReward> jobData;
-        private AmountData<QuestPlayer, JobsExpReward> amountData;
+        private final JobTypeData<QuestPlayer, JobsExpReward> jobData;
+        private final AmountData<QuestPlayer, JobsExpReward> amountData;
 
         public JobsExpReward(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, JobsExpRewardType.this, section);
@@ -60,7 +77,7 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
                     getConfig().loadSection(Paths.REWARD_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(jobData.getInfo());
             info.add("&9Exp reward: &e" + amountData.getAmount());
@@ -86,7 +103,7 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -94,28 +111,12 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
 
             public GuiEditor(Player player, Gui previusHolder) {
                 super(player, previusHolder);
-                this.putButton(27, jobData.getJobSelector(this));
+                this.putButton(27, getJobsData().getJobSelector(this));
                 this.putButton(28,
-                        amountData.getAmountEditorButton("&9Select exp reiceved as reward",
+                        getAmountData().getAmountEditorButton("&9Select exp reiceved as reward",
                                 Arrays.asList("&6Exp Reward Selector", "&9Level: &e%amount%"),
                                 new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
             }
         }
-    }
-
-    @Override
-    public String getDefaultFeedback(Reward<QuestPlayer> reward) {
-        if (!(reward instanceof JobsExpRewardType.JobsExpReward))
-            return null;
-        JobsExpReward r = (JobsExpReward) reward;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:obtained} &e{amount} &a{action:experience} {conjun:on} {jobs}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-
-        }
-        return Translations.replaceAll(txt).replace("{jobs}", DataUtils.getJobsHolder(r.getJobsData()))
-                .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 }

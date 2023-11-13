@@ -17,11 +17,14 @@ import emanondev.deepquests.player.QuestPlayer;
 import emanondev.deepquests.utils.DataUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
+    private final static String ID = "mcmmo_exp";
+
     public McmmoExpRewardType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
     }
@@ -31,8 +34,6 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
         return false;
     }
 
-    private final static String ID = "mcmmo_exp";
-
     @Override
     public Material getGuiMaterial() {
         return Material.IRON_PICKAXE;
@@ -40,7 +41,7 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
 
     @Override
     public List<String> getDescription() {
-        return Arrays.asList("&7Reward the player with an Item");
+        return List.of("&7Reward the player with an Item");
     }
 
     @Override
@@ -48,19 +49,34 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
         return new McmmoExpReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<QuestPlayer> reward) {
+        if (!(reward instanceof McmmoExpReward r))
+            return null;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:obtained} &e{amount} &a{action:experience} {conjun:on} {mcmmoskilltype}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+        }
+        return Translations.replaceAll(txt)
+                .replace("{mcmmoskilltype}", DataUtils.getMcmmoSkillTypeHolder(r.getMcmmoSkillTypeData()))
+                .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
+    }
+
     public class McmmoExpReward extends AReward<QuestPlayer> {
-        private McMMOSkillTypeData<QuestPlayer, McmmoExpReward> skillData;
-        private AmountData<QuestPlayer, McmmoExpReward> amountData;
+        private final McMMOSkillTypeData<QuestPlayer, McmmoExpReward> skillData;
+        private final AmountData<QuestPlayer, McmmoExpReward> amountData;
 
         public McmmoExpReward(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, McmmoExpRewardType.this, section);
-            skillData = new McMMOSkillTypeData<QuestPlayer, McmmoExpReward>(this,
+            skillData = new McMMOSkillTypeData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_MCMMO));
-            amountData = new AmountData<QuestPlayer, McmmoExpReward>(this,
+            amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(skillData.getInfo());
             info.add("&9Exp Reward: &e" + amountData.getAmount());
@@ -89,7 +105,7 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -97,28 +113,12 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
 
             public GuiEditor(Player player, Gui previusHolder) {
                 super(player, previusHolder);
-                this.putButton(27, skillData.getSkillTypeSelector(this));
+                this.putButton(27, getMcmmoSkillTypeData().getSkillTypeSelector(this));
                 this.putButton(28,
-                        amountData.getAmountEditorButton("&9Select exp reiceved as reward",
+                        getAmountData().getAmountEditorButton("&9Select exp reiceved as reward",
                                 Arrays.asList("&6Exp Reward Selector", "&9Experience: &e%amount%"),
                                 new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
             }
         }
-    }
-
-    @Override
-    public String getDefaultFeedback(Reward<QuestPlayer> reward) {
-        if (!(reward instanceof McmmoExpRewardType.McmmoExpReward))
-            return null;
-        McmmoExpReward r = (McmmoExpReward) reward;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:obtained} &e{amount} &a{action:experience} {conjun:on} {mcmmoskilltype}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-        }
-        return Translations.replaceAll(txt)
-                .replace("{mcmmoskilltype}", DataUtils.getMcmmoSkillTypeHolder(r.getMcmmoSkillTypeData()))
-                .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 }

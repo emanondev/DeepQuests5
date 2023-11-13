@@ -15,16 +15,17 @@ import emanondev.deepquests.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ConsoleCommandRewardType extends ARewardType<QuestPlayer> {
+    private final static String ID = "console_command";
+
     public ConsoleCommandRewardType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "console_command";
 
     @Override
     public Material getGuiMaterial() {
@@ -42,16 +43,36 @@ public class ConsoleCommandRewardType extends ARewardType<QuestPlayer> {
         return new ConsoleCommandReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<QuestPlayer> reward) {
+        if (!(reward instanceof ConsoleCommandRewardType.ConsoleCommandReward))
+            return null;
+        ConsoleCommandReward r = (ConsoleCommandReward) reward;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:console_execute} &e{command}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+
+        }
+        return Translations.replaceAll(txt).replace("{command}", DataUtils.getCommandHolder(r.getCommandData()));
+    }
+
+    @Override
+    protected boolean getStandardHiddenValue() {
+        return true;
+    }
+
     public class ConsoleCommandReward extends AReward<QuestPlayer> {
-        private CommandData<QuestPlayer, ConsoleCommandReward> cmdData;
+        private final CommandData<QuestPlayer, ConsoleCommandReward> cmdData;
 
         public ConsoleCommandReward(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, ConsoleCommandRewardType.this, section);
-            cmdData = new CommandData<QuestPlayer, ConsoleCommandReward>(this,
+            cmdData = new CommandData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_COMMAND));
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(cmdData.getInfo());
             return info;
@@ -73,7 +94,7 @@ public class ConsoleCommandRewardType extends ARewardType<QuestPlayer> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -84,25 +105,5 @@ public class ConsoleCommandRewardType extends ARewardType<QuestPlayer> {
                 this.putButton(27, cmdData.getCommandEditorButton(this));
             }
         }
-    }
-
-    @Override
-    public String getDefaultFeedback(Reward<QuestPlayer> reward) {
-        if (!(reward instanceof ConsoleCommandRewardType.ConsoleCommandReward))
-            return null;
-        ConsoleCommandReward r = (ConsoleCommandReward) reward;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:console_execute} &e{command}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-
-        }
-        return Translations.replaceAll(txt).replace("{command}", DataUtils.getCommandHolder(r.getCommandData()));
-    }
-
-    @Override
-    protected boolean getStandardHiddenValue() {
-        return true;
     }
 }

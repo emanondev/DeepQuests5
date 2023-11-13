@@ -12,6 +12,7 @@ import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -53,7 +54,7 @@ public class DayOfWeekRequireType<T extends User<T>> extends ARequireType<T> {
         }
 
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.add("&9allowed_days");
             for (DayOfWeek day : days)
@@ -62,7 +63,7 @@ public class DayOfWeekRequireType<T extends User<T>> extends ARequireType<T> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 

@@ -31,11 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T> {
+    private final static String ID = "enter_region_with_item";
+
     public EnterRegionWithItemTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "enter_region_with_item";
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     private void onRegionEnter(RegionEnteredEvent event) {
@@ -43,10 +43,7 @@ public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T>
         T user = getManager().getUserManager().getUser(p);
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             EnterRegionWithItemTask task = (EnterRegionWithItemTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.regionInfo.isValidRegion(event.getRegion())) {
                 ItemStack targetItem = task.itemData.getItem();
@@ -57,83 +54,6 @@ public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T>
                 if (removedAmount > 0) {
                     task.onProgress(user, removedAmount, p, false);
                 }
-            }
-        }
-    }
-
-    public class EnterRegionWithItemTask extends ATask<T> {
-        private final RegionsData<T, EnterRegionWithItemTask> regionInfo;
-        private final ItemStackData<T, EnterRegionWithItemTask> itemData;
-
-        public EnterRegionWithItemTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, EnterRegionWithItemTaskType.this, section);
-            regionInfo = new RegionsData<>(this,
-                    getConfig().loadSection(Paths.TASK_INFO_REGIONSDATA));
-            itemData = new ItemStackData<>(this,
-                    getConfig().loadSection(Paths.TASK_INFO_ITEM));
-        }
-
-        public RegionsData<T, EnterRegionWithItemTask> getRegionsData() {
-            return regionInfo;
-        }
-
-        public ItemStackData<T, EnterRegionWithItemTask> getItemStackData() {
-            return itemData;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            info.addAll(regionInfo.getInfo());
-
-            info.add("&9Item:");
-            ItemStack item = itemData.getItem();
-            if (item == null)
-                info.add("&cNot setted");
-            else {
-                info.add("  &9Material: &e" + item.getType());
-                if (item.hasItemMeta()) {
-                    ItemMeta meta = item.getItemMeta();
-                    assert meta != null;
-                    if (meta.hasDisplayName())
-                        info.add("  &9DisplayName: &e" + meta.getDisplayName());
-                    if (meta.hasLore()) {
-                        info.add("  &9Lore:");
-                        for (String line : meta.getLore())
-                            info.add("  &9- &e" + line);
-                    }
-                    if (meta.hasEnchants()) {
-                        info.add("  &9Enchants:");
-                        for (Enchantment ench : meta.getEnchants().keySet())
-                            info.add("  &9- &e" + ench.getKey().getKey() + " " + meta.getEnchantLevel(ench));
-                    }
-                    if (meta.getItemFlags().size() > 0) {
-                        info.add("  &9Flags:");
-                        for (ItemFlag flag : meta.getItemFlags())
-                            info.add("  &9- &e" + flag);
-                    }
-                    if (meta.isUnbreakable())
-                        info.add("  &9Unbreakable: &etrue");
-                }
-            }
-            return info;
-        }
-
-        @Override
-        public @NotNull EnterRegionWithItemTaskType<T> getType() {
-            return EnterRegionWithItemTaskType.this;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previusHolder) {
-                super(player, previusHolder);
-                itemData.setupButtons(this, 27);
-                this.putButton(28, regionInfo.getRegionSelectorButton(this));
             }
         }
     }
@@ -195,6 +115,83 @@ public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T>
 
         }
         return Translations.replaceAll(txt).replace("{regions}", DataUtils.getRegionHolder(t.getRegionsData()));
+    }
+
+    public class EnterRegionWithItemTask extends ATask<T> {
+        private final RegionsData<T, EnterRegionWithItemTask> regionInfo;
+        private final ItemStackData<T, EnterRegionWithItemTask> itemData;
+
+        public EnterRegionWithItemTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, EnterRegionWithItemTaskType.this, section);
+            regionInfo = new RegionsData<>(this,
+                    getConfig().loadSection(Paths.TASK_INFO_REGIONSDATA));
+            itemData = new ItemStackData<>(this,
+                    getConfig().loadSection(Paths.TASK_INFO_ITEM));
+        }
+
+        public RegionsData<T, EnterRegionWithItemTask> getRegionsData() {
+            return regionInfo;
+        }
+
+        public ItemStackData<T, EnterRegionWithItemTask> getItemStackData() {
+            return itemData;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            info.addAll(regionInfo.getInfo());
+
+            info.add("&9Item:");
+            ItemStack item = itemData.getItem();
+            if (item == null)
+                info.add("&cNot setted");
+            else {
+                info.add("  &9Material: &e" + item.getType());
+                if (item.hasItemMeta()) {
+                    ItemMeta meta = item.getItemMeta();
+                    assert meta != null;
+                    if (meta.hasDisplayName())
+                        info.add("  &9DisplayName: &e" + meta.getDisplayName());
+                    if (meta.hasLore()) {
+                        info.add("  &9Lore:");
+                        for (String line : meta.getLore())
+                            info.add("  &9- &e" + line);
+                    }
+                    if (meta.hasEnchants()) {
+                        info.add("  &9Enchants:");
+                        for (Enchantment ench : meta.getEnchants().keySet())
+                            info.add("  &9- &e" + ench.getKey().getKey() + " " + meta.getEnchantLevel(ench));
+                    }
+                    if (meta.getItemFlags().size() > 0) {
+                        info.add("  &9Flags:");
+                        for (ItemFlag flag : meta.getItemFlags())
+                            info.add("  &9- &e" + flag);
+                    }
+                    if (meta.isUnbreakable())
+                        info.add("  &9Unbreakable: &etrue");
+                }
+            }
+            return info;
+        }
+
+        @Override
+        public @NotNull EnterRegionWithItemTaskType<T> getType() {
+            return EnterRegionWithItemTaskType.this;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previusHolder) {
+                super(player, previusHolder);
+                itemData.setupButtons(this, 27);
+                this.putButton(28, regionInfo.getRegionSelectorButton(this));
+            }
+        }
     }
 
 }

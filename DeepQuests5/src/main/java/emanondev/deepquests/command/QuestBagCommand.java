@@ -48,20 +48,20 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
                 T u = manager.getUserManager().getUser(s);
                 if (u == null) {
                     // no user
-                    new DMessage(this.getPlugin(),sender).appendLang(
+                    new DMessage(this.getPlugin(), sender).appendLang(
                             "command." + this.getID() + ".no-user").send();
                     return;
                 }
                 if (u.getQuestBag() == null) {
                     // nobag
-                    new DMessage(this.getPlugin(),sender).appendLang(
+                    new DMessage(this.getPlugin(), sender).appendLang(
                             "command." + this.getID() + ".no-bag").send();
                     return;
                 }
                 Map<String, Integer> map = u.getQuestBag().getQuestItems();
                 if (map.isEmpty()) {
                     // no items
-                    new DMessage(this.getPlugin(),sender).appendLang(
+                    new DMessage(this.getPlugin(), sender).appendLang(
                             "command." + this.getID() + ".no-items").send();
                     return;
                 }
@@ -86,20 +86,20 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
                 T u = manager.getUserManager().getUser(t);
                 if (u == null) {
                     // no user
-                    new DMessage(this.getPlugin(),sender).appendLang(
+                    new DMessage(this.getPlugin(), sender).appendLang(
                             "command." + this.getID() + ".no-user").send();
                     return;
                 }
                 if (u.getQuestBag() == null) {
                     // nobag
-                    new DMessage(this.getPlugin(),sender).appendLang(
+                    new DMessage(this.getPlugin(), sender).appendLang(
                             "command." + this.getID() + ".no-bag").send();
                     return;
                 }
                 Map<String, Integer> map = u.getQuestBag().getQuestItems();
                 if (map.isEmpty()) {
                     // noitems
-                    new DMessage(this.getPlugin(),sender).appendLang(
+                    new DMessage(this.getPlugin(), sender).appendLang(
                             "command." + this.getID() + ".no-items").send();
                     return;
                 }
@@ -107,7 +107,7 @@ public class QuestBagCommand<T extends User<T>> extends CoreCommand {
                         .loadMessage("command." + this.getID() + ".gui-title", "&9Quest Bag"));
                 s.openInventory(gui.getInventory());
             }
-            default -> new DMessage(this.getPlugin(),sender).appendLang(
+            default -> new DMessage(this.getPlugin(), sender).appendLang(
                     "command." + this.getID() + ".help", "%alias%", alias).send();
         }
     }

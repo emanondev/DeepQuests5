@@ -12,17 +12,18 @@ import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T> {
 
+    private static final String ID = "have_quest_items";
+
     public HaveQuestItemRequireType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private static final String ID = "have_quest_items";
 
     @Override
     public Material getGuiMaterial() {
@@ -62,7 +63,7 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
             return p.getQuestBag().hasQuestItem(this.questItemData.getQuestItemID(), amountData.getAmount());
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.add("&9Required Points: &e" + amountData.getAmount());
             info.addAll(questItemData.getInfo());
@@ -74,7 +75,7 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -82,9 +83,9 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
 
             public GuiEditor(Player player, Gui previousHolder) {
                 super(player, previousHolder);
-                questItemData.setupButtons(this, 27);
+                getQuestItemData().setupButtons(this, 27);
                 this.putButton(28,
-                        amountData.getAmountEditorButton("&9Required Points Selector",
+                        getAmountData().getAmountEditorButton("&9Required Points Selector",
                                 Arrays.asList("&6Required Points Selector", "&9Amount: &e%amount%"),
                                 new ItemBuilder(Material.REPEATER).setGuiProperty().build(), this));
             }

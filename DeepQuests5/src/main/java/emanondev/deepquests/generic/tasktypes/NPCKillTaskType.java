@@ -28,11 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
+    private final static String ID = "kill_npc";
+
     public NPCKillTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "kill_npc";
 
     @Override
     public Material getGuiMaterial() {
@@ -58,10 +58,7 @@ public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
         T user = getManager().getUserManager().getUser(p);
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             NPCKillTask task = (NPCKillTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.npcData.isValidNPC(event.getNPC())
                     && task.toolData.isValidTool(p.getInventory().getItemInMainHand(), p)) {
@@ -71,67 +68,6 @@ public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
                     if (task.dropsData.removeItemDrops())
                         event.getDrops().clear();
                 }
-            }
-        }
-    }
-
-    public class NPCKillTask extends ATask<T> {
-
-        private final NPCData<T, NPCKillTask> npcData;
-        private final ToolData<T, NPCKillTask> toolData;
-        private final DropData<T, NPCKillTask> dropsData;
-
-        public NPCKillTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, NPCKillTaskType.this, section);
-            npcData = new NPCData<>(this, getConfig().loadSection(Paths.TASK_INFO_NPCDATA));
-            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-        }
-
-        public NPCData<T, NPCKillTask> getNPCData() {
-            return npcData;
-        }
-
-        public DropData<T, NPCKillTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, NPCKillTask> getWeaponData() {
-            return toolData;
-        }
-
-        public @NotNull NPCKillTaskType<T> getType() {
-            return NPCKillTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            info.addAll(npcData.getInfo());
-
-            if (dropsData.removeExpDrops())
-                info.add("&9Exp Drops: &cDisabled");
-            if (dropsData.removeItemDrops())
-                info.add("&9Item Drops: &cDisabled");
-            if (toolData.isEnabled()) {
-                info.add("&9Weapon Check:");
-                info.addAll(toolData.getInfo());
-            }
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                this.putButton(27, npcData.getNPCSelectorButton(this));
-                this.putButton(36, dropsData.getItemDropsFlagButton(this));
-                this.putButton(37, dropsData.getExpDropsFlagButton(this));
-                toolData.setupButtons("&6Weapon editor", this, 45);
             }
         }
     }
@@ -183,5 +119,66 @@ public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt).replace("{npcs}", DataUtils.getNPCHolder(t.getNPCData()));
+    }
+
+    public class NPCKillTask extends ATask<T> {
+
+        private final NPCData<T, NPCKillTask> npcData;
+        private final ToolData<T, NPCKillTask> toolData;
+        private final DropData<T, NPCKillTask> dropsData;
+
+        public NPCKillTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, NPCKillTaskType.this, section);
+            npcData = new NPCData<>(this, getConfig().loadSection(Paths.TASK_INFO_NPCDATA));
+            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
+            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+        }
+
+        public NPCData<T, NPCKillTask> getNPCData() {
+            return npcData;
+        }
+
+        public DropData<T, NPCKillTask> getDropData() {
+            return dropsData;
+        }
+
+        public ToolData<T, NPCKillTask> getWeaponData() {
+            return toolData;
+        }
+
+        public @NotNull NPCKillTaskType<T> getType() {
+            return NPCKillTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            info.addAll(npcData.getInfo());
+
+            if (dropsData.removeExpDrops())
+                info.add("&9Exp Drops: &cDisabled");
+            if (dropsData.removeItemDrops())
+                info.add("&9Item Drops: &cDisabled");
+            if (toolData.isEnabled()) {
+                info.add("&9Weapon Check:");
+                info.addAll(toolData.getInfo());
+            }
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                this.putButton(27, getNPCData().getNPCSelectorButton(this));
+                this.putButton(36, getDropData().getItemDropsFlagButton(this));
+                this.putButton(37, getDropData().getExpDropsFlagButton(this));
+                toolData.setupButtons("&6Weapon editor", this, 45);
+            }
+        }
     }
 }

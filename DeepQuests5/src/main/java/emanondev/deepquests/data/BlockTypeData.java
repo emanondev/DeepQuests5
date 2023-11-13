@@ -15,6 +15,7 @@ import java.util.*;
 
 public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
 
+    private static final LinkedHashSet<Material> validMaterials = loadValidMaterials();
     private final EnumSet<Material> materials = EnumSet.noneOf(Material.class);
     private boolean isWhitelist;
 
@@ -22,6 +23,15 @@ public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> exten
         super(parent, section);
         isWhitelist = getConfig().getBoolean(Paths.DATA_BLOCK_TYPE_IS_WHITELIST, true);
         materials.addAll(getConfig().loadEnumSet(Paths.DATA_BLOCK_TYPE_LIST, EnumSet.noneOf(Material.class), Material.class));
+    }
+
+    private static LinkedHashSet<Material> loadValidMaterials() {
+        List<Material> list = new ArrayList<>();
+        for (Material mat : Material.values())
+            if (!mat.isAir() && mat.isBlock())
+                list.add(mat);
+        Collections.sort(list);
+        return new LinkedHashSet<>(list);
     }
 
     public boolean isValidMaterial(Material material) {
@@ -57,9 +67,6 @@ public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> exten
         this.isWhitelist = !this.isWhitelist;
         getConfig().set(Paths.DATA_BLOCK_TYPE_IS_WHITELIST, isWhitelist);
     }
-
-
-    private static final LinkedHashSet<Material> validMaterials = loadValidMaterials();
 
     public BlockEditorButton getBlockEditorButton(Gui parent) {
         return new BlockEditorButton(parent);
@@ -134,15 +141,6 @@ public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> exten
             return true;
         }
 
-    }
-
-    private static LinkedHashSet<Material> loadValidMaterials() {
-        List<Material> list = new ArrayList<>();
-        for (Material mat : Material.values())
-            if (!mat.isAir() && mat.isBlock())
-                list.add(mat);
-        Collections.sort(list);
-        return new LinkedHashSet<>(list);
     }
 
 

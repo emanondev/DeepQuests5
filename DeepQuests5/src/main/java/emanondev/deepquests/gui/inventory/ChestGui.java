@@ -4,22 +4,13 @@ import emanondev.deepquests.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ChestGui implements Gui {
 
     private final Gui previusHolder;
-
-    @Override
-    public Gui getPreviusGui() {
-        return previusHolder;
-    }
-
-    /**
-     * @return the amount of rows used in this chest gui
-     */
-    public int getInventoryRows() {
-        return getInventorySize() / 9;
-    }
+    private Inventory inv;
+    private Player player;
 
     /**
      * Create a chesttype gui
@@ -37,14 +28,22 @@ public abstract class ChestGui implements Gui {
         this.player = p;
     }
 
-    private Inventory inv;
-
     @Override
-    public Inventory getInventory() {
-        return inv;
+    public Gui getPreviusGui() {
+        return previusHolder;
     }
 
-    private Player player;
+    /**
+     * @return the amount of rows used in this chest gui
+     */
+    public int getInventoryRows() {
+        return getInventorySize() / 9;
+    }
+
+    @Override
+    public @NotNull Inventory getInventory() {
+        return inv;
+    }
 
     public Player getTargetPlayer() {
         return player;

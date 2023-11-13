@@ -24,7 +24,7 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
     }
 
     @Override
-    public List<String> getInfo() {
+    public @NotNull List<String> getInfo() {
         return Arrays.asList("&cThis task couldn't be loaded correctly",
                 "&cMaybe a plugin wasn't loaded correctly",
                 "&cExample: NPCKillTask and Citizen not loading",
@@ -62,12 +62,12 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
     }
 
     @Override
-    public BarStyle getBossBarStyle() {
+    public @NotNull BarStyle getBossBarStyle() {
         return BarStyle.SOLID;
     }
 
     @Override
-    public BarColor getBossBarColor() {
+    public @NotNull BarColor getBossBarColor() {
         return BarColor.BLUE;
     }
 
@@ -89,12 +89,12 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
     }
 
     @Override
-    public String getTypeName() {
+    public @NotNull String getTypeName() {
         return "error";
     }
 
     @Override
-    public Gui getEditorGui(Player target, Gui parent) {
+    public @NotNull Gui getEditorGui(Player target, Gui parent) {
         return new PagedMapGui("&4Corrupted Task", 6, target, parent);
     }
 

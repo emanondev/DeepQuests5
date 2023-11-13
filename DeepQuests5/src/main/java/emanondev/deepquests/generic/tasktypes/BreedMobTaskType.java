@@ -27,11 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
+    private final static String ID = "breed_mob";
+
     public BreedMobTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "breed_mob";
 
     @Override
     public List<String> getDescription() {
@@ -52,10 +52,7 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
         T user = getManager().getUserManager().getUser(p);
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             BreedMobTask task = (BreedMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidEntity(event.getEntity())
                     && task.toolData.isValidTool(event.getBredWith(), p))
@@ -63,67 +60,6 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
                     if (task.dropsData.removeExpDrops())
                         event.setExperience(0);
                 }
-        }
-    }
-
-    public class BreedMobTask extends ATask<T> {
-
-        private final EntityData<T, BreedMobTask> entityData;
-        private final DropData<T, BreedMobTask> dropsData;
-        private final ToolData<T, BreedMobTask> toolData;
-
-        public BreedMobTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, BreedMobTaskType.this, section);
-            entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-        }
-
-        public EntityData<T, BreedMobTask> getEntityData() {
-            return entityData;
-        }
-
-        public DropData<T, BreedMobTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, BreedMobTask> getBreedItemData() {
-            return toolData;
-        }
-
-        @Override
-        public @NotNull BreedMobTaskType<T> getType() {
-            return BreedMobTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            info.addAll(entityData.getInfo());
-
-            if (dropsData.removeExpDrops())
-                info.add("&9Exp Drops: &cDisabled");
-            if (toolData.isEnabled()) {
-                info.add("&9Breeding Item Check:");
-                info.addAll(toolData.getInfo());
-            }
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                this.putButton(27, entityData.getEntityTypeButton(this));
-                this.putButton(28, entityData.getSpawnReasonButton(this));
-                this.putButton(36, entityData.getIgnoreNPCFlagButton(this));
-                this.putButton(37, dropsData.getExpDropsFlagButton(this));
-                toolData.setupButtons("&6Breeding Item Button", this, 45);
-            }
         }
     }
 
@@ -174,6 +110,67 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt).replace("{entities}", DataUtils.getEntityHolder(t.getEntityData()));
+    }
+
+    public class BreedMobTask extends ATask<T> {
+
+        private final EntityData<T, BreedMobTask> entityData;
+        private final DropData<T, BreedMobTask> dropsData;
+        private final ToolData<T, BreedMobTask> toolData;
+
+        public BreedMobTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, BreedMobTaskType.this, section);
+            entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
+            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
+        }
+
+        public EntityData<T, BreedMobTask> getEntityData() {
+            return entityData;
+        }
+
+        public DropData<T, BreedMobTask> getDropData() {
+            return dropsData;
+        }
+
+        public ToolData<T, BreedMobTask> getBreedItemData() {
+            return toolData;
+        }
+
+        @Override
+        public @NotNull BreedMobTaskType<T> getType() {
+            return BreedMobTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            info.addAll(entityData.getInfo());
+
+            if (dropsData.removeExpDrops())
+                info.add("&9Exp Drops: &cDisabled");
+            if (toolData.isEnabled()) {
+                info.add("&9Breeding Item Check:");
+                info.addAll(toolData.getInfo());
+            }
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                this.putButton(27, entityData.getEntityTypeButton(this));
+                this.putButton(28, entityData.getSpawnReasonButton(this));
+                this.putButton(36, entityData.getIgnoreNPCFlagButton(this));
+                this.putButton(37, dropsData.getExpDropsFlagButton(this));
+                toolData.setupButtons("&6Breeding Item Button", this, 45);
+            }
+        }
     }
 
 }

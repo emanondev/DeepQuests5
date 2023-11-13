@@ -4,6 +4,8 @@ import emanondev.core.CorePlugin;
 import emanondev.core.YMLConfig;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collection;
@@ -13,7 +15,6 @@ public interface QuestManager<T extends User<T>> extends GuiElement {
     /**
      * name of this, must be unique and immutable, used for folder name
      *
-     * @return
      */
     String getName();
 
@@ -132,19 +133,18 @@ public interface QuestManager<T extends User<T>> extends GuiElement {
      * the string may not represent the user id, usually it's something human readable
      * like player name for players instead of their uuid
      *
-     * @param argument
      * @return the related user, may be null
      */
-    T getArgomentUser(String argument);
+    @Nullable T getArgomentUser(String argument);
 
     /**
      * Utility for command to autocomplete user, must return a collection of users arguments taken by command
      *
      * @return collection of users arguments taken by command
      */
-    Collection<String> getUsersArguments();
+    @NotNull Collection<String> getUsersArguments();
 
-    CorePlugin getPlugin();
+    @NotNull CorePlugin getPlugin();
 
     Permission getEditorPermission();
 

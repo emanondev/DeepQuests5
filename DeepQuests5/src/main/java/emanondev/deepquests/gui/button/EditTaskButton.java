@@ -16,6 +16,7 @@ import java.util.*;
 
 public class EditTaskButton<T extends User<T>> extends QuestComponentButton<Task<T>> {
     private final T user;
+    private Player clicker = null;
 
     public EditTaskButton(Gui parent, Task<T> questComponent, T user) {
         super(parent, questComponent);
@@ -43,10 +44,34 @@ public class EditTaskButton<T extends User<T>> extends QuestComponentButton<Task
         new ClickEditorButton().onClick(clicker, click);
     }
 
-    private Player clicker = null;
-
     public T getUser() {
         return user;
+    }
+
+    public void handle(ActionType element) {
+        switch (element) {
+            case PROGRESS_1:
+                getUser().progressTask(getQuestComponent(), 1, null, true);
+                break;
+            case PROGRESS_5:
+                getUser().progressTask(getQuestComponent(), 5, null, true);
+                break;
+            case PROGRESS_10:
+                getUser().progressTask(getQuestComponent(), 10, null, true);
+                break;
+            case PROGRESS_50:
+                getUser().progressTask(getQuestComponent(), 50, null, true);
+                break;
+            case ERASE:
+                getUser().eraseTaskData(getQuestComponent());
+                break;
+            case RESET:
+                getUser().resetTask(getQuestComponent());
+                break;
+        }
+        this.getGui().updateInventory();
+        if (clicker != null)
+            clicker.openInventory(getGui().getInventory());
     }
 
     private enum ActionType {
@@ -175,31 +200,5 @@ public class EditTaskButton<T extends User<T>> extends QuestComponentButton<Task
             return set;
         }
 
-    }
-
-    public void handle(ActionType element) {
-        switch (element) {
-            case PROGRESS_1:
-                getUser().progressTask(getQuestComponent(), 1, null, true);
-                break;
-            case PROGRESS_5:
-                getUser().progressTask(getQuestComponent(), 5, null, true);
-                break;
-            case PROGRESS_10:
-                getUser().progressTask(getQuestComponent(), 10, null, true);
-                break;
-            case PROGRESS_50:
-                getUser().progressTask(getQuestComponent(), 50, null, true);
-                break;
-            case ERASE:
-                getUser().eraseTaskData(getQuestComponent());
-                break;
-            case RESET:
-                getUser().resetTask(getQuestComponent());
-                break;
-        }
-        this.getGui().updateInventory();
-        if (clicker != null)
-            clicker.openInventory(getGui().getInventory());
     }
 }

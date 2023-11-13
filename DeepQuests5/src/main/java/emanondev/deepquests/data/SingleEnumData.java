@@ -19,14 +19,13 @@ import java.util.List;
 public class SingleEnumData<T extends User<T>, E extends QuestComponent<T>, Z extends Enum<Z>>
         extends QuestComponentData<T, E> {
 
+    private final Class<Z> typeClass;
+    private Z type;
+
     public SingleEnumData(E parent, YMLSection section, Class<Z> type) {
         super(parent, section);
         this.typeClass = type;
     }
-
-    private final Class<Z> typeClass;
-
-    private Z type;
 
     public Z getType() {
         return type;

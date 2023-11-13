@@ -21,7 +21,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,11 +28,11 @@ import java.util.List;
 
 public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
 
+    private final static String ID = "kill_mythic_mob";
+
     public KillMythicMobTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "kill_mythic_mob";
 
     @Override
     public Material getGuiMaterial() {
@@ -51,97 +50,18 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
     private void onEntityDie(MythicMobDeathEvent event) {
         if (event.getKiller() == null || !(event.getKiller() instanceof Player p))
             return;
-        T qPlayer = getManager().getUserManager().getUser(p);
-        if (qPlayer == null)
+        T user = getManager().getUserManager().getUser(p);
+        if (user == null)
             return;
-        List<Task<T>> tasks = qPlayer.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             KillMythicMobTask task = (KillMythicMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidMythicMob(event.getMob())) {
-                if (task.onProgress(qPlayer, 1, p, false) > 0) {
+                if (task.onProgress(user, 1, p, false) > 0) {
                     if (task.dropsData.removeItemDrops())
                         event.setDrops(new ArrayList<>());
                     // if (task.dropsData.removeExpDrops())
                     // event..setExp(0);
                 }
-            }
-        }
-    }
-
-    public class KillMythicMobTask extends ATask<T> {
-
-        private final MythicMobsData<T, KillMythicMobTask> entityData;
-        private final DropData<T, KillMythicMobTask> dropsData;
-        private final ToolData<T, KillMythicMobTask> toolData;
-
-        public KillMythicMobTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, KillMythicMobTaskType.this, section);
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-            entityData = new MythicMobsData<>(this,
-                    getConfig().loadSection(Paths.TASK_INFO_MYTHICMOBSDATA));
-            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-        }
-
-        public DropData<T, KillMythicMobTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, KillMythicMobTask> getWeaponData() {
-            return toolData;
-        }
-
-        public MythicMobsData<T, KillMythicMobTask> getMythicMobsData() {
-            return entityData;
-        }
-
-        @Override
-        public @NotNull KillMythicMobTaskType<T> getType() {
-            return KillMythicMobTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            if (entityData.areInternalNamesWhitelist()) {
-                info.add("&9Valid Internal Names:");
-                for (String type : entityData.getInternalNames())
-                    info.add("  &9- &a" + type);
-            } else {
-                info.add("&9Invalid Internal Names:");
-                for (String type : entityData.getInternalNames())
-                    info.add("  &9- &c" + type);
-            }
-            if (entityData.checkLevel()) {
-                info.add("&9Min level: &e" + entityData.getMinLevel());
-                info.add("&9Max level: &e" + entityData.getMaxLevel());
-            }
-            // if (dropsData.removeExpDrops())
-            // info.add("&9Exp Drops: &cDisabled");
-            if (dropsData.removeItemDrops())
-                info.add("&9Item Drops: &cDisabled");
-            if (toolData.isEnabled()) {
-                info.add("&9Weapon Check:");
-                info.addAll(toolData.getInfo());
-            }
-            return info;
-        }
-
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previusHolder) {
-                super(player, previusHolder);
-                this.putButton(27, entityData.getMythicMobsSelectorButton(this));
-                this.putButton(28, entityData.getMinLevelButton(this));
-                this.putButton(29, entityData.getMaxLevelButton(this));
-                this.putButton(36, entityData.getCheckLevelFlag(this));
-                // this.putButton(37, dropsData.getExpDropsFlagButton(this));
-                this.putButton(38, dropsData.getItemDropsFlagButton(this));
-                toolData.setupButtons("&6Weapon Item Button", this, 45);
             }
         }
     }
@@ -196,5 +116,81 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
         }
         return Translations.replaceAll(txt).replace("{mythicmobs}",
                 DataUtils.getMythicMobsHolder(t.getMythicMobsData()));
+    }
+
+    public class KillMythicMobTask extends ATask<T> {
+
+        private final MythicMobsData<T, KillMythicMobTask> entityData;
+        private final DropData<T, KillMythicMobTask> dropsData;
+        private final ToolData<T, KillMythicMobTask> toolData;
+
+        public KillMythicMobTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, KillMythicMobTaskType.this, section);
+            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            entityData = new MythicMobsData<>(this,
+                    getConfig().loadSection(Paths.TASK_INFO_MYTHICMOBSDATA));
+            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
+        }
+
+        public DropData<T, KillMythicMobTask> getDropData() {
+            return dropsData;
+        }
+
+        public ToolData<T, KillMythicMobTask> getWeaponData() {
+            return toolData;
+        }
+
+        public MythicMobsData<T, KillMythicMobTask> getMythicMobsData() {
+            return entityData;
+        }
+
+        @Override
+        public @NotNull KillMythicMobTaskType<T> getType() {
+            return KillMythicMobTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            if (entityData.areInternalNamesWhitelist()) {
+                info.add("&9Valid Internal Names:");
+                for (String type : entityData.getInternalNames())
+                    info.add("  &9- &a" + type);
+            } else {
+                info.add("&9Invalid Internal Names:");
+                for (String type : entityData.getInternalNames())
+                    info.add("  &9- &c" + type);
+            }
+            if (entityData.checkLevel()) {
+                info.add("&9Min level: &e" + entityData.getMinLevel());
+                info.add("&9Max level: &e" + entityData.getMaxLevel());
+            }
+            // if (dropsData.removeExpDrops())
+            // info.add("&9Exp Drops: &cDisabled");
+            if (dropsData.removeItemDrops())
+                info.add("&9Item Drops: &cDisabled");
+            if (toolData.isEnabled()) {
+                info.add("&9Weapon Check:");
+                info.addAll(toolData.getInfo());
+            }
+            return info;
+        }
+
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previusHolder) {
+                super(player, previusHolder);
+                this.putButton(27, getMythicMobsData().getMythicMobsSelectorButton(this));
+                this.putButton(28, getMythicMobsData().getMinLevelButton(this));
+                this.putButton(29, getMythicMobsData().getMaxLevelButton(this));
+                this.putButton(36, getMythicMobsData().getCheckLevelFlag(this));
+                // this.putButton(37, dropsData.getExpDropsFlagButton(this));
+                this.putButton(38, getDropData().getItemDropsFlagButton(this));
+                getWeaponData().setupButtons("&6Weapon Item Button", this, 45);
+            }
+        }
     }
 }

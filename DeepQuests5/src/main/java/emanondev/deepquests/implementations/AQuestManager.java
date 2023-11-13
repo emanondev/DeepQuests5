@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -76,14 +77,6 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     private final int priority;
 
     private final Permission editorPermission;
-
-    public final YMLConfig getConfig(String fileName) {
-        return Quests.get().getConfig(this.getName() + File.separator + fileName);
-    }
-
-    public final YMLConfig getConfig() {
-        return managerConfig;
-    }
 
     public AQuestManager(String name, CorePlugin plugin) {
         if (name == null || plugin == null)
@@ -164,6 +157,14 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
             getTaskProvider().registerType(new ObtainQuestItemTaskType<>(this));
             Quests.get().registerCommand(new QuestBagCommand<>(this));
         }
+    }
+
+    public final YMLConfig getConfig(String fileName) {
+        return Quests.get().getConfig(this.getName() + File.separator + fileName);
+    }
+
+    public final YMLConfig getConfig() {
+        return managerConfig;
     }
 
     public void debugUnused() {
@@ -414,7 +415,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public CorePlugin getPlugin() {
+    public @NotNull CorePlugin getPlugin() {
         return plugin;
     }
 

@@ -10,6 +10,7 @@ import emanondev.deepquests.implementations.AQuestManager;
 import emanondev.deepquests.nation.rewardtypes.ConsoleCommandRewardType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,8 +19,8 @@ import java.util.List;
 
 public class NationQuestManager extends AQuestManager<QuestNation> {
 
-    private final NationUserManager userManager;
     public final static String NAME = "nations";
+    private final NationUserManager userManager;
 
     public NationQuestManager(String name, CorePlugin plugin) {
         super(name, plugin);
@@ -40,7 +41,7 @@ public class NationQuestManager extends AQuestManager<QuestNation> {
     }
 
     @Override
-    public Gui getEditorGui(Player target, Gui parent) {
+    public @NotNull Gui getEditorGui(Player target, Gui parent) {
         return new EditorGui(target, parent);
     }
 
@@ -49,16 +50,8 @@ public class NationQuestManager extends AQuestManager<QuestNation> {
         return Arrays.asList("&6&lNations", "&6Quests related to nations");
     }
 
-    protected class EditorGui extends AQuestManager<QuestNation>.EditorGui {
-
-        public EditorGui(Player player, Gui previousHolder) {
-            super(player, previousHolder);
-        }
-
-    }
-
     @Override
-    public Material getGuiMaterial() {
+    public @NotNull Material getGuiMaterial() {
         return Material.BRICKS;
     }
 
@@ -73,11 +66,19 @@ public class NationQuestManager extends AQuestManager<QuestNation> {
     }
 
     @Override
-    public Collection<String> getUsersArguments() {
+    public @NotNull Collection<String> getUsersArguments() {
         HashSet<String> names = new HashSet<>();
         for (Nation nation : TownyUniverse.getInstance().getNations())
             names.add(nation.getName());
         return names;
+    }
+
+    protected class EditorGui extends AQuestManager<QuestNation>.EditorGui {
+
+        public EditorGui(Player player, Gui previousHolder) {
+            super(player, previousHolder);
+        }
+
     }
 
 }

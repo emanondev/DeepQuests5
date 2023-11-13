@@ -72,7 +72,7 @@ public interface Quest<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasC
     boolean isDeveloped();
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    default List<String> getDisplayDescription(ArrayList<String> desc, T user, Player player) {
+    default @NotNull List<String> getDisplayDescription(ArrayList<String> desc, T user, Player player) {
 
         if (desc != null)
             for (int i = 0; i < desc.size(); i++) {
@@ -152,7 +152,7 @@ public interface Quest<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasC
     }
 
     @Override
-    default Material getGuiMaterial() {
+    default @NotNull Material getGuiMaterial() {
         return Material.KNOWLEDGE_BOOK;
     }
 
@@ -161,7 +161,7 @@ public interface Quest<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasC
         return new GuiElementButton<>(parent, this);
     }
 
-    QuestManager<T> getManager();
+    @NotNull QuestManager<T> getManager();
 
     void setDeveloped(boolean value);
 

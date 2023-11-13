@@ -16,6 +16,7 @@ import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.player.QuestPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,7 +64,7 @@ public class CMIPlayTimeRequireType extends ARequireType<QuestPlayer> {
                     / 60 > amountData.getAmount();
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.add("&9Required Time (minutes):");
             info.add(" &9- &e" + amountData.getAmount());
@@ -72,7 +73,7 @@ public class CMIPlayTimeRequireType extends ARequireType<QuestPlayer> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 

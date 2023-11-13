@@ -124,30 +124,6 @@ public class DataUtils {
         return Translations.translate(item.getType());
     }
 
-    private static class NPCModule {
-        private static <T extends User<T>, E extends QuestComponent<T>> String getNPCHolder(NPCData<T, E> data) {
-            StringBuilder txt = new StringBuilder("");
-            if (data.getNpcIds().isEmpty())
-                txt.append(Translations.translateAction("?"));
-            else {
-                if (!data.areNpcIdsWhitelist())
-                    txt.append(Translations.translateAction("any_npc_except") + " ");
-                List<Integer> list = new ArrayList<Integer>(data.getNpcIds());
-                for (int i = 0; i < list.size() - 2; i++) {
-                    NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(i));
-                    txt.append((npc == null ? "?" : npc.getFullName()) + ", ");
-                }
-                if (list.size() >= 2) {
-                    NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(list.size() - 2));
-                    txt.append((npc == null ? "?" : npc.getFullName()) + " " + Translations.translateConjunction("or") + " ");
-                }
-                NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(list.size() - 1));
-                txt.append(npc == null ? "?" : npc.getFullName());
-            }
-            return txt.toString();
-        }
-    }
-
     public static <T extends User<T>, E extends QuestComponent<T>> String getTargetHolder(TargetMissionData<T, E> data) {
         if (data.getMission() == null)
             return "?";
@@ -180,6 +156,30 @@ public class DataUtils {
     public static <T extends User<T>, E extends QuestComponent<T>> String getSkillAPIClassHolder(
             SkillAPIClassData<T, E> data) {
         return SkillAPIModule.getSkillAPIClassHolder(data);
+    }
+
+    private static class NPCModule {
+        private static <T extends User<T>, E extends QuestComponent<T>> String getNPCHolder(NPCData<T, E> data) {
+            StringBuilder txt = new StringBuilder("");
+            if (data.getNpcIds().isEmpty())
+                txt.append(Translations.translateAction("?"));
+            else {
+                if (!data.areNpcIdsWhitelist())
+                    txt.append(Translations.translateAction("any_npc_except") + " ");
+                List<Integer> list = new ArrayList<Integer>(data.getNpcIds());
+                for (int i = 0; i < list.size() - 2; i++) {
+                    NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(i));
+                    txt.append((npc == null ? "?" : npc.getFullName()) + ", ");
+                }
+                if (list.size() >= 2) {
+                    NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(list.size() - 2));
+                    txt.append((npc == null ? "?" : npc.getFullName()) + " " + Translations.translateConjunction("or") + " ");
+                }
+                NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(list.size() - 1));
+                txt.append(npc == null ? "?" : npc.getFullName());
+            }
+            return txt.toString();
+        }
     }
 
     private static class SkillAPIModule {

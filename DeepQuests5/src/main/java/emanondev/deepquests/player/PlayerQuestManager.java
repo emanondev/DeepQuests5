@@ -14,14 +14,15 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
 
 public class PlayerQuestManager extends AQuestManager<QuestPlayer> {
 
-    private final PlayerUserManager userManager;
     public final static String NAME = "players";
+    private final PlayerUserManager userManager;
 
     public PlayerQuestManager(String name, CorePlugin plugin) {
         super(name, plugin);
@@ -128,7 +129,7 @@ public class PlayerQuestManager extends AQuestManager<QuestPlayer> {
     }
 
     @Override
-    public Gui getEditorGui(Player target, Gui parent) {
+    public @NotNull Gui getEditorGui(Player target, Gui parent) {
         return new EditorGui(target, parent);
     }
 
@@ -137,16 +138,8 @@ public class PlayerQuestManager extends AQuestManager<QuestPlayer> {
         return Arrays.asList("&6&lPlayers", "&6Quests related to players");
     }
 
-    protected class EditorGui extends AQuestManager<QuestPlayer>.EditorGui {
-
-        public EditorGui(Player player, Gui previusHolder) {
-            super(player, previusHolder);
-        }
-
-    }
-
     @Override
-    public Material getGuiMaterial() {
+    public @NotNull Material getGuiMaterial() {
         return Material.PLAYER_HEAD;
     }
 
@@ -165,10 +158,18 @@ public class PlayerQuestManager extends AQuestManager<QuestPlayer> {
     }
 
     @Override
-    public Collection<String> getUsersArguments() {
+    public @NotNull Collection<String> getUsersArguments() {
         HashSet<String> names = new HashSet<>();
         for (Player p : Bukkit.getOnlinePlayers())
             names.add(p.getName());
         return names;
+    }
+
+    protected class EditorGui extends AQuestManager<QuestPlayer>.EditorGui {
+
+        public EditorGui(Player player, Gui previusHolder) {
+            super(player, previusHolder);
+        }
+
     }
 }

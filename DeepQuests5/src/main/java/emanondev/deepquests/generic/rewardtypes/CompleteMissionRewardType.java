@@ -18,10 +18,13 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class CompleteMissionRewardType<T extends User<T>> extends ARewardType<T> {
+    private final static String ID = "complete_mission";
+
     public CompleteMissionRewardType(QuestManager<T> manager) {
         super(ID, manager);
     }
@@ -30,8 +33,6 @@ public class CompleteMissionRewardType<T extends User<T>> extends ARewardType<T>
     protected boolean getStandardHiddenValue() {
         return true;
     }
-
-    private final static String ID = "complete_mission";
 
     @Override
     public Material getGuiMaterial() {
@@ -54,6 +55,20 @@ public class CompleteMissionRewardType<T extends User<T>> extends ARewardType<T>
         return new CompleteMissionReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<T> reward) {
+        if (!(reward instanceof CompleteMissionReward r))
+            return null;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:completed} &e{target}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+
+        }
+        return Translations.replaceAll(txt).replace("{target}", DataUtils.getTargetHolder(r.getTargetMissionData()));
+    }
+
     public class CompleteMissionReward extends AReward<T> {
         private final TargetMissionData<T, CompleteMissionReward> missionData;
 
@@ -63,7 +78,7 @@ public class CompleteMissionRewardType<T extends User<T>> extends ARewardType<T>
                     getConfig().loadSection(Paths.REWARD_INFO_TARGET_MISSION));
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(missionData.getInfo());
             return info;
@@ -89,7 +104,7 @@ public class CompleteMissionRewardType<T extends User<T>> extends ARewardType<T>
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -97,23 +112,9 @@ public class CompleteMissionRewardType<T extends User<T>> extends ARewardType<T>
 
             public GuiEditor(Player player, Gui previousHolder) {
                 super(player, previousHolder);
-                this.putButton(27, missionData.getMissionSelectorButton(this));
+                this.putButton(27, getTargetMissionData().getMissionSelectorButton(this));
             }
         }
-    }
-
-    @Override
-    public String getDefaultFeedback(Reward<T> reward) {
-        if (!(reward instanceof CompleteMissionReward r))
-            return null;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:completed} &e{target}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-
-        }
-        return Translations.replaceAll(txt).replace("{target}", DataUtils.getTargetHolder(r.getTargetMissionData()));
     }
 
 }

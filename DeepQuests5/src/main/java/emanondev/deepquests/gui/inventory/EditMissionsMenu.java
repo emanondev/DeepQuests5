@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class EditMissionsMenu<T extends User<T>> extends ListGui<EditMissionButton<T>> {
+    private final ArrayList<EditMissionButton<T>> rawMissionButtons = new ArrayList<>();
+
     public EditMissionsMenu(Player player, Gui previusHolder, Quest<T> quest, T user) {
         super(GuiConfig.Generic.getMissionsMenuTitle(player), 6, player, previusHolder, 1);
         if (user == null || quest == null)
@@ -20,8 +22,6 @@ public class EditMissionsMenu<T extends User<T>> extends ListGui<EditMissionButt
         Collections.sort(rawMissionButtons);
         updateInventory();
     }
-
-    private ArrayList<EditMissionButton<T>> rawMissionButtons = new ArrayList<>();
 
     public boolean updateInventory() {
         this.clearButtons();

@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Completer {
     public static final int MAX_COMPLETES = 75;
+    private static final String[] boolValues = new String[]{"true", "false"};
 
     /**
      * @param l         - where to put results
@@ -95,8 +96,6 @@ public class Completer {
         return;
 
     }
-
-    private static final String[] boolValues = new String[]{"true", "false"};
 
     public static void completeBoolean(ArrayList<String> l, String prefix) {
         complete(l, prefix, boolValues);

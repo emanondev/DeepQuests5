@@ -52,6 +52,18 @@ public class QuestItemData<T extends User<T>, E extends QuestComponent<T>> exten
         gui.putButton(slot + 9, new ItemDisplayButton(gui));
     }
 
+    public ArrayList<String> getInfo() {
+        ArrayList<String> info = new ArrayList<>();
+        if (id == null)
+            info.add("&9Item: &cnot setted");
+        else {
+            info.add("&9Item:");
+            info.add("  &9ID: &e" + id);
+            info.add("  &9Nick: &f" + ItemEdit.get().getServerStorage().getNick(id));
+        }
+        return info;
+    }
+
     private class ItemDisplayButton extends AButton {
 
         public ItemDisplayButton(Gui parent) {
@@ -117,18 +129,6 @@ public class QuestItemData<T extends User<T>, E extends QuestComponent<T>> exten
             return ItemEdit.get().getServerStorage().getIds();
         }
 
-    }
-
-    public ArrayList<String> getInfo() {
-        ArrayList<String> info = new ArrayList<>();
-        if (id == null)
-            info.add("&9Item: &cnot setted");
-        else {
-            info.add("&9Item:");
-            info.add("  &9ID: &e" + id);
-            info.add("  &9Nick: &f" + ItemEdit.get().getServerStorage().getNick(id));
-        }
-        return info;
     }
 
 }

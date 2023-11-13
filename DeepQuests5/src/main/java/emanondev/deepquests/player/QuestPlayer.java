@@ -7,6 +7,7 @@ import emanondev.deepquests.interfaces.UserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -31,7 +32,7 @@ public class QuestPlayer extends AUser<QuestPlayer> {
     }
 
     @Override
-    public Collection<Player> getPlayers() {
+    public @NotNull Collection<Player> getPlayers() {
         HashSet<Player> set = new HashSet<>();
         if (getPlayer() != null)
             set.add(getPlayer());
@@ -39,12 +40,12 @@ public class QuestPlayer extends AUser<QuestPlayer> {
     }
 
     @Override
-    public boolean canProgress(Task<QuestPlayer> task, Player player) {
+    public boolean canProgress(@NotNull Task<QuestPlayer> task, Player player) {
         return true;
     }
 
     @Override
-    public boolean canStart(Mission<QuestPlayer> mission, Player targetPlayer) {
+    public boolean canStart(@NotNull Mission<QuestPlayer> mission, Player targetPlayer) {
         return true;
     }
 

@@ -15,16 +15,17 @@ import emanondev.deepquests.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ConsoleCommandRewardType extends ARewardType<QuestNation> {
+    private final static String ID = "console_command";
+
     public ConsoleCommandRewardType(QuestManager<QuestNation> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "console_command";
 
     @Override
     public Material getGuiMaterial() {
@@ -42,6 +43,25 @@ public class ConsoleCommandRewardType extends ARewardType<QuestNation> {
         return new ConsoleCommandReward(id, manager, section);
     }
 
+    @Override
+    public String getDefaultFeedback(Reward<QuestNation> reward) {
+        if (!(reward instanceof ConsoleCommandReward r))
+            return null;
+        YMLSection config = getProvider().getTypeConfig(this);
+        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
+        if (txt == null) {
+            txt = "&a{action:console_execute} &e{command}";
+            config.set(Paths.REWARD_FEEDBACK, txt);
+
+        }
+        return Translations.replaceAll(txt).replace("{command}", DataUtils.getCommandHolder(r.getCommandData()));
+    }
+
+    @Override
+    protected boolean getStandardHiddenValue() {
+        return true;
+    }
+
     public class ConsoleCommandReward extends AReward<QuestNation> {
         private final CommandData<QuestNation, ConsoleCommandReward> cmdData;
 
@@ -51,7 +71,7 @@ public class ConsoleCommandRewardType extends ARewardType<QuestNation> {
                     getConfig().loadSection(Paths.REWARD_INFO_COMMAND));
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(cmdData.getInfo());
             return info;
@@ -73,7 +93,7 @@ public class ConsoleCommandRewardType extends ARewardType<QuestNation> {
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -84,24 +104,5 @@ public class ConsoleCommandRewardType extends ARewardType<QuestNation> {
                 this.putButton(27, cmdData.getCommandEditorButton(this));
             }
         }
-    }
-
-    @Override
-    public String getDefaultFeedback(Reward<QuestNation> reward) {
-        if (!(reward instanceof ConsoleCommandReward r))
-            return null;
-        YMLSection config = getProvider().getTypeConfig(this);
-        String txt = config.getString(Paths.REWARD_FEEDBACK, null);
-        if (txt == null) {
-            txt = "&a{action:console_execute} &e{command}";
-            config.set(Paths.REWARD_FEEDBACK, txt);
-
-        }
-        return Translations.replaceAll(txt).replace("{command}", DataUtils.getCommandHolder(r.getCommandData()));
-    }
-
-    @Override
-    protected boolean getStandardHiddenValue() {
-        return true;
     }
 }

@@ -62,6 +62,47 @@ public class ItemStackData<T extends User<T>, E extends QuestComponent<T>> exten
         gui.putButton(slot + 9, new ItemDisplayButton(gui));
     }
 
+    public ArrayList<String> getInfo() {
+        ArrayList<String> info = new ArrayList<>();
+        if (item == null)
+            info.add("&9Item: &cnot setted");
+        else {
+            info.add("&9Item:");
+            info.add("  &9Type: &e" + item.getType());
+            if (item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta.hasDisplayName())
+                    info.add("  &9Title: &f" + meta.getDisplayName());
+                if (meta.hasLore()) {
+                    info.add("  &9Lore:");
+                    for (String str : meta.getLore()) {
+                        info.add("    &5" + str);
+                    }
+                }
+                if (meta.hasEnchants()) {
+                    info.add("  &9Enchants:");
+                    meta.getEnchants().forEach((ench, lv) -> info.add("    &e" + ench.getKey().getKey() + " &9lv &e" + lv));
+                }
+                if (meta.isUnbreakable())
+                    info.add("  &9Unbreakable: &etrue");
+                meta.getItemFlags();
+                if (!meta.getItemFlags().isEmpty()) {
+                    info.add("  &9Flags:");
+                    meta.getItemFlags().forEach((flag) -> info.add("    &e" + flag));
+                }
+                if (meta instanceof SkullMeta && ((SkullMeta) meta).hasOwner()) {
+                    info.add("  &9Skull Owner: &e" + ((SkullMeta) meta).getOwningPlayer().getName());
+                }
+                if (meta instanceof Damageable) {
+                    int damage = ((Damageable) meta).getDamage();
+                    if (damage > 0)
+                        info.add("  &9Damage: &e" + damage);
+                }
+            }
+        }
+        return info;
+    }
+
     private class ItemDisplayButton extends AButton {
 
         public ItemDisplayButton(Gui parent) {
@@ -122,47 +163,6 @@ public class ItemStackData<T extends User<T>, E extends QuestComponent<T>> exten
                     getButtonDescription(), null, true);
         }
 
-    }
-
-    public ArrayList<String> getInfo() {
-        ArrayList<String> info = new ArrayList<>();
-        if (item == null)
-            info.add("&9Item: &cnot setted");
-        else {
-            info.add("&9Item:");
-            info.add("  &9Type: &e" + item.getType());
-            if (item.hasItemMeta()) {
-                ItemMeta meta = item.getItemMeta();
-                if (meta.hasDisplayName())
-                    info.add("  &9Title: &f" + meta.getDisplayName());
-                if (meta.hasLore()) {
-                    info.add("  &9Lore:");
-                    for (String str : meta.getLore()) {
-                        info.add("    &5" + str);
-                    }
-                }
-                if (meta.hasEnchants()) {
-                    info.add("  &9Enchants:");
-                    meta.getEnchants().forEach((ench, lv) -> info.add("    &e" + ench.getKey().getKey() + " &9lv &e" + lv));
-                }
-                if (meta.isUnbreakable())
-                    info.add("  &9Unbreakable: &etrue");
-                meta.getItemFlags();
-                if (!meta.getItemFlags().isEmpty()) {
-                    info.add("  &9Flags:");
-                    meta.getItemFlags().forEach((flag) -> info.add("    &e" + flag));
-                }
-                if (meta instanceof SkullMeta && ((SkullMeta) meta).hasOwner()) {
-                    info.add("  &9Skull Owner: &e" + ((SkullMeta) meta).getOwningPlayer().getName());
-                }
-                if (meta instanceof Damageable) {
-                    int damage = ((Damageable) meta).getDamage();
-                    if (damage > 0)
-                        info.add("  &9Damage: &e" + damage);
-                }
-            }
-        }
-        return info;
     }
 
 }

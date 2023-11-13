@@ -1,6 +1,7 @@
 package emanondev.deepquests.gui.button;
 
 import emanondev.deepquests.gui.inventory.PagedGui;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class APagedButton extends AButton implements PagedButton {
 
@@ -9,7 +10,7 @@ public abstract class APagedButton extends AButton implements PagedButton {
     }
 
     @Override
-    public PagedGui getGui() {
+    public @NotNull PagedGui getGui() {
         return (PagedGui) super.getGui();
     }
 

@@ -94,6 +94,75 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
             return !groups.contains(group);
     }
 
+    public void toggleRPGClassWhitelist() {
+        classesIsWhitelist = !classesIsWhitelist;
+        getConfig().set(Paths.DATA_SKILLAPI_CLASSES_IS_WHITELIST, classesIsWhitelist);
+    }
+
+    public void toggleGroupWhitelist() {
+        groupsIsWhitelist = !groupsIsWhitelist;
+        getConfig().set(Paths.DATA_SKILLAPI_GROUPS_IS_WHITELIST, groupsIsWhitelist);
+    }
+
+    public Button getGroupButton(Gui gui) {
+        return new GroupButton(gui);
+    }
+
+    public Button getRPGClassButton(Gui gui) {
+        return new RPGClassButton(gui);
+    }
+
+    public ArrayList<String> getInfo() {
+        ArrayList<String> info = new ArrayList<String>();
+        if (classes.isEmpty() && groups.isEmpty())
+            info.add("&9Any Class is &aAllowed");
+        else if (classes.isEmpty()) {
+            info.add("&9Any Class from Enabled Groups is &aAllowed:");
+            info.add("&9Enabled Groups are:");
+            for (String group : SkillAPI.getGroups())
+                if (isValidGroup(group))
+                    info.add("&9  - &a" + group);
+        } else {
+            info.add("&aAllowed &9Classes:");
+            for (RPGClass clazz : SkillAPI.getClasses().values())
+                if (isValidRPGClass(clazz))
+                    info.add("&9  - &a" + clazz.getName());
+        }
+        return info;
+    }
+
+    public Set<RPGClass> getRPGClasses() {
+        LinkedHashSet<RPGClass> set = new LinkedHashSet<>();
+        for (RPGClass clazz : SkillAPI.getClasses().values())
+            if (isValidRPGClass(clazz))
+                set.add(clazz);
+        return set;
+    }
+
+    public Set<String> getGroups() {
+        LinkedHashSet<String> set = new LinkedHashSet<>();
+        for (String group : SkillAPI.getGroups())
+            if (isValidGroup(group))
+                set.add(group);
+        return set;
+    }
+
+    public Set<RPGClass> getStoredRPGClasses() {
+        return Collections.unmodifiableSet(classes);
+    }
+
+    public Set<String> getStoredGroups() {
+        return Collections.unmodifiableSet(groups);
+    }
+
+    public boolean getStoredClassesIsWhitelist() {
+        return classesIsWhitelist;
+    }
+
+    public boolean getStoredGroupsIsWhitelist() {
+        return groupsIsWhitelist;
+    }
+
     private class RPGClassButton extends CollectionSelectorButton<RPGClass> {
 
         public RPGClassButton(Gui parent) {
@@ -172,16 +241,6 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         }
     }
 
-    public void toggleRPGClassWhitelist() {
-        classesIsWhitelist = !classesIsWhitelist;
-        getConfig().set(Paths.DATA_SKILLAPI_CLASSES_IS_WHITELIST, classesIsWhitelist);
-    }
-
-    public void toggleGroupWhitelist() {
-        groupsIsWhitelist = !groupsIsWhitelist;
-        getConfig().set(Paths.DATA_SKILLAPI_GROUPS_IS_WHITELIST, groupsIsWhitelist);
-    }
-
     private class GroupButton extends CollectionSelectorButton<String> {
 
         public GroupButton(Gui parent) {
@@ -255,64 +314,5 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
             toggleGroupWhitelist();
             return true;
         }
-    }
-
-    public Button getGroupButton(Gui gui) {
-        return new GroupButton(gui);
-    }
-
-    public Button getRPGClassButton(Gui gui) {
-        return new RPGClassButton(gui);
-    }
-
-    public ArrayList<String> getInfo() {
-        ArrayList<String> info = new ArrayList<String>();
-        if (classes.isEmpty() && groups.isEmpty())
-            info.add("&9Any Class is &aAllowed");
-        else if (classes.isEmpty()) {
-            info.add("&9Any Class from Enabled Groups is &aAllowed:");
-            info.add("&9Enabled Groups are:");
-            for (String group : SkillAPI.getGroups())
-                if (isValidGroup(group))
-                    info.add("&9  - &a" + group);
-        } else {
-            info.add("&aAllowed &9Classes:");
-            for (RPGClass clazz : SkillAPI.getClasses().values())
-                if (isValidRPGClass(clazz))
-                    info.add("&9  - &a" + clazz.getName());
-        }
-        return info;
-    }
-
-    public Set<RPGClass> getRPGClasses() {
-        LinkedHashSet<RPGClass> set = new LinkedHashSet<>();
-        for (RPGClass clazz : SkillAPI.getClasses().values())
-            if (isValidRPGClass(clazz))
-                set.add(clazz);
-        return set;
-    }
-
-    public Set<String> getGroups() {
-        LinkedHashSet<String> set = new LinkedHashSet<>();
-        for (String group : SkillAPI.getGroups())
-            if (isValidGroup(group))
-                set.add(group);
-        return set;
-    }
-
-    public Set<RPGClass> getStoredRPGClasses() {
-        return Collections.unmodifiableSet(classes);
-    }
-
-    public Set<String> getStoredGroups() {
-        return Collections.unmodifiableSet(groups);
-    }
-
-    public boolean getStoredClassesIsWhitelist() {
-        return classesIsWhitelist;
-    }
-
-    public boolean getStoredGroupsIsWhitelist() {
-        return groupsIsWhitelist;
     }
 }

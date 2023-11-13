@@ -28,7 +28,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
     private final Map<Integer, Require<T>> requires = new HashMap<>();
     private boolean isDeveloped;
 
-    public AQuest(int id, QuestManager<T> manager, YMLSection section) {
+    public AQuest(int id,@NotNull QuestManager<T> manager,@NotNull YMLSection section) {
         super(id, section, manager);
         isDeveloped = getConfig().getBoolean(Paths.QUEST_IS_DEVELOPED, false);
         displayInfo = new QuestDisplayInfo<>(getConfig().loadSection(Paths.QUESTCOMPONENT_DISPLAY_INFO), this);
@@ -41,12 +41,12 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
     }
 
     @Override
-    public Gui getEditorGui(Player target, Gui parent) {
+    public @NotNull Gui getEditorGui(Player target, Gui parent) {
         return new AQuestGuiEditor(target, parent);
     }
 
     @Override
-    public List<String> getInfo() {
+    public @NotNull List<String> getInfo() {
         List<String> info = new ArrayList<>();
         info.add("&9&lQuest: &6" + this.getDisplayName());
         info.add("&8ID: " + this.getID());

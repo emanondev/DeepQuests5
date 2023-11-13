@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
+    private final static String ID = "deliver_quest_item_to_npc";
+
     public DeliverQuestItemTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "deliver_quest_item_to_npc";
 
     @Override
     public Material getGuiMaterial() {
@@ -50,10 +50,7 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
         QuestBag<T> bag = user.getQuestBag();
         if (bag == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             DeliverQuestItemTask task = (DeliverQuestItemTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.npcData.isValidNPC(event.getNPC())) {
                 if (task.getQuestItemData().getQuestItemID() == null)
@@ -65,52 +62,6 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
                 if (removedAmount > 0) {
                     task.onProgress(user, removedAmount, p, false);
                 }
-            }
-        }
-    }
-
-    public class DeliverQuestItemTask extends ATask<T> {
-
-        private final NPCData<T, DeliverQuestItemTask> npcData;
-        private final QuestItemData<T, DeliverQuestItemTask> itemData;
-
-        public DeliverQuestItemTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, DeliverQuestItemTaskType.this, section);
-            npcData = new NPCData<>(this, getConfig().loadSection(Paths.TASK_INFO_NPCDATA));
-            itemData = new QuestItemData<>(this,
-                    getConfig().loadSection(Paths.TASK_INFO_ITEM));
-        }
-
-        public NPCData<T, DeliverQuestItemTask> getNPCData() {
-            return npcData;
-        }
-
-        public QuestItemData<T, DeliverQuestItemTask> getQuestItemData() {
-            return itemData;
-        }
-
-        public @NotNull DeliverQuestItemTaskType<T> getType() {
-            return DeliverQuestItemTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            info.addAll(npcData.getInfo());
-            info.addAll(itemData.getInfo());
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                itemData.setupButtons(this, 27);
-                this.putButton(28, npcData.getNPCSelectorButton(this));
             }
         }
     }
@@ -165,6 +116,52 @@ public class DeliverQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
         }
         return Translations.replaceAll(txt).replace("{npcs}", DataUtils.getNPCHolder(t.getNPCData())).replace("{items}",
                 t.getQuestItemData().getQuestItemNick());
+    }
+
+    public class DeliverQuestItemTask extends ATask<T> {
+
+        private final NPCData<T, DeliverQuestItemTask> npcData;
+        private final QuestItemData<T, DeliverQuestItemTask> itemData;
+
+        public DeliverQuestItemTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, DeliverQuestItemTaskType.this, section);
+            npcData = new NPCData<>(this, getConfig().loadSection(Paths.TASK_INFO_NPCDATA));
+            itemData = new QuestItemData<>(this,
+                    getConfig().loadSection(Paths.TASK_INFO_ITEM));
+        }
+
+        public NPCData<T, DeliverQuestItemTask> getNPCData() {
+            return npcData;
+        }
+
+        public QuestItemData<T, DeliverQuestItemTask> getQuestItemData() {
+            return itemData;
+        }
+
+        public @NotNull DeliverQuestItemTaskType<T> getType() {
+            return DeliverQuestItemTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            info.addAll(npcData.getInfo());
+            info.addAll(itemData.getInfo());
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                itemData.setupButtons(this, 27);
+                this.putButton(28, npcData.getNPCSelectorButton(this));
+            }
+        }
     }
 
 }

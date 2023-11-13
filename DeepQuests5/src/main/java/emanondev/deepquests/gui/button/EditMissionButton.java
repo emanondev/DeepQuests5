@@ -18,6 +18,7 @@ import java.util.*;
 public class EditMissionButton<T extends User<T>> extends QuestComponentButton<Mission<T>> {
     private final T user;
     private DisplayState state;
+    private Player clicker = null;
 
     public EditMissionButton(Gui parent, Mission<T> questComponent, T user) {
         super(parent, questComponent);
@@ -46,10 +47,32 @@ public class EditMissionButton<T extends User<T>> extends QuestComponentButton<M
         clicker.openInventory(new EditTasksMenu<>(getTargetPlayer(), getGui(), getQuestComponent(), user).getInventory());
     }
 
-    private Player clicker = null;
-
     public T getUser() {
         return user;
+    }
+
+    public void handle(ActionType element) {
+        switch (element) {
+            case COMPLETE:
+                getUser().completeMission(getQuestComponent());
+                break;
+            case ERASE:
+                getUser().eraseMissionData(getQuestComponent());
+                break;
+            case FAIL:
+                getUser().failMission(getQuestComponent());
+                break;
+            case RESET:
+                getUser().resetMission(getQuestComponent());
+                break;
+            case START:
+                getUser().resetMission(getQuestComponent());
+                getUser().startMission(getQuestComponent(), null, true);
+                break;
+        }
+        this.getGui().updateInventory();
+        if (clicker != null)
+            clicker.openInventory(getGui().getInventory());
     }
 
     private enum ActionType {
@@ -173,29 +196,5 @@ public class EditMissionButton<T extends User<T>> extends QuestComponentButton<M
             return set;
         }
 
-    }
-
-    public void handle(ActionType element) {
-        switch (element) {
-            case COMPLETE:
-                getUser().completeMission(getQuestComponent());
-                break;
-            case ERASE:
-                getUser().eraseMissionData(getQuestComponent());
-                break;
-            case FAIL:
-                getUser().failMission(getQuestComponent());
-                break;
-            case RESET:
-                getUser().resetMission(getQuestComponent());
-                break;
-            case START:
-                getUser().resetMission(getQuestComponent());
-                getUser().startMission(getQuestComponent(), null, true);
-                break;
-        }
-        this.getGui().updateInventory();
-        if (clicker != null)
-            clicker.openInventory(getGui().getInventory());
     }
 }

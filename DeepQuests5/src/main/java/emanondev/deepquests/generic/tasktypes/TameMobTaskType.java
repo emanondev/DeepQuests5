@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
+    private final static String ID = "tame_mob";
+
     public TameMobTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "tame_mob";
 
     @Override
     public Material getGuiMaterial() {
@@ -50,52 +50,10 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
         T user = getManager().getUserManager().getUser(p);
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             TameMobTask task = (TameMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidEntity(event.getEntity())) {
                 task.onProgress(user, 1, p, false);
-            }
-        }
-    }
-
-    public class TameMobTask extends ATask<T> {
-
-        private final EntityData<T, TameMobTask> entityData;
-
-        public TameMobTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, TameMobTaskType.this, section);
-            entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
-        }
-
-        public EntityData<T, TameMobTask> getEntityData() {
-            return entityData;
-        }
-
-        public @NotNull TameMobTaskType<T> getType() {
-            return TameMobTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            info.addAll(entityData.getInfo());
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                this.putButton(27, entityData.getEntityTypeButton(this));
-                this.putButton(28, entityData.getSpawnReasonButton(this));
-                this.putButton(36, entityData.getIgnoreNPCFlagButton(this));
             }
         }
     }
@@ -147,6 +105,45 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt).replace("{entities}", DataUtils.getEntityHolder(t.getEntityData()));
+    }
+
+    public class TameMobTask extends ATask<T> {
+
+        private final EntityData<T, TameMobTask> entityData;
+
+        public TameMobTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, TameMobTaskType.this, section);
+            entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
+        }
+
+        public EntityData<T, TameMobTask> getEntityData() {
+            return entityData;
+        }
+
+        public @NotNull TameMobTaskType<T> getType() {
+            return TameMobTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            info.addAll(entityData.getInfo());
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                this.putButton(27, getEntityData().getEntityTypeButton(this));
+                this.putButton(28, getEntityData().getSpawnReasonButton(this));
+                this.putButton(36, getEntityData().getIgnoreNPCFlagButton(this));
+            }
+        }
     }
 
 }

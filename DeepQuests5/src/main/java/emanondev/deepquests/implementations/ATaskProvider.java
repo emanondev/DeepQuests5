@@ -20,6 +20,7 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     private final QuestManager<T> manager;
     private final Map<String, TaskType<T>> types = new LinkedHashMap<>();
     private final YMLConfig config;
+    private final Permission editPermission;
 
     public ATaskProvider(QuestManager<T> manager) {
         if (manager == null)
@@ -69,8 +70,6 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
         editPermission.getChildren().put(type.getEditorPermission().getName(), true);
         this.getManager().getPlugin().registerPermission(editPermission);
     }
-
-    private final Permission editPermission;
 
     @Override
     public Collection<TaskType<T>> getTypes() {

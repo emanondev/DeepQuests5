@@ -11,19 +11,6 @@ public interface PlayerInfo {
 
     void setProgressBarType(ProgressBarType type);
 
-    enum ProgressBarType {
-        BOSSBAR,
-        NONE,
-        ACTIONBAR
-    }
-
-    enum ProgressBarStyle {
-        NUMERIC,
-        BAR_10,
-        BAR_20
-    }
-
-
     Player getPlayer();
 
     OfflinePlayer getOfflinePlayer();
@@ -39,5 +26,17 @@ public interface PlayerInfo {
     ProgressBarStyle getProgressBarStyle();
 
     void setProgressBarStyle(ProgressBarStyle style);
+
+    enum ProgressBarType {
+        BOSSBAR,
+        NONE,
+        ACTIONBAR
+    }
+
+    enum ProgressBarStyle {
+        NUMERIC,
+        BAR_10,
+        BAR_20
+    }
 
 }

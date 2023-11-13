@@ -139,30 +139,6 @@ public class Translations {
         return defaultName;
     }
 
-    public static class Command {
-
-        private static void reload() {
-            PLAYERS_ONLY = read("players-only", ChatColor.RED + "Command for players only");
-            LACK_PERMISSION = read("lack-permission", ChatColor.RED + "You lack of permission " + Holders.PERMISSION);
-            NOT_IMPLEMENTED = read("not-implemented", ChatColor.RED + "This is not implemented yet");
-            SUCCESS = read("success", ChatColor.GREEN + "Command successfully executed");
-            FAIL = read("fail", ChatColor.RED + "Command generated errors");
-
-        }
-
-        private static String read(String path, String defaultName) {
-            return Translations.read("command." + path, defaultName);
-        }
-
-        public static String PLAYERS_ONLY = read("players-only", ChatColor.RED + "Command for players only");
-        public static String LACK_PERMISSION = read("lack-permission", ChatColor.RED + "You lack of permission " + Holders.PERMISSION);
-        public static String NOT_IMPLEMENTED = read("not-implemented", ChatColor.RED + "This is not implemented yet");
-        public static String SUCCESS = read("success", ChatColor.GREEN + "Command successfully executed");
-        public static String FAIL = read("fail", ChatColor.RED + "Command generated errors");
-        public static String RELOAD = read("reload", ChatColor.GREEN + "Plugin Reloaded");
-
-    }
-
     public static String translateMythicMob(String internalName) {
         return getOrRead(mythicMobs, internalName, "mythic_mobs", internalName);
     }
@@ -201,5 +177,29 @@ public class Translations {
             base = base.replace("{conjun:" + conj + "}", Translations.translateConjunction(conj));
         }
         return base;
+    }
+
+    public static class Command {
+
+        public static String PLAYERS_ONLY = read("players-only", ChatColor.RED + "Command for players only");
+        public static String LACK_PERMISSION = read("lack-permission", ChatColor.RED + "You lack of permission " + Holders.PERMISSION);
+        public static String NOT_IMPLEMENTED = read("not-implemented", ChatColor.RED + "This is not implemented yet");
+        public static String SUCCESS = read("success", ChatColor.GREEN + "Command successfully executed");
+        public static String FAIL = read("fail", ChatColor.RED + "Command generated errors");
+        public static String RELOAD = read("reload", ChatColor.GREEN + "Plugin Reloaded");
+
+        private static void reload() {
+            PLAYERS_ONLY = read("players-only", ChatColor.RED + "Command for players only");
+            LACK_PERMISSION = read("lack-permission", ChatColor.RED + "You lack of permission " + Holders.PERMISSION);
+            NOT_IMPLEMENTED = read("not-implemented", ChatColor.RED + "This is not implemented yet");
+            SUCCESS = read("success", ChatColor.GREEN + "Command successfully executed");
+            FAIL = read("fail", ChatColor.RED + "Command generated errors");
+
+        }
+
+        private static String read(String path, String defaultName) {
+            return Translations.read("command." + path, defaultName);
+        }
+
     }
 }

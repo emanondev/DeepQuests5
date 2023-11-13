@@ -130,7 +130,7 @@ public interface User<T extends User<T>> extends Navigable {
      * @throws NullPointerException     if quest is null
      * @throws IllegalArgumentException if quest manager is unequal to this manager
      */
-    default void resetQuest(Quest<T> quest) {
+    default void resetQuest(@NotNull Quest<T> quest) {
         getQuestData(quest).reset();
     }
 
@@ -141,7 +141,7 @@ public interface User<T extends User<T>> extends Navigable {
      * @throws NullPointerException     if task is null
      * @throws IllegalArgumentException if task manager is unequal to this manager
      */
-    default void resetTask(Task<T> task) {
+    default void resetTask(@NotNull Task<T> task) {
         getTaskData(task).reset();
     }
 
@@ -154,7 +154,7 @@ public interface User<T extends User<T>> extends Navigable {
      * @throws NullPointerException if player is null
      * @throws NullPointerException if quest is null
      */
-    default boolean canSee(Player player, Quest<T> quest) {
+    default boolean canSee(@NotNull Player player, @NotNull Quest<T> quest) {
         return// quest.isWorldAllowed(player.getWorld()) &&
                 Quests.get().getPlayerInfo(player).canSeeQuestState(getDisplayState(quest)) && (quest.isDeveloped() || player.hasPermission(Perms.ADMIN_EDITOR));
     }//TODO check displayinfo of quest?
@@ -169,7 +169,7 @@ public interface User<T extends User<T>> extends Navigable {
      * @throws NullPointerException if player is null
      * @throws NullPointerException if mission is null
      */
-    default boolean canSee(Player player, Mission<T> mission) {
+    default boolean canSee(@NotNull Player player, @NotNull Mission<T> mission) {
         return (mission.getQuest().isDeveloped() || player.hasPermission(Perms.ADMIN_EDITOR)) && Quests.get().getPlayerInfo(player).canSeeMissionState(getDisplayState(mission));
     }
 
@@ -180,9 +180,7 @@ public interface User<T extends User<T>> extends Navigable {
      * @return progress of selected task for this
      * @throws NullPointerException if task is null
      */
-    default int getTaskProgress(Task<T> task) {
-        if (task == null)
-            throw new NullPointerException();
+    default int getTaskProgress(@NotNull Task<T> task) {
         return getTaskData(task).getProgress();
     }
 
@@ -190,10 +188,9 @@ public interface User<T extends User<T>> extends Navigable {
      * Mark quest as completed for this.
      * Also call {@link QuestCompleteEvent}
      *
-     * @param quest
      * @return true
      */
-    default boolean completeQuest(Quest<T> quest) {
+    default boolean completeQuest(@NotNull Quest<T> quest) {
         QuestData<T> data = getQuestData(quest);
         Bukkit.getPluginManager().callEvent(new QuestCompleteEvent<>((T) this, quest));
         data.complete();
@@ -204,10 +201,9 @@ public interface User<T extends User<T>> extends Navigable {
      * Mark quest as failed for this.
      * Also call {@link QuestFailEvent}
      *
-     * @param quest
      * @return true
      */
-    default boolean failQuest(Quest<T> quest) {
+    default boolean failQuest(@NotNull Quest<T> quest) {
         QuestData<T> data = getQuestData(quest);
         Bukkit.getPluginManager().callEvent(new QuestFailEvent<>((T) this, quest));
         data.fail();
@@ -225,7 +221,7 @@ public interface User<T extends User<T>> extends Navigable {
      * @param skipPlayerCheck should skip restriction applicable on player?
      * @return validated progress amount
      */
-    default int progressTask(Task<T> task, int amount, Player player, boolean skipPlayerCheck) {
+    default int progressTask(@NotNull Task<T> task, int amount, @Nullable Player player, boolean skipPlayerCheck) {
         if (!skipPlayerCheck && player != null && !canProgress(task, player))
             return 0;
         TaskData<T> data = getTaskData(task);
@@ -278,25 +274,18 @@ public interface User<T extends User<T>> extends Navigable {
 
     /**
      * Sets selected task as inactive.
-     *
-     * @param task
      */
-    void unregister(Task<?> task);
+    void unregister(@NotNull Task<?> task);
 
     /**
-     * @param task
-     * @param player
      * @return true if player can progress on task
      */
-    boolean canProgress(Task<T> task, Player player);
+    boolean canProgress(@NotNull Task<T> task, @Nullable Player player);
 
     /**
      * Also call {@link MissionCompleteEvent} if mission is started
-     *
-     * @param mission
-     * @return
      */
-    default boolean completeMission(Mission<T> mission) {
+    default boolean completeMission(@NotNull Mission<T> mission) {
         MissionData<T> missionData = getMissionData(mission);
         if (!missionData.isStarted())
             return false;
@@ -318,11 +307,8 @@ public interface User<T extends User<T>> extends Navigable {
 
     /**
      * call {@link MissionFailEvent}
-     *
-     * @param mission
-     * @return
      */
-    default boolean failMission(Mission<T> mission) {
+    default boolean failMission(@NotNull Mission<T> mission) {
         MissionData<T> missionData = getMissionData(mission);
         if (missionData.isFailed())
             return false;
@@ -342,11 +328,8 @@ public interface User<T extends User<T>> extends Navigable {
 
     /**
      * call {@link MissionStartEvent}
-     *
-     * @param mission
-     * @return
      */
-    default boolean startMission(Mission<T> mission, Player player, boolean forcedStart) {
+    default boolean startMission(@NotNull Mission<T> mission, @Nullable Player player, boolean forcedStart) {
         MissionData<T> missionData = getMissionData(mission);
         if (!forcedStart && !canStart(mission, player))
             return false;
@@ -376,11 +359,8 @@ public interface User<T extends User<T>> extends Navigable {
      * if Mission isFailed return FAILED<br>
      * if user satisfy requires for Mission return UNSTARTED<br>
      * else return LOCKED
-     *
-     * @param mission
-     * @return
      */
-    default DisplayState getDisplayState(Mission<T> mission) {
+    default @NotNull DisplayState getDisplayState(@NotNull Mission<T> mission) {
         MissionData<T> data = getMissionData(mission);
         if (data.isStarted())
             return DisplayState.ONPROGRESS;
@@ -399,10 +379,9 @@ public interface User<T extends User<T>> extends Navigable {
     }
 
     /**
-     * @param mission
      * @return true if user satisfy all requires of mission
      */
-    default boolean hasRequires(Mission<T> mission) {
+    default boolean hasRequires(@NotNull Mission<T> mission) {
         for (Require<T> require : mission.getRequires()) {
             if (!require.isAllowed((T) this))
                 return false;
@@ -411,7 +390,6 @@ public interface User<T extends User<T>> extends Navigable {
     }
 
     /**
-     * @param quest
      * @return in ordine di checks <br>
      * se la Quest è dichiarata Completata ritorna COMPLETED <br>
      * se la Quest è dichiarata Fallita ritorna FAILED <br>
@@ -429,7 +407,7 @@ public interface User<T extends User<T>> extends Navigable {
      * <br>
      * altrimenti è ONPROGRESS
      */
-    default DisplayState getDisplayState(Quest<T> quest) {
+    default @NotNull DisplayState getDisplayState(@NotNull Quest<T> quest) {
         QuestData<T> data = getQuestData(quest);
         if (data.isCompleted())
             return DisplayState.COMPLETED;
@@ -472,10 +450,9 @@ public interface User<T extends User<T>> extends Navigable {
     }
 
     /**
-     * @param quest
      * @return true if user satisfy all requires of quest
      */
-    default boolean hasRequires(Quest<T> quest) {
+    default boolean hasRequires(@NotNull Quest<T> quest) {
         for (Require<T> require : quest.getRequires()) {
             if (!require.isAllowed((T) this))
                 return false;
@@ -484,10 +461,9 @@ public interface User<T extends User<T>> extends Navigable {
     }
 
     /**
-     * @param quest - target quest
      * @return a map with the amount of DisplayStatus of Mission of the quest
      */
-    default EnumMap<DisplayState, Integer> getMissionsStates(Quest<T> quest) {
+    default @NotNull EnumMap<DisplayState, Integer> getMissionsStates(@NotNull Quest<T> quest) {
         EnumMap<DisplayState, Integer> values = new EnumMap<>(DisplayState.class);
         for (DisplayState state : DisplayState.values())
             values.put(state, 0);
@@ -500,38 +476,31 @@ public interface User<T extends User<T>> extends Navigable {
 
     /**
      * set inactive all missions and tasks of the quest for this
-     *
-     * @param quest
      */
-    default void unregister(Quest<?> quest) {
+    default void unregister(@NotNull Quest<?> quest) {
         for (Mission<?> mission : quest.getMissions())
             unregister(mission);
     }
 
     /**
      * set the mission active for this
-     *
-     * @param mission
      */
-    void register(Mission<T> mission);
+    void register(@NotNull Mission<T> mission);
 
     /**
      * set inactive the mission and it's tasks for this
-     *
-     * @param mission
      */
-    void unregister(Mission<?> mission);
+    void unregister(@NotNull Mission<?> mission);
 
     /**
-     * @param type
      * @return active quest of selected type
      */
-    List<Task<T>> getActiveTasks(TaskType<T> type);
+    @NotNull List<Task<T>> getActiveTasks(@NotNull TaskType<T> type);
 
     /**
      * @return players linked to user
      */
-    Collection<Player> getPlayers();
+    @NotNull Collection<Player> getPlayers();
 
     /**
      * @return questpoints of this
@@ -541,11 +510,10 @@ public interface User<T extends User<T>> extends Navigable {
     void setPoints(int amount);
 
     /**
-     * @param mission
      * @param starter - might be null
      * @return true if starter is allowed to start mission for this
      */
-    boolean canStart(Mission<T> mission, Player starter);
+    boolean canStart(@NotNull Mission<T> mission, @Nullable Player starter);
 
     /**
      * @return the amount of missions currently active for this
@@ -565,21 +533,20 @@ public interface User<T extends User<T>> extends Navigable {
     /**
      * @param limit - if null restore default value from userManager
      */
-    void setActiveMissionAmountLimit(Integer limit);
+    void setActiveMissionAmountLimit(@Nullable Integer limit);
 
     /**
-     * @param mission
      * @return true if currently active missions are not beyond the limit
      */
-    default boolean canRegister(Mission<T> mission) {
+    default boolean canRegister(@NotNull Mission<T> mission) {
         return this.getActiveMissionAmountLimit() > this.getActiveMissionAmount();
     }
 
-    Collection<QuestData<T>> getQuestDatas();
+    @NotNull Collection<QuestData<T>> getQuestDatas();
 
-    Collection<MissionData<T>> getMissionDatas();
+    @NotNull Collection<MissionData<T>> getMissionDatas();
 
-    Collection<TaskData<T>> getTaskDatas();
+    @NotNull Collection<TaskData<T>> getTaskDatas();
 
     default void saveOnDisk() {
         getUserManager().saveUser((T) this);

@@ -6,8 +6,8 @@ import emanondev.deepquests.interfaces.User;
 
 public abstract class AUserData<T extends User<T>> implements Navigable {
 
-    private final T user;
     protected final YMLSection section;
+    private final T user;
 
     public AUserData(T user, YMLSection section) {
         if (user == null || section == null)

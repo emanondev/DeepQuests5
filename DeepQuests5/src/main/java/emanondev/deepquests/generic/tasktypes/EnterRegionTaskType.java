@@ -24,11 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnterRegionTaskType<T extends User<T>> extends ATaskType<T> {
+    private final static String ID = "enter_region";
+
     public EnterRegionTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "enter_region";
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     private void onRegionEnter(RegionEnteredEvent event) {
@@ -36,51 +36,10 @@ public class EnterRegionTaskType<T extends User<T>> extends ATaskType<T> {
         T user = getManager().getUserManager().getUser(p);
         if (user == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             EnterRegionTask task = (EnterRegionTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.regionInfo.isValidRegion(event.getRegion())) {
                 task.onProgress(user, 1, p, false);
-            }
-        }
-    }
-
-    public class EnterRegionTask extends ATask<T> {
-        private final RegionsData<T, EnterRegionTask> regionInfo;
-
-        public EnterRegionTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, EnterRegionTaskType.this, section);
-            regionInfo = new RegionsData<>(this,
-                    getConfig().loadSection(Paths.TASK_INFO_REGIONSDATA));
-        }
-
-        public RegionsData<T, EnterRegionTask> getRegionsData() {
-            return regionInfo;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            info.addAll(regionInfo.getInfo());
-            return info;
-        }
-
-        @Override
-        public @NotNull EnterRegionTaskType<T> getType() {
-            return EnterRegionTaskType.this;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previusHolder) {
-                super(player, previusHolder);
-                this.putButton(27, regionInfo.getRegionSelectorButton(this));
             }
         }
     }
@@ -142,5 +101,43 @@ public class EnterRegionTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt).replace("{regions}", DataUtils.getRegionHolder(t.getRegionsData()));
+    }
+
+    public class EnterRegionTask extends ATask<T> {
+        private final RegionsData<T, EnterRegionTask> regionInfo;
+
+        public EnterRegionTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, EnterRegionTaskType.this, section);
+            regionInfo = new RegionsData<>(this,
+                    getConfig().loadSection(Paths.TASK_INFO_REGIONSDATA));
+        }
+
+        public RegionsData<T, EnterRegionTask> getRegionsData() {
+            return regionInfo;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            info.addAll(regionInfo.getInfo());
+            return info;
+        }
+
+        @Override
+        public @NotNull EnterRegionTaskType<T> getType() {
+            return EnterRegionTaskType.this;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previusHolder) {
+                super(player, previusHolder);
+                this.putButton(27, regionInfo.getRegionSelectorButton(this));
+            }
+        }
     }
 }

@@ -28,7 +28,7 @@ public interface Require<T extends User<T>> extends QuestComponent<T> {
     }
 
     @Override
-    default Material getGuiMaterial() {
+    default @NotNull Material getGuiMaterial() {
         return Material.TRIPWIRE_HOOK;
     }
 

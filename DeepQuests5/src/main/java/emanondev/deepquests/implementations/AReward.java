@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,20 +27,10 @@ import java.util.Objects;
 
 public abstract class AReward<T extends User<T>> extends AQuestComponent<T> implements Reward<T> {
 
-    private boolean isHidden;
-
-    public boolean isHidden() {
-        return isHidden;
-    }
-
-    public void setHidden(Boolean value) {
-        if (value != null && isHidden == value)
-            return;
-        isHidden = Objects.requireNonNullElse(value, getType().getDefaultIsHidden());
-        getConfig().set(Paths.IS_HIDDEN, value == null ? null : isHidden);
-    }
-
     private final RewardType<T> type;
+    private boolean isHidden;
+    private String feedback = null;
+    private boolean isFeedbackDefault = true;
 
     public AReward(int id, QuestManager<T> manager, RewardType<T> type, YMLSection section) {
         super(id, section, manager);
@@ -56,8 +47,19 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
 
     }
 
+    public boolean isHidden() {
+        return isHidden;
+    }
+
+    public void setHidden(Boolean value) {
+        if (value != null && isHidden == value)
+            return;
+        isHidden = Objects.requireNonNullElse(value, getType().getDefaultIsHidden());
+        getConfig().set(Paths.IS_HIDDEN, value == null ? null : isHidden);
+    }
+
     @Override
-    public List<String> getInfo() {
+    public @NotNull List<String> getInfo() {
         List<String> info = new ArrayList<>();
         info.add("&9&lReward: &6" + this.getDisplayName());
         info.add("&8Type: &7" + (getType() != null ? getType().getKeyID() : "&cError"));
@@ -73,6 +75,35 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
         return type;
     }
 
+    public String getRawFeedback() {
+        if (feedback == null)
+            this.feedback = getDefaultFeedback();
+        return feedback;
+    }
+
+    public String getFeedback(T user, int amount) {
+        return getRawFeedback();
+    }
+
+    public void setFeedback(String feedback) {
+        if (feedback == null) {
+            isFeedbackDefault = true;
+            this.feedback = getDefaultFeedback();
+        } else {
+            isFeedbackDefault = false;
+            this.feedback = feedback;
+        }
+        getConfig().set(Paths.REWARD_IS_FEEDBACK_DEFAULT, isFeedbackDefault);
+        if (isFeedbackDefault)
+            getConfig().set(Paths.REWARD_FEEDBACK, null);
+        else
+            getConfig().set(Paths.REWARD_FEEDBACK, feedback);
+    }
+
+    private String getDefaultFeedback() {
+        String desc = getType().getDefaultFeedback(this);
+        return desc != null ? desc : ChatColor.GREEN + "Received reward " + Holders.DISPLAY_NAME;
+    }
 
     protected class ARewardGuiEditor extends AGuiEditor {
 
@@ -171,38 +202,5 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
             }
 
         }
-    }
-
-    private String feedback = null;
-    private boolean isFeedbackDefault = true;
-
-    public String getRawFeedback() {
-        if (feedback == null)
-            this.feedback = getDefaultFeedback();
-        return feedback;
-    }
-
-    public String getFeedback(T user, int amount) {
-        return getRawFeedback();
-    }
-
-    public void setFeedback(String feedback) {
-        if (feedback == null) {
-            isFeedbackDefault = true;
-            this.feedback = getDefaultFeedback();
-        } else {
-            isFeedbackDefault = false;
-            this.feedback = feedback;
-        }
-        getConfig().set(Paths.REWARD_IS_FEEDBACK_DEFAULT, isFeedbackDefault);
-        if (isFeedbackDefault)
-            getConfig().set(Paths.REWARD_FEEDBACK, null);
-        else
-            getConfig().set(Paths.REWARD_FEEDBACK, feedback);
-    }
-
-    private String getDefaultFeedback() {
-        String desc = getType().getDefaultFeedback(this);
-        return desc != null ? desc : ChatColor.GREEN + "Received reward " + Holders.DISPLAY_NAME;
     }
 }

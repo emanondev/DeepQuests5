@@ -22,11 +22,11 @@ import java.util.List;
 
 public class ObtainQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
 
+    private final static String ID = "obtain_quest_item";
+
     public ObtainQuestItemTaskType(QuestManager<T> manager) {
         super(ID, manager);
     }
-
-    private final static String ID = "obtain_quest_item";
 
     @Override
     public Material getGuiMaterial() {
@@ -48,53 +48,13 @@ public class ObtainQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
         QuestBag<T> bag = user.getQuestBag();
         if (bag == null)
             return;
-        List<Task<T>> tasks = user.getActiveTasks(this);
-        if (tasks == null || tasks.isEmpty())
-            return;
-        for (Task<T> tTask : tasks) {
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             ObtainQuestItemTask task = (ObtainQuestItemTask) tTask;
             if (!event.getID().equals(task.getQuestItemData().getQuestItemID()))
                 continue;
             int progress = Math.min(task.getMaxProgress() - user.getTaskProgress(task), event.getAmount());
             if (progress > 0) {
                 task.onProgress(user, progress, null, false);
-            }
-        }
-    }
-
-    public class ObtainQuestItemTask extends ATask<T> {
-
-        private final QuestItemData<T, ObtainQuestItemTask> itemData;
-
-        public ObtainQuestItemTask(int id, Mission<T> mission, YMLSection section) {
-            super(id, mission, ObtainQuestItemTaskType.this, section);
-            itemData = new QuestItemData<>(this, getConfig().loadSection(Paths.TASK_INFO_ITEM));
-        }
-
-        public QuestItemData<T, ObtainQuestItemTask> getQuestItemData() {
-            return itemData;
-        }
-
-        public @NotNull ObtainQuestItemTaskType<T> getType() {
-            return ObtainQuestItemTaskType.this;
-        }
-
-        public List<String> getInfo() {
-            List<String> info = super.getInfo();
-            info.addAll(itemData.getInfo());
-            return info;
-        }
-
-        @Override
-        public Gui getEditorGui(Player target, Gui parent) {
-            return new GuiEditor(target, parent);
-        }
-
-        private class GuiEditor extends ATaskGuiEditor {
-
-            public GuiEditor(Player player, Gui previousHolder) {
-                super(player, previousHolder);
-                itemData.setupButtons(this, 27);
             }
         }
     }
@@ -146,6 +106,43 @@ public class ObtainQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
 
         }
         return Translations.replaceAll(txt).replace("{items}", t.getQuestItemData().getQuestItemNick());
+    }
+
+    public class ObtainQuestItemTask extends ATask<T> {
+
+        private final QuestItemData<T, ObtainQuestItemTask> itemData;
+
+        public ObtainQuestItemTask(int id, Mission<T> mission, YMLSection section) {
+            super(id, mission, ObtainQuestItemTaskType.this, section);
+            itemData = new QuestItemData<>(this, getConfig().loadSection(Paths.TASK_INFO_ITEM));
+        }
+
+        public QuestItemData<T, ObtainQuestItemTask> getQuestItemData() {
+            return itemData;
+        }
+
+        public @NotNull ObtainQuestItemTaskType<T> getType() {
+            return ObtainQuestItemTaskType.this;
+        }
+
+        public @NotNull List<String> getInfo() {
+            List<String> info = super.getInfo();
+            info.addAll(itemData.getInfo());
+            return info;
+        }
+
+        @Override
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
+            return new GuiEditor(target, parent);
+        }
+
+        private class GuiEditor extends ATaskGuiEditor {
+
+            public GuiEditor(Player player, Gui previousHolder) {
+                super(player, previousHolder);
+                getQuestItemData().setupButtons(this, 27);
+            }
+        }
     }
 
 }

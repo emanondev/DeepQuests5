@@ -3,6 +3,7 @@ package emanondev.deepquests.interfaces;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +12,12 @@ public interface HasDisplay<T extends User<T>> {
 
     DisplayInfo<T> getDisplayInfo();
 
-    QuestManager<T> getManager();
+    @NotNull QuestManager<T> getManager();
 
-    default ItemStack getDisplayItem(ItemStack rawItem, ArrayList<String> rawDescription, T user, Player player) {
+    @NotNull default ItemStack getDisplayItem(ItemStack rawItem, ArrayList<String> rawDescription, T user, Player player) {
         return Utils.setDescription(rawItem, getDisplayDescription(rawDescription, user, player), null, true);
     }
 
-    List<String> getDisplayDescription(ArrayList<String> rawDescription, T user, Player player);
+    @NotNull List<String> getDisplayDescription(ArrayList<String> rawDescription, T user, Player player);
 
 }

@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class CurrentMissionStateRequireType<T extends User<T>> extends ARequireT
             return stateData;
         }
 
-        public List<String> getInfo() {
+        public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(targetMission.getInfo());
             info.addAll(stateData.getInfo());
@@ -84,7 +85,7 @@ public class CurrentMissionStateRequireType<T extends User<T>> extends ARequireT
         }
 
         @Override
-        public Gui getEditorGui(Player target, Gui parent) {
+        public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
         }
 
@@ -92,8 +93,8 @@ public class CurrentMissionStateRequireType<T extends User<T>> extends ARequireT
 
             public GuiEditor(Player player, Gui previousHolder) {
                 super(player, previousHolder);
-                this.putButton(27, targetMission.getMissionSelectorButton(this));
-                this.putButton(28, stateData.getDisplaySelectorButton(this));
+                this.putButton(27, getTargetMissionData().getMissionSelectorButton(this));
+                this.putButton(28, getDisplayStateData().getDisplaySelectorButton(this));
             }
         }
 

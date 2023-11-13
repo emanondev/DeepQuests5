@@ -20,11 +20,10 @@ import java.util.List;
 
 abstract class AQuestComponent<T extends User<T>> implements QuestComponent<T> {
 
-    private int priority;
     private final int id;
     private final YMLSection section;
     private final QuestManager<T> manager;
-
+    private int priority;
     private String displayName;
 
     public AQuestComponent(int id, YMLSection section, QuestManager<T> manager) {

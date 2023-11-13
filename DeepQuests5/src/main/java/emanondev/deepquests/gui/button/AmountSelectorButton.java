@@ -63,6 +63,20 @@ public abstract class AmountSelectorButton extends AButton {
         clicker.openInventory(new AmountEditorGui().getInventory());
     }
 
+    protected ItemStack craftEditorAmountButtonItem(long amount) {
+        ItemStack item;
+        if (amount > 0) {
+            item = new ItemBuilder(Material.LIME_WOOL).build();
+            Utils.updateDescription(item, GuiConfig.Generic.AMOUNT_SELECTOR_ADD, null, true,
+                    GuiConfig.AMOUNT_HOLDER, amount + "");
+        } else {
+            item = new ItemBuilder(Material.RED_WOOL).build();
+            Utils.updateDescription(item, GuiConfig.Generic.AMOUNT_SELECTOR_REMOVE, null, true,
+                    GuiConfig.AMOUNT_HOLDER, -amount + "");
+        }
+        return item;
+    }
+
     private class AmountEditorGui extends MapGui {
         public AmountEditorGui() {
             super(Utils.fixString(subGuiTitle, AmountSelectorButton.this.getTargetPlayer(), true), 6,
@@ -123,20 +137,5 @@ public abstract class AmountSelectorButton extends AButton {
                         getGui().updateInventory();
             }
         }
-    }
-
-
-    protected ItemStack craftEditorAmountButtonItem(long amount) {
-        ItemStack item;
-        if (amount > 0) {
-            item = new ItemBuilder(Material.LIME_WOOL).build();
-            Utils.updateDescription(item, GuiConfig.Generic.AMOUNT_SELECTOR_ADD, null, true,
-                    GuiConfig.AMOUNT_HOLDER, amount + "");
-        } else {
-            item = new ItemBuilder(Material.RED_WOOL).build();
-            Utils.updateDescription(item, GuiConfig.Generic.AMOUNT_SELECTOR_REMOVE, null, true,
-                    GuiConfig.AMOUNT_HOLDER, -amount + "");
-        }
-        return item;
     }
 }
