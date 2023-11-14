@@ -24,12 +24,12 @@ import java.util.List;
 public class CurrentMissionStateRequireType<T extends User<T>> extends ARequireType<T> {
     public static final String ID = "current_mission_state";
 
-    public CurrentMissionStateRequireType(QuestManager<T> manager) {
+    public CurrentMissionStateRequireType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
     @Override
-    public Require<T> getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull Require<T> getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new CurrentMissionStateRequire(id, manager, section);
     }
 
@@ -62,7 +62,7 @@ public class CurrentMissionStateRequireType<T extends User<T>> extends ARequireT
         }
 
         @Override
-        public boolean isAllowed(T user) {
+        public boolean isAllowed(@NotNull T user) {
             Mission<T> mission = targetMission.getMission();
             if (mission == null)
                 return false;

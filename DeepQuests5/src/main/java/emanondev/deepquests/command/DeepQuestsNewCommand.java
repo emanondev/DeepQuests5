@@ -1,6 +1,6 @@
 package emanondev.deepquests.command;
 
-import emanondev.core.CoreCommand;
+import emanondev.core.command.CoreCommand;
 import emanondev.core.MessageBuilder;
 import emanondev.core.UtilsMessages;
 import emanondev.core.YMLConfig;
@@ -49,55 +49,62 @@ public class DeepQuestsNewCommand extends CoreCommand {
             return;
         }
         switch (args[0].toLowerCase()) {
-
-            case "swapplayers":
+            case "swapplayers" -> {
                 if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_SWAPPLAYERS))
                     this.permissionLackNotify(sender, P.COMMAND_DEEPQUESTS_SWAPPLAYERS);
                 else
                     this.swapplayers(sender, alias, args);
                 return;
-            case "manager":
+            }
+            case "manager" -> {
                 if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_MANAGER))
                     this.permissionLackNotify(sender, P.COMMAND_DEEPQUESTS_MANAGER);
                 else
                     this.manager(sender, alias, args);
                 return;
-            case "listmanagers":
+            }
+            case "listmanagers" -> {
                 if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_LISTMANAGERS))
                     this.permissionLackNotify(sender, P.COMMAND_DEEPQUESTS_LISTMANAGERS);
                 else
                     this.listmanagers(sender, alias, args);
                 return;
-            case "opengui":
+            }
+            case "opengui" -> {
                 if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_OPENGUI))
                     this.permissionLackNotify(sender, P.COMMAND_DEEPQUESTS_OPENGUI);
                 else
                     this.opengui(sender, alias, args);
                 return;
-            case "editor":
+            }
+            case "editor" -> {
                 if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_EDITOR))
                     this.permissionLackNotify(sender, P.COMMAND_DEEPQUESTS_EDITOR);
                 else
                     this.editor(sender, alias, args);
                 return;
-            case "reload":
+            }
+            case "reload" -> {
                 if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_RELOAD))
                     this.permissionLackNotify(sender, P.COMMAND_DEEPQUESTS_RELOAD);
                 else
                     this.reload(sender, alias, args);
                 return;
-            case "questbag":
+            }
+            case "questbag" -> {
                 if (!sender.hasPermission(P.COMMAND_DEEPQUESTS_QUESTBAG))
                     this.permissionLackNotify(sender, P.COMMAND_DEEPQUESTS_QUESTBAG);
                 else
                     this.questbag(sender, alias, args);
                 return;
-            case "debugunused":
+            }
+            case "debugunused" -> {
                 for (QuestManager<?> qManager : Quests.get().getManagers()) {
                     getPlugin().logDone("checking manager &e" + qManager.getName());
                     ((AQuestManager) qManager).debugUnused();
                 }
                 return;
+            }
         }
         help(sender, alias, args);
     }

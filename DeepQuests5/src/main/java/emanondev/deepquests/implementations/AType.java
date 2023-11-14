@@ -12,9 +12,7 @@ public abstract class AType<T extends User<T>, E extends QuestComponent<T>> impl
 
     private final QuestManager<T> manager;
 
-    public AType(String id, QuestManager<T> manager) {
-        if (id == null || manager == null)
-            throw new NullPointerException();
+    public AType(@NotNull String id, @NotNull QuestManager<T> manager) {
         if (id.isEmpty() || !Paths.ALPHANUMERIC.matcher(id).matches())
             throw new IllegalArgumentException("Invalid Id");
         this.ID = id;
@@ -27,7 +25,7 @@ public abstract class AType<T extends User<T>, E extends QuestComponent<T>> impl
     }
 
     @Override
-    public QuestManager<T> getManager() {
+    public @NotNull QuestManager<T> getManager() {
         return manager;
     }
 }

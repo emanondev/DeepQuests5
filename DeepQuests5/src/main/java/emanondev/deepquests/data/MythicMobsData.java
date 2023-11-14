@@ -17,6 +17,8 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -27,7 +29,7 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
     private int maxLv = 1;
     private boolean checkLv = false;
 
-    public MythicMobsData(E parent, YMLSection section) {
+    public MythicMobsData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         checkLv = getConfig().getBoolean(Paths.MYTHICMOBDATA_CHECK_LV, checkLv);
         internalNamesIsWhitelist = getConfig().getBoolean(Paths.MYTHICMOBDATA_INTERNAL_NAMES_IS_WHITELIST,
@@ -37,7 +39,7 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
         internalNames.addAll(getConfig().getStringList(Paths.MYTHICMOBDATA_INTERNAL_NAMES, new ArrayList<>()));
     }
 
-    public boolean isValidMythicMob(ActiveMob mob) {
+    public boolean isValidMythicMob(@Nullable ActiveMob mob) {
         if (mob == null)
             return false;
         if (checkLv)

@@ -1,8 +1,10 @@
 package emanondev.deepquests.interfaces;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface UserData<T extends User<T>> extends Navigable {
 
-    T getUser();
+    @NotNull T getUser();
 
     void reset();
 

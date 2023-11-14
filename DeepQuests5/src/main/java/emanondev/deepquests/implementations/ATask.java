@@ -91,7 +91,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     public @NotNull List<String> getInfo() {
         List<String> info = new ArrayList<>();
         info.add("&9&lTask: &6" + this.getDisplayName());
-        info.add("&8Type: &7" + (getType() != null ? getType().getKeyID() : "&cError"));
+        info.add("&8Type: &7" + getTypeName());
 
         info.add("&8ID: " + this.getID());
         info.add("");
@@ -129,14 +129,14 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             info.add("&9Complete Rewards:");
             for (Reward<T> reward : completeRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
-                info.add("   &7" + (reward.getType() != null ? reward.getType().getKeyID() : "&cError"));
+                info.add("   &7" + reward.getTypeName());
             }
         }
         if (progressRewards.size() > 0) {
             info.add("&9Progress Rewards:");
             for (Reward<T> reward : progressRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
-                info.add("   &7" + (reward.getType() != null ? reward.getType().getKeyID() : "&cError"));
+                info.add("   &7" + reward.getTypeName());
             }
         }
         return info;
@@ -362,7 +362,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
     protected class ATaskGuiEditor extends AAGuiEditor {
 
         public ATaskGuiEditor(Player player, Gui previousHolder) {
-            super("&9Task: &r" + getDisplayName() + " &9ID: &e" + getID() + " &9Type: &e" + getType().getKeyID(),
+            super("&9Task: &r" + getDisplayName() + " &9ID: &e" + getID() + " &9Type: &e" + getTypeName(),
                     player, previousHolder);
             this.putButton(6, new BarShowButton());
             this.putButton(7, new BarStyleButton());

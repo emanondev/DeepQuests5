@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +25,7 @@ import java.util.Objects;
 public class QuestItemData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private String id;
 
-    public QuestItemData(E parent, YMLSection section) {
+    public QuestItemData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         id = getConfig().getString(Paths.QUESTITEM_ID, null);
     }

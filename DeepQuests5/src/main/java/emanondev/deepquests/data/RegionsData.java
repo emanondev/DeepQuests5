@@ -26,6 +26,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
     private final Set<String> regionNames = new TreeSet<>();
     private boolean isRegionListWhitelist;
 
-    public RegionsData(E parent, YMLSection section) {
+    public RegionsData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         regionNames.addAll(getConfig().getStringList(Paths.DATA_REGION_LIST, new ArrayList<>()));
         isRegionListWhitelist = getConfig().getBoolean(Paths.DATA_REGION_LIST_IS_WHITELIST, true);
@@ -78,7 +79,7 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
         return WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
     }
 
-    public boolean isValidRegion(ProtectedRegion region) {
+    public boolean isValidRegion(@NotNull ProtectedRegion region) {
         return isValidRegion(region.getId());
     }
 
@@ -89,7 +90,7 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
             return !regionNames.contains(region.toLowerCase());
     }
 
-    public Set<String> getRegionNames() {
+    public @NotNull Set<String> getRegionNames() {
         return Collections.unmodifiableSet(regionNames);
     }
 
@@ -116,7 +117,7 @@ public class RegionsData<T extends User<T>, E extends QuestComponent<T>> extends
         getConfig().set(Paths.DATA_REGION_LIST_IS_WHITELIST, isRegionListWhitelist);
     }
 
-    public Button getRegionSelectorButton(Gui parent) {
+    public @NotNull Button getRegionSelectorButton(@NotNull Gui parent) {
         return new RegionSelectorButton(parent);
     }
 

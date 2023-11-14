@@ -30,44 +30,32 @@ public interface DisplayInfo<T extends User<T>> extends Navigable {
     ItemStack getGuiItem(@NotNull DisplayState state, T user, Player player, boolean forceShow);
 
     /**
-     * @param state
      * @return raw itemstack no description applied
      */
     ItemStack getRawItem(@NotNull DisplayState state);
 
     /**
-     * @param state
      * @return raw description no holders applied
      */
     List<String> getRawDescription(@NotNull DisplayState state);
 
     /**
-     * @param state
      * @return true if should be hidden
      */
     boolean isHidden(@NotNull DisplayState state);
 
     /**
      * sets raw item
-     *
-     * @param state
-     * @param item
      */
     void setItem(@NotNull DisplayState state, ItemStack item);
 
     /**
      * sets if should be hidden when displaystate equals state
-     *
-     * @param state
-     * @param value
      */
     void setHide(@NotNull DisplayState state, Boolean value);
 
     /**
      * sets raw description
-     *
-     * @param state
-     * @param description
      */
     void setDescription(@NotNull DisplayState state, List<String> description);
 }

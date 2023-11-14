@@ -32,7 +32,7 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
     private String feedback = null;
     private boolean isFeedbackDefault = true;
 
-    public AReward(int id, QuestManager<T> manager, RewardType<T> type, YMLSection section) {
+    public AReward(int id, @NotNull QuestManager<T> manager, @NotNull RewardType<T> type, @NotNull YMLSection section) {
         super(id, section, manager);
         this.type = type;
         isHidden = getConfig().getBoolean(Paths.IS_HIDDEN, getType().getDefaultIsHidden());
@@ -62,8 +62,7 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
     public @NotNull List<String> getInfo() {
         List<String> info = new ArrayList<>();
         info.add("&9&lReward: &6" + this.getDisplayName());
-        info.add("&8Type: &7" + (getType() != null ? getType().getKeyID() : "&cError"));
-
+        info.add("&8Type: &7" + getTypeName());
         info.add("&8KEY: " + this.getID());
         info.add("");
         info.add("&9Priority: &e" + getPriority());
@@ -71,7 +70,7 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
     }
 
     @Override
-    public final RewardType<T> getType() {
+    public final @NotNull RewardType<T> getType() {
         return type;
     }
 
@@ -108,7 +107,7 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
     protected class ARewardGuiEditor extends AGuiEditor {
 
         public ARewardGuiEditor(Player player, Gui previousHolder) {
-            super("&9Reward: &r" + getDisplayName() + " &9ID: &e" + getID() + " &9Type: &e" + getType().getKeyID(),
+            super("&9Reward: &r" + getDisplayName() + " &9ID: &e" + getID() + " &9Type: &e" + AReward.this.getTypeName(),
                     player, previousHolder);
             this.putButton(7, new HiddenButton());
             this.putButton(8, new FeedbackButton());

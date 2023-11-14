@@ -5,19 +5,18 @@ import emanondev.deepquests.interfaces.Navigable;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.User;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class QuestComponentData<T extends User<T>, E extends QuestComponent<T>> implements Navigable {
     private final E parent;
     private final YMLSection section;
 
-    public QuestComponentData(E parent, YMLSection section) {
-        if (parent == null || section == null)
-            throw new NullPointerException();
+    public QuestComponentData(@NotNull E parent,@NotNull YMLSection section) {
         this.parent = parent;
         this.section = section;
     }
 
-    public YMLSection getConfig() {
+    public @NotNull YMLSection getConfig() {
         return section;
     }
 

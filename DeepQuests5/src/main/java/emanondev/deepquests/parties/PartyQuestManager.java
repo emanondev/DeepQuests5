@@ -22,7 +22,7 @@ public class PartyQuestManager extends AQuestManager<QuestParty> {
     public final static String NAME = "parties";
     private final PartyUserManager userManager;
 
-    public PartyQuestManager(String name, CorePlugin plugin) {
+    public PartyQuestManager(@NotNull String name, @NotNull CorePlugin plugin) {
         super(name, plugin);
         userManager = new PartyUserManager(this);
 
@@ -31,12 +31,12 @@ public class PartyQuestManager extends AQuestManager<QuestParty> {
     }
 
     @Override
-    public PartyUserManager getUserManager() {
+    public @NotNull PartyUserManager getUserManager() {
         return userManager;
     }
 
     @Override
-    public SortableButton getEditorButton(Gui parent) {
+    public @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 

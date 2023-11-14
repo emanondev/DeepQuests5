@@ -21,7 +21,7 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
 
     private static final String ID = "have_quest_items";
 
-    public HaveQuestItemRequireType(QuestManager<T> manager) {
+    public HaveQuestItemRequireType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -36,7 +36,7 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
     }
 
     @Override
-    public HaveQuestItemRequire getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull HaveQuestItemRequire getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new HaveQuestItemRequire(id, manager, section);
     }
 
@@ -57,7 +57,7 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
             return amountData;
         }
 
-        public boolean isAllowed(T p) {
+        public boolean isAllowed(@NotNull T p) {
             if (this.questItemData.getQuestItemID() == null)
                 return false;
             return p.getQuestBag().hasQuestItem(this.questItemData.getQuestItemID(), amountData.getAmount());

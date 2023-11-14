@@ -42,9 +42,8 @@ public interface GuiElement {
     List<String> getInfo();
 
     /**
-     * @param parent
      * @return a button for Description Utility which shows a recap of the object and do nothing when clicked
      */
-    SortableButton getEditorButton(Gui parent);
+    @NotNull SortableButton getEditorButton(@NotNull Gui parent);
 
 }

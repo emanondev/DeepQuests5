@@ -10,28 +10,19 @@ import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
 
-    private static final LinkedHashSet<Material> validMaterials = loadValidMaterials();
     private final EnumSet<Material> materials = EnumSet.noneOf(Material.class);
     private boolean isWhitelist;
 
-    public BlockTypeData(E parent, YMLSection section) {
+    public BlockTypeData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         isWhitelist = getConfig().getBoolean(Paths.DATA_BLOCK_TYPE_IS_WHITELIST, true);
         materials.addAll(getConfig().loadEnumSet(Paths.DATA_BLOCK_TYPE_LIST, EnumSet.noneOf(Material.class), Material.class));
-    }
-
-    private static LinkedHashSet<Material> loadValidMaterials() {
-        List<Material> list = new ArrayList<>();
-        for (Material mat : Material.values())
-            if (!mat.isAir() && mat.isBlock())
-                list.add(mat);
-        Collections.sort(list);
-        return new LinkedHashSet<>(list);
     }
 
     public boolean isValidMaterial(Material material) {
@@ -46,7 +37,7 @@ public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> exten
     public void toggleMaterial(Material mat) {
         if (mat == null)
             return;
-        if (!validMaterials.contains(mat))
+        if (mat.isAir() || !mat.isBlock())
             return;
         if (materials.contains(mat))
             materials.remove(mat);
@@ -82,7 +73,12 @@ public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> exten
 
         @Override
         public Collection<Material> getPossibleValues() {
-            return validMaterials;
+            List<Material> list = new ArrayList<>();
+            for (Material mat : Material.values())
+                if (!mat.isAir() && mat.isBlock())
+                    list.add(mat);
+            Collections.sort(list);
+            return new LinkedHashSet<>(list);
         }
 
         @Override
@@ -111,12 +107,13 @@ public class BlockTypeData<T extends User<T>, E extends QuestComponent<T>> exten
         public ItemStack getElementItem(Material element) {
             if (element.isItem())
                 return new ItemBuilder(element).setGuiProperty().build();
-            switch (element) {
+            return new ItemBuilder(switch (element) {
                 //TODO
-                default -> {
-                }
-            }
-            return new ItemBuilder(Material.KNOWLEDGE_BOOK).setGuiProperty().build();
+                case BEETROOTS -> Material.BEETROOT;
+                case CARROTS -> Material.CARROT;
+                case POTATOES -> Material.POTATO;
+                default -> Material.KNOWLEDGE_BOOK;
+            }).setGuiProperty().build();
         }
 
         @Override

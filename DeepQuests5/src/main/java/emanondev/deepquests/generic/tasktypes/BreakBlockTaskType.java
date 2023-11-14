@@ -32,7 +32,7 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "break_block";
 
 
-    public BreakBlockTaskType(QuestManager<T> manager) {
+    public BreakBlockTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -150,12 +150,6 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
             return toolData;
         }
 
-        /*
-         * public Navigator getNavigator() { super.getNavigator();
-         * blockData.getNavigator(); virginBlockData.getNavigator();
-         * dropsData.getNavigator(); toolData.getNavigator(); return nav; }
-         */
-
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             if (blockData.areMaterialsWhitelist()) {
@@ -191,10 +185,10 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
 
             public GuiEditor(Player player, Gui previousHolder) {
                 super(player, previousHolder);
-                this.putButton(27, blockData.getBlockEditorButton(this));
-                this.putButton(28, virginBlockData.getVirginStatusEditor(this));
-                this.putButton(36, dropsData.getItemDropsFlagButton(this));
-                this.putButton(37, dropsData.getExpDropsFlagButton(this));
+                this.putButton(27, getBlockTypeData().getBlockEditorButton(this));
+                this.putButton(28, getVirginBlockData().getVirginStatusEditor(this));
+                this.putButton(36, getDropData().getItemDropsFlagButton(this));
+                this.putButton(37, getDropData().getExpDropsFlagButton(this));
                 toolData.setupButtons("&6Tool Button", this, 45);
             }
         }

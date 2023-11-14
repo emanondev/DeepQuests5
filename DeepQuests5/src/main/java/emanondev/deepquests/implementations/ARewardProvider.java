@@ -6,6 +6,7 @@ import emanondev.core.YMLSection;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.interfaces.*;
 import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,7 +37,7 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
         config.reload();
     }
 
-    public YMLSection getTypeConfig(RewardType<T> t) {
+    public @NotNull YMLSection getTypeConfig(@NotNull RewardType<T> t) {
         if (t == null)
             throw new NullPointerException();
         return config.loadSection(t.getKeyID());
@@ -47,22 +48,22 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
     }
 
     @Override
-    public QuestManager<T> getManager() {
+    public @NotNull QuestManager<T> getManager() {
         return manager;
     }
 
     @Override
-    public RewardType<T> getType(String id) {
+    public RewardType<T> getType(@NotNull String id) {
         return types.get(id);
     }
 
     @Override
-    public Collection<RewardType<T>> getTypes() {
+    public @NotNull Collection<RewardType<T>> getTypes() {
         return types.values();
     }
 
     @Override
-    public void registerQuestType(RewardType<T> type) {
+    public void registerQuestType(@NotNull RewardType<T> type) {
         if (type == null)
             throw new NullPointerException();
         if (type.getManager() != manager)
@@ -75,7 +76,7 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
     }
 
     @Override
-    public void registerMissionType(RewardType<T> type) {
+    public void registerMissionType(@NotNull RewardType<T> type) {
         if (type == null)
             throw new NullPointerException();
         if (type.getManager() != manager)
@@ -88,7 +89,7 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
     }
 
     @Override
-    public void registerTaskType(RewardType<T> type) {
+    public void registerTaskType(@NotNull RewardType<T> type) {
         if (type == null)
             throw new NullPointerException();
         if (type.getManager() != manager)
@@ -101,7 +102,7 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
     }
 
     @Override
-    public void registerType(RewardType<T> type) {
+    public void registerType(@NotNull RewardType<T> type) {
         if (type == null)
             throw new NullPointerException();
         if (type.getManager() != manager)
@@ -116,22 +117,22 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
     }
 
     @Override
-    public Collection<RewardType<T>> getQuestTypes() {
+    public @NotNull Collection<RewardType<T>> getQuestTypes() {
         return Collections.unmodifiableCollection(questTypes.values());
     }
 
     @Override
-    public Collection<RewardType<T>> getMissionTypes() {
+    public @NotNull Collection<RewardType<T>> getMissionTypes() {
         return Collections.unmodifiableCollection(missionTypes.values());
     }
 
     @Override
-    public Collection<RewardType<T>> getTaskTypes() {
+    public @NotNull Collection<RewardType<T>> getTaskTypes() {
         return Collections.unmodifiableCollection(taskTypes.values());
     }
 
     @Override
-    public Reward<T> getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull Reward<T> getInstance(int id, @NotNull YMLSection section) {
         if (manager == null)
             throw new NullPointerException();
         try {
@@ -153,7 +154,7 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
     }
 
     @Override
-    public final Permission getEditorPermission() {
+    public final @NotNull Permission getEditorPermission() {
         return editPermission;
     }
 

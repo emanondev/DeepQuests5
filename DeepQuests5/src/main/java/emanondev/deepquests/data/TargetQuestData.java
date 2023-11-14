@@ -11,6 +11,8 @@ import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,12 +21,12 @@ import java.util.List;
 public class TargetQuestData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private Integer questKey;
 
-    public TargetQuestData(E parent, YMLSection section) {
+    public TargetQuestData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         questKey = getConfig().getInteger(Paths.DATA_TARGET_QUEST_KEY, null);
     }
 
-    public Quest<T> getQuest() {
+    public @Nullable Quest<T> getQuest() {
         if (questKey == null)
             return null;
         return getQuestManager().getQuest(questKey);
@@ -40,7 +42,7 @@ public class TargetQuestData<T extends User<T>, E extends QuestComponent<T>> ext
         return desc;
     }
 
-    public void setQuest(Quest<T> quest) {
+    public void setQuest(@Nullable Quest<T> quest) {
         if (quest == null) {
             if (questKey == null)
                 return;
@@ -56,7 +58,7 @@ public class TargetQuestData<T extends User<T>, E extends QuestComponent<T>> ext
         getConfig().set(Paths.DATA_TARGET_QUEST_KEY, questKey);
     }
 
-    public Button getQuestSelectorButton(Gui gui) {
+    public @NotNull Button getQuestSelectorButton(@NotNull Gui gui) {
         return new QuestSelectorButton(gui);
     }
 

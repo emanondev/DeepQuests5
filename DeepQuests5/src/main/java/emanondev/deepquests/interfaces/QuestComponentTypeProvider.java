@@ -2,6 +2,8 @@ package emanondev.deepquests.interfaces;
 
 import emanondev.core.YMLSection;
 import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -11,7 +13,7 @@ public interface QuestComponentTypeProvider<T extends User<T>, K extends QuestCo
      * @param id type id
      * @return true if Type with id == type.getKeyID() is registered
      */
-    default boolean existType(String id) {
+    default boolean existType(@NotNull String id) {
         return getType(id) != null;
     }
 
@@ -19,24 +21,24 @@ public interface QuestComponentTypeProvider<T extends User<T>, K extends QuestCo
      * @param id type id
      * @return type with type.getKeyID().equals(id) or null
      */
-    E getType(String id);
+    @Nullable E getType(@NotNull String id);
 
     /**
      * @param type - type to register
      * @throws IllegalArgumentException - if (existType(type.getKeyID()) == true)
      */
-    void registerType(E type);
+    void registerType(@NotNull E type);
 
     /**
      * @return types
      */
-    Collection<E> getTypes();
+    @NotNull Collection<E> getTypes();
 
-    QuestManager<T> getManager();
+    @NotNull QuestManager<T> getManager();
 
-    Permission getEditorPermission();
+    @NotNull Permission getEditorPermission();
 
-    YMLSection getTypeConfig(E t);
+    @NotNull YMLSection getTypeConfig(@NotNull E t);
 
     @Deprecated
     void saveConfig();

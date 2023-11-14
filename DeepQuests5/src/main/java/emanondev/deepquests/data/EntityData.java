@@ -18,6 +18,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -31,7 +32,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
     private boolean ignoreNPC;
     private String entityName;
 
-    public EntityData(E parent, YMLSection section) {
+    public EntityData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         entityType.addAll(getConfig().loadEnumSet(Paths.DATA_ENTITYTYPE_LIST, EnumSet.noneOf(EntityType.class),
                 EntityType.class));
@@ -44,11 +45,11 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
         entityName = UtilsString.fix(getConfig().getString(Paths.DATA_ENTITY_NAME, null), null, true);
     }
 
-    public Set<EntityType> getTypes() {
+    public @NotNull Set<EntityType> getTypes() {
         return Collections.unmodifiableSet(entityType);
     }
 
-    public Set<SpawnReason> getSpawnReasons() {
+    public @NotNull Set<SpawnReason> getSpawnReasons() {
         return Collections.unmodifiableSet(spawnReasons);
     }
 
@@ -64,7 +65,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
         return ignoreNPC;
     }
 
-    public boolean isValidEntity(Entity e) {
+    public boolean isValidEntity(@NotNull Entity e) {
         if (!isValidEntityType(e.getType()))
             return false;
         if (entityType.contains(e.getType())) {
@@ -135,7 +136,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
         return info;
     }
 
-    public void toggleEntityType(EntityType type) {
+    public void toggleEntityType(@NotNull EntityType type) {
         if (!type.isAlive())
             return;
         if (entityType.contains(type))
@@ -150,7 +151,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
         getConfig().set(Paths.DATA_ENTITYTYPE_IS_WHITELIST, entityTypeIsWhitelist);
     }
 
-    public void toggleSpawnReason(SpawnReason type) {
+    public void toggleSpawnReason(@NotNull SpawnReason type) {
         if (spawnReasons.contains(type))
             spawnReasons.remove(type);
         else
@@ -177,147 +178,71 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
         return entityName;
     }
 
-    public Button getEntityTypeButton(Gui gui) {
+    public @NotNull Button getEntityTypeButton(@NotNull Gui gui) {
         return new EntityTypeButton(gui);
     }
 
-    public Button getSpawnReasonButton(Gui gui) {
+    public @NotNull Button getSpawnReasonButton(@NotNull Gui gui) {
         return new SpawnReasonButton(gui);
     }
 
-    public Button getIgnoreNPCFlagButton(Gui gui) {
+    public @NotNull Button getIgnoreNPCFlagButton(@NotNull Gui gui) {
         return new IgnoreCitizenTargetsButton(gui);
     }
 
     private ItemStack getGuiItem(EntityType element) {
-        switch (element) {
-            case ZOMBIE:
-            case ZOMBIE_VILLAGER:
-            case HUSK:
-            case DROWNED:
-                return new ItemBuilder(Material.ROTTEN_FLESH).setGuiProperty().build();
-            case WITCH:
-                return new ItemBuilder(Material.GLASS_BOTTLE).setGuiProperty().build();
-            case SPIDER:
-            case CAVE_SPIDER:
-                return new ItemBuilder(Material.SPIDER_EYE).setGuiProperty().build();
-            case SLIME:
-                return new ItemBuilder(Material.SLIME_BALL).setGuiProperty().build();
-            case SKELETON:
-                return new ItemBuilder(Material.BONE).setGuiProperty().build();
-            case SILVERFISH:
-                return new ItemBuilder(Material.STONE_BRICKS).setGuiProperty().build();
-            case GIANT:
-                return new ItemBuilder(Material.BONE_BLOCK).setGuiProperty().build();
-            case ENDERMITE:
-                return new ItemBuilder(Material.ENDER_PEARL).setGuiProperty().build();
-            case ENDERMAN:
-                return new ItemBuilder(Material.ENDER_PEARL).setGuiProperty().build();
-            case CREEPER:
-                return new ItemBuilder(Material.GUNPOWDER).setGuiProperty().build();
-            case WOLF:
-                return new ItemBuilder(Material.BONE).setGuiProperty().build();
-            case VILLAGER:
-                return new ItemBuilder(Material.EMERALD).setGuiProperty().build();
-            case SNOWMAN:
-                return new ItemBuilder(Material.SNOWBALL).setGuiProperty().build();
-            case IRON_GOLEM:
-                return new ItemBuilder(Material.IRON_BLOCK).setGuiProperty().build();
-            case WITHER:
-                return new ItemBuilder(Material.NETHER_STAR).setGuiProperty().build();
-            case ENDER_DRAGON:
-                return new ItemBuilder(Material.DRAGON_EGG).setGuiProperty().build();
-            case SQUID:
-                return new ItemBuilder(Material.INK_SAC).setGuiProperty().build();
-            case GUARDIAN:
-                return new ItemBuilder(Material.PRISMARINE_SHARD).setGuiProperty().build();
-            case BAT:
-                return new ItemBuilder(Material.STONE).setGuiProperty().build();
-            case OCELOT:
-                return new ItemBuilder(Material.RED_BED).setGuiProperty().build();
-            case PIG:
-                return new ItemBuilder(Material.PORKCHOP).setGuiProperty().build();
-            case SHEEP:
-                return new ItemBuilder(Material.WHITE_WOOL).setGuiProperty().build();
-            case RABBIT:
-                return new ItemBuilder(Material.RABBIT_FOOT).setGuiProperty().build();
-            case MUSHROOM_COW:
-                return new ItemBuilder(Material.RED_MUSHROOM).setGuiProperty().build();
-            case COW:
-                return new ItemBuilder(Material.MILK_BUCKET).setGuiProperty().build();
-            case CHICKEN:
-                return new ItemBuilder(Material.CHICKEN).setGuiProperty().build();
-            case PLAYER:
-                return new ItemBuilder(Material.PLAYER_HEAD).setGuiProperty().build();
-            case BLAZE:
-                return new ItemBuilder(Material.BLAZE_ROD).setGuiProperty().build();
-            case ZOMBIFIED_PIGLIN:
-                return new ItemBuilder(Material.GOLD_NUGGET).setGuiProperty().build();
-            case MAGMA_CUBE:
-                return new ItemBuilder(Material.MAGMA_CREAM).setGuiProperty().build();
-            case GHAST:
-                return new ItemBuilder(Material.GHAST_TEAR).setGuiProperty().build();
-            case WITHER_SKELETON:
-                return new ItemBuilder(Material.NETHER_BRICK).setGuiProperty().build();
-            case HORSE:
-                return new ItemBuilder(Material.SADDLE).setGuiProperty().build();
-            case DONKEY:
-                return new ItemBuilder(Material.SADDLE).setGuiProperty().build();
-            case MULE:
-                return new ItemBuilder(Material.SADDLE).setGuiProperty().build();
-            case SKELETON_HORSE:
-                return new ItemBuilder(Material.SADDLE).setGuiProperty().build();
-            case ZOMBIE_HORSE:
-                return new ItemBuilder(Material.SADDLE).setGuiProperty().build();
-            case ELDER_GUARDIAN:
-                return new ItemBuilder(Material.PRISMARINE_CRYSTALS).setGuiProperty().build();
-            // 1.9
-            case SHULKER:
-                return new ItemBuilder(Material.PURPLE_SHULKER_BOX).setGuiProperty().build();
-            // 1.10
-            case POLAR_BEAR:
-                return new ItemBuilder(Material.SNOW_BLOCK).setGuiProperty().build();
-            case STRAY:
-                return new ItemBuilder(Material.BONE).setGuiProperty().build();
-            // 1.11
-            case LLAMA:
-                return new ItemBuilder(Material.ORANGE_CARPET).setGuiProperty().build();
-            case EVOKER:
-                return new ItemBuilder(Material.EVOKER_SPAWN_EGG).setGuiProperty().build();
-            case VEX:
-                return new ItemBuilder(Material.IRON_SWORD).setGuiProperty().build();
-            case VINDICATOR:
-                return new ItemBuilder(Material.IRON_AXE).setGuiProperty().build();
-            // 1.12
-            case PARROT:
-                return new ItemBuilder(Material.NOTE_BLOCK).setGuiProperty().build();
-            case ILLUSIONER:
-                return new ItemBuilder(Material.LINGERING_POTION).setGuiProperty().build();
-
-            case COD:
-                return new ItemBuilder(Material.COD_BUCKET).setGuiProperty().build();
-            case DOLPHIN:
-                return new ItemBuilder(Material.BUBBLE_CORAL).setGuiProperty().build();
-
-            case PHANTOM:
-                return new ItemBuilder(Material.PHANTOM_MEMBRANE).setGuiProperty().build();
-
-            case PUFFERFISH:
-
-                return new ItemBuilder(Material.PUFFERFISH_BUCKET).setGuiProperty().build();
-
-            case SALMON:
-                return new ItemBuilder(Material.SALMON_BUCKET).setGuiProperty().build();
-
-            case TROPICAL_FISH:
-                return new ItemBuilder(Material.TROPICAL_FISH_BUCKET).setGuiProperty().build();
-            case TURTLE:
-                return new ItemBuilder(Material.SCUTE).setGuiProperty().build();
-            default:
-                break;
-
-        }
-        return new ItemBuilder(Material.BARRIER).setGuiProperty().build();
+        return switch (element) {
+            case ZOMBIE, ZOMBIE_VILLAGER, HUSK, DROWNED -> new ItemBuilder(Material.ROTTEN_FLESH).setGuiProperty().build();
+            case WITCH -> new ItemBuilder(Material.GLASS_BOTTLE).setGuiProperty().build();
+            case SPIDER, CAVE_SPIDER -> new ItemBuilder(Material.SPIDER_EYE).setGuiProperty().build();
+            case SLIME -> new ItemBuilder(Material.SLIME_BALL).setGuiProperty().build();
+            case SKELETON -> new ItemBuilder(Material.BONE).setGuiProperty().build();
+            case SILVERFISH -> new ItemBuilder(Material.STONE_BRICKS).setGuiProperty().build();
+            case GIANT -> new ItemBuilder(Material.BONE_BLOCK).setGuiProperty().build();
+            case ENDERMITE,ENDERMAN -> new ItemBuilder(Material.ENDER_PEARL).setGuiProperty().build();
+            case CREEPER -> new ItemBuilder(Material.GUNPOWDER).setGuiProperty().build();
+            case WOLF -> new ItemBuilder(Material.BONE).setGuiProperty().build();
+            case VILLAGER -> new ItemBuilder(Material.EMERALD).setGuiProperty().build();
+            case SNOWMAN -> new ItemBuilder(Material.SNOWBALL).setGuiProperty().build();
+            case IRON_GOLEM -> new ItemBuilder(Material.IRON_BLOCK).setGuiProperty().build();
+            case WITHER -> new ItemBuilder(Material.NETHER_STAR).setGuiProperty().build();
+            case ENDER_DRAGON -> new ItemBuilder(Material.DRAGON_EGG).setGuiProperty().build();
+            case SQUID -> new ItemBuilder(Material.INK_SAC).setGuiProperty().build();
+            case GUARDIAN -> new ItemBuilder(Material.PRISMARINE_SHARD).setGuiProperty().build();
+            case BAT -> new ItemBuilder(Material.STONE).setGuiProperty().build();
+            case OCELOT -> new ItemBuilder(Material.RED_BED).setGuiProperty().build();
+            case PIG -> new ItemBuilder(Material.PORKCHOP).setGuiProperty().build();
+            case SHEEP -> new ItemBuilder(Material.WHITE_WOOL).setGuiProperty().build();
+            case RABBIT -> new ItemBuilder(Material.RABBIT_FOOT).setGuiProperty().build();
+            case MUSHROOM_COW -> new ItemBuilder(Material.RED_MUSHROOM).setGuiProperty().build();
+            case COW -> new ItemBuilder(Material.MILK_BUCKET).setGuiProperty().build();
+            case CHICKEN -> new ItemBuilder(Material.CHICKEN).setGuiProperty().build();
+            case PLAYER -> new ItemBuilder(Material.PLAYER_HEAD).setGuiProperty().build();
+            case BLAZE -> new ItemBuilder(Material.BLAZE_ROD).setGuiProperty().build();
+            case ZOMBIFIED_PIGLIN -> new ItemBuilder(Material.GOLD_NUGGET).setGuiProperty().build();
+            case MAGMA_CUBE -> new ItemBuilder(Material.MAGMA_CREAM).setGuiProperty().build();
+            case GHAST -> new ItemBuilder(Material.GHAST_TEAR).setGuiProperty().build();
+            case WITHER_SKELETON -> new ItemBuilder(Material.NETHER_BRICK).setGuiProperty().build();
+            case HORSE,DONKEY,MULE,SKELETON_HORSE,ZOMBIE_HORSE -> new ItemBuilder(Material.SADDLE).setGuiProperty().build();
+            case ELDER_GUARDIAN -> new ItemBuilder(Material.PRISMARINE_CRYSTALS).setGuiProperty().build();
+            case SHULKER -> new ItemBuilder(Material.PURPLE_SHULKER_BOX).setGuiProperty().build();
+            case POLAR_BEAR -> new ItemBuilder(Material.SNOW_BLOCK).setGuiProperty().build();
+            case STRAY -> new ItemBuilder(Material.BONE).setGuiProperty().build();
+            case LLAMA -> new ItemBuilder(Material.ORANGE_CARPET).setGuiProperty().build();
+            case EVOKER -> new ItemBuilder(Material.EVOKER_SPAWN_EGG).setGuiProperty().build();
+            case VEX -> new ItemBuilder(Material.IRON_SWORD).setGuiProperty().build();
+            case VINDICATOR -> new ItemBuilder(Material.IRON_AXE).setGuiProperty().build();
+            case PARROT -> new ItemBuilder(Material.NOTE_BLOCK).setGuiProperty().build();
+            case ILLUSIONER -> new ItemBuilder(Material.LINGERING_POTION).setGuiProperty().build();
+            case COD -> new ItemBuilder(Material.COD_BUCKET).setGuiProperty().build();
+            case DOLPHIN -> new ItemBuilder(Material.BUBBLE_CORAL).setGuiProperty().build();
+            case PHANTOM -> new ItemBuilder(Material.PHANTOM_MEMBRANE).setGuiProperty().build();
+            case PUFFERFISH -> new ItemBuilder(Material.PUFFERFISH_BUCKET).setGuiProperty().build();
+            case SALMON -> new ItemBuilder(Material.SALMON_BUCKET).setGuiProperty().build();
+            case TROPICAL_FISH -> new ItemBuilder(Material.TROPICAL_FISH_BUCKET).setGuiProperty().build();
+            case TURTLE -> new ItemBuilder(Material.SCUTE).setGuiProperty().build();
+            default -> new ItemBuilder(Material.BARRIER).setGuiProperty().build();
+        };
     }
 
     @SuppressWarnings("deprecation")
@@ -343,8 +268,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
             case SLIME_SPLIT -> new ItemBuilder(Material.SLIME_BLOCK).setGuiProperty().build();
             case SPAWNER -> new ItemBuilder(Material.SPAWNER).setGuiProperty().build();
             case SPAWNER_EGG -> new ItemBuilder(Material.EVOKER_SPAWN_EGG).setGuiProperty().build();
-            case VILLAGE_DEFENSE -> new ItemBuilder(Material.EMERALD).setGuiProperty().build();
-            case VILLAGE_INVASION -> new ItemBuilder(Material.EMERALD).setGuiProperty().build();
+            case VILLAGE_DEFENSE,VILLAGE_INVASION -> new ItemBuilder(Material.EMERALD).setGuiProperty().build();
             case TRAP -> new ItemBuilder(Material.TRIPWIRE_HOOK).setGuiProperty().build();
             default -> new ItemBuilder(Material.BARRIER).setGuiProperty().build();
         };

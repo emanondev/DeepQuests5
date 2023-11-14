@@ -29,7 +29,7 @@ import java.util.List;
 public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "breed_mob";
 
-    public BreedMobTaskType(QuestManager<T> manager) {
+    public BreedMobTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

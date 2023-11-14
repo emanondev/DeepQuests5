@@ -27,7 +27,7 @@ import java.util.List;
 public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "tame_mob";
 
-    public TameMobTaskType(QuestManager<T> manager) {
+    public TameMobTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

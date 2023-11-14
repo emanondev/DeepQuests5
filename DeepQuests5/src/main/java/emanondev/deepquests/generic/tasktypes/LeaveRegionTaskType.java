@@ -26,7 +26,7 @@ import java.util.List;
 public class LeaveRegionTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "leave_region";
 
-    public LeaveRegionTaskType(QuestManager<T> manager) {
+    public LeaveRegionTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

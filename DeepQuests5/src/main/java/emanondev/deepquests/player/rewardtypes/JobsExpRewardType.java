@@ -45,7 +45,7 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
     }
 
     @Override
-    public JobsExpReward getInstance(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
+    public @NotNull JobsExpReward getInstance(int id, @NotNull QuestManager<QuestPlayer> manager, @NotNull YMLSection section) {
         return new JobsExpReward(id, manager, section);
     }
 
@@ -85,7 +85,7 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
         }
 
         @Override
-        public void apply(QuestPlayer qPlayer, int amount) {
+        public void apply(@NotNull QuestPlayer qPlayer, int amount) {
             if (qPlayer.getPlayer() == null || jobData.getJob() == null || amount <= 0 || amountData.getAmount() <= 0)
                 return;
 

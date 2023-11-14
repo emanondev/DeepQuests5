@@ -22,7 +22,7 @@ import java.util.List;
 public class QuestsPointsRewardType<T extends User<T>> extends ARewardType<T> {
     private final static String ID = "quests_points";
 
-    public QuestsPointsRewardType(QuestManager<T> manager) {
+    public QuestsPointsRewardType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -42,7 +42,7 @@ public class QuestsPointsRewardType<T extends User<T>> extends ARewardType<T> {
     }
 
     @Override
-    public QuestsPointsReward getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull QuestsPointsReward getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new QuestsPointsReward(id, manager, section);
     }
 
@@ -80,7 +80,7 @@ public class QuestsPointsRewardType<T extends User<T>> extends ARewardType<T> {
         }
 
         @Override
-        public void apply(T qPlayer, int amount) {
+        public void apply(@NotNull T qPlayer, int amount) {
             if (amount <= 0)
                 return;
             try {

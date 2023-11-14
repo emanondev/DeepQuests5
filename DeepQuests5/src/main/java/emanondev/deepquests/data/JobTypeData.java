@@ -12,6 +12,8 @@ import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +22,7 @@ import java.util.List;
 public class JobTypeData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private Job job = null;
 
-    public JobTypeData(E parent, YMLSection section) {
+    public JobTypeData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         try {
             String jobName = section.getString(Paths.DATA_JOB_TYPE, null);
@@ -31,11 +33,11 @@ public class JobTypeData<T extends User<T>, E extends QuestComponent<T>> extends
         }
     }
 
-    public Job getJob() {
+    public @Nullable Job getJob() {
         return job;
     }
 
-    public void setJob(Job job) {
+    public void setJob(@Nullable Job job) {
         if (this.job == job)
             return;
         if (this.job != null && this.job.equals(job))
@@ -44,7 +46,7 @@ public class JobTypeData<T extends User<T>, E extends QuestComponent<T>> extends
         getConfig().set(Paths.DATA_JOB_TYPE, job == null ? null : job.getName());
     }
 
-    public Button getJobSelector(Gui gui) {
+    public @NotNull Button getJobSelector(@NotNull Gui gui) {
         return new JobSelector(gui);
     }
 

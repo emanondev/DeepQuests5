@@ -30,7 +30,7 @@ public class KillMythicMobTaskType<T extends User<T>> extends ATaskType<T> {
 
     private final static String ID = "kill_mythic_mob";
 
-    public KillMythicMobTaskType(QuestManager<T> manager) {
+    public KillMythicMobTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

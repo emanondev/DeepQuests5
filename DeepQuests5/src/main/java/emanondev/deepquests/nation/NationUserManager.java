@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,18 +22,18 @@ public class NationUserManager extends AUserManager<QuestNation> implements List
 
     private final Map<Nation, QuestNation> users = new HashMap<>();
 
-    public NationUserManager(NationQuestManager questManager) {
+    public NationUserManager(@NotNull NationQuestManager questManager) {
         super(questManager);
         Bukkit.getPluginManager().registerEvents(this, Quests.get());
     }
 
     @Override
-    public NationQuestManager getManager() {
+    public @NotNull NationQuestManager getManager() {
         return (NationQuestManager) super.getManager();
     }
 
     @Override
-    public Collection<QuestNation> getUsers() {
+    public @NotNull Collection<QuestNation> getUsers() {
         return Collections.unmodifiableCollection(users.values());
     }
 

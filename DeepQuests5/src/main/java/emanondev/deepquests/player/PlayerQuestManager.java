@@ -1,10 +1,10 @@
 package emanondev.deepquests.player;
 
 import emanondev.core.CorePlugin;
+import emanondev.core.Hooks;
 import emanondev.deepquests.gui.button.GuiElementButton;
 import emanondev.deepquests.gui.button.SortableButton;
 import emanondev.deepquests.gui.inventory.Gui;
-import emanondev.deepquests.hooks.Hooks;
 import emanondev.deepquests.implementations.AQuestManager;
 import emanondev.deepquests.player.requiretypes.*;
 import emanondev.deepquests.player.rewardtypes.*;
@@ -44,14 +44,14 @@ public class PlayerQuestManager extends AQuestManager<QuestPlayer> {
             getRewardProvider().registerType(new SkillAPIExpRewardType(this));
             getRequireProvider().registerType(new SkillAPILevelRequireType(this));
         }
-        if (Hooks.isCMIEnabled()) {
+        if (Hooks.isEnabled("CMI")) {//TODO add to core
             getRequireProvider().registerType(new CMIPlayTimeRequireType(this));
         }
 
     }
 
     @Override
-    public PlayerUserManager getUserManager() {
+    public @NotNull PlayerUserManager getUserManager() {
         return userManager;
     }
 
@@ -124,7 +124,7 @@ public class PlayerQuestManager extends AQuestManager<QuestPlayer> {
     }
 
     @Override
-    public SortableButton getEditorButton(Gui parent) {
+    public @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 

@@ -92,7 +92,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
             info.add("&9Requires:");
             for (Require<T> require : requires.values()) {
                 info.add("&9 - &e" + require.getDisplayName());
-                info.add("   &8" + (require.getType() == null ? "&cError" : require.getType().getKeyID()));
+                info.add("   &8" + require.getTypeName());
             }
         }
         return info;
@@ -170,7 +170,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
     }
 
     @Override
-    public final QuestDisplayInfo<T> getDisplayInfo() {
+    public final @NotNull QuestDisplayInfo<T> getDisplayInfo() {
         return displayInfo;
     }
 

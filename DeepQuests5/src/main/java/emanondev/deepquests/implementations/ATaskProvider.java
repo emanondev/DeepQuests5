@@ -22,9 +22,7 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     private final YMLConfig config;
     private final Permission editPermission;
 
-    public ATaskProvider(QuestManager<T> manager) {
-        if (manager == null)
-            throw new NullPointerException();
+    public ATaskProvider(@NotNull QuestManager<T> manager) {
         this.manager = manager;
         editPermission = new PermissionBuilder("deepquests.editor." + this.getManager().getName() + ".tasktype.*")
                 .setDescription("Allows to edit any task with type for manager " + this.getManager().getName())
@@ -36,9 +34,7 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
         config.reload();
     }
 
-    public YMLSection getTypeConfig(TaskType<T> t) {
-        if (t == null)
-            throw new NullPointerException();
+    public @NotNull YMLSection getTypeConfig(@NotNull TaskType<T> t) {
         return config.loadSection(t.getKeyID());
     }
 
@@ -47,19 +43,17 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     }
 
     @Override
-    public QuestManager<T> getManager() {
+    public @NotNull QuestManager<T> getManager() {
         return manager;
     }
 
     @Override
-    public TaskType<T> getType(String id) {
+    public @NotNull TaskType<T> getType(@NotNull String id) {
         return types.get(id);
     }
 
     @Override
-    public void registerType(TaskType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
+    public void registerType(@NotNull TaskType<T> type) {
         if (types.containsKey(type.getKeyID()))
             throw new IllegalArgumentException();
         if (type.getManager() != manager)
@@ -72,12 +66,12 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     }
 
     @Override
-    public Collection<TaskType<T>> getTypes() {
+    public @NotNull Collection<TaskType<T>> getTypes() {
         return Collections.unmodifiableCollection(types.values());
     }
 
     @Override
-    public @NotNull Task<T> getInstance(int id, Mission<T> mission, YMLSection section) {
+    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, @NotNull YMLSection section) {
         if (mission == null)
             throw new NullPointerException();
         try {
@@ -109,7 +103,7 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     }
 
     @Override
-    public Permission getEditorPermission() {
+    public @NotNull Permission getEditorPermission() {
         return editPermission;
     }
 

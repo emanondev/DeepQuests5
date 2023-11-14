@@ -9,7 +9,7 @@ public class MissionFailEvent<T extends User<T>> extends UserEventWithRewards<T>
     private static final HandlerList handlers = new HandlerList();
     private final Mission<T> mission;
 
-    public MissionFailEvent(T user, Mission<T> mission) {
+    public MissionFailEvent(@NotNull T user, @NotNull Mission<T> mission) {
         super(user, mission.getFailRewards());
         this.mission = mission;
     }
@@ -22,7 +22,7 @@ public class MissionFailEvent<T extends User<T>> extends UserEventWithRewards<T>
         return handlers;
     }
 
-    public Mission<T> getMission() {
+    public @NotNull Mission<T> getMission() {
         return mission;
     }
 }

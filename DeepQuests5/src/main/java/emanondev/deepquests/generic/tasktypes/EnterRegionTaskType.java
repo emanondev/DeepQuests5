@@ -26,7 +26,7 @@ import java.util.List;
 public class EnterRegionTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "enter_region";
 
-    public EnterRegionTaskType(QuestManager<T> manager) {
+    public EnterRegionTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

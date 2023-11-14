@@ -45,7 +45,7 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
     }
 
     @Override
-    public ItemStackReward getInstance(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
+    public @NotNull ItemStackReward getInstance(int id, @NotNull QuestManager<QuestPlayer> manager, @NotNull YMLSection section) {
         return new ItemStackReward(id, manager, section);
     }
 
@@ -85,7 +85,7 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
         }
 
         @Override
-        public void apply(QuestPlayer qPlayer, int amount) {
+        public void apply(@NotNull QuestPlayer qPlayer, int amount) {
             if (amount <= 0 || stackData.getItem() == null || amountData.getAmount() <= 0)
                 return;
             UtilsInventory.giveAmount(qPlayer.getPlayer(), stackData.getItem(), amountData.getAmount() * amount,

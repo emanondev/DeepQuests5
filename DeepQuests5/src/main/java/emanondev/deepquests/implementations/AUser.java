@@ -9,7 +9,6 @@ import java.util.*;
 public abstract class AUser<T extends AUser<T>> implements User<T> {
     private final UserManager<T> userManager;
     private final String uuid;
-    // protected final Navigator nav;
     private final QuestManager<T> manager;
     private final YMLConfig config;
     private final Map<Integer, QuestData<T>> questDatas = new HashMap<>();
@@ -22,8 +21,8 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
     private Integer missionLimit = null;
 
     @SuppressWarnings("unchecked")
-    public AUser(UserManager<T> userManager, String uuid) {
-        if (userManager == null || uuid == null || uuid.isEmpty())
+    public AUser(@NotNull UserManager<T> userManager, @NotNull String uuid) {
+        if (uuid.isEmpty())
             throw new NullPointerException();
         this.userManager = userManager;
         this.manager = userManager.getManager();
@@ -45,7 +44,7 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
     }
 
     @Override
-    public final YMLConfig getConfig() {
+    public final @NotNull YMLConfig getConfig() {
         return config;
     }
 
@@ -86,7 +85,7 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
             unregister(task);
     }
 
-    private boolean register(Task<T> task) {
+    private boolean register(@NotNull Task<T> task) {
         if (!getTaskData(task).isCompleted()) {
             List<Task<T>> list = activeTasks.get(task.getType());
             if (list == null) {
@@ -108,7 +107,6 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
         if (list == null) {
             list = new Vector<>();
             activeTasks.put(type, list);
-            return Collections.unmodifiableList(list);
         }
         return Collections.unmodifiableList(list);
     }
@@ -264,7 +262,6 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
     @SuppressWarnings("unchecked")
     private Collection<TaskData<T>> loadUserTaskDatas() {
         HashSet<TaskData<T>> set = new HashSet<>();
-        // Navigator subNav = nav.getNavigator("tasks_data");
         for (String key : config.getKeys("tasks_data")) {
             try {
                 int id = Integer.parseInt(key);

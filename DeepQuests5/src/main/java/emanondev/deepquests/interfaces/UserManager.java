@@ -2,6 +2,7 @@ package emanondev.deepquests.interfaces;
 
 import emanondev.core.YMLConfig;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,10 +13,9 @@ public interface UserManager<T extends User<T>> {
     /**
      * @return an immutable Collection of all loaded Users
      */
-    Collection<T> getUsers();
+    @NotNull Collection<T> getUsers();
 
     /**
-     * @param id
      * @return the user with user.getUID().equals(id)
      */
     T getUser(String id);
@@ -31,7 +31,7 @@ public interface UserManager<T extends User<T>> {
     /**
      * @return the quest manager
      */
-    QuestManager<T> getManager();
+    @NotNull QuestManager<T> getManager();
 
     /**
      * save all users progress
@@ -40,7 +40,6 @@ public interface UserManager<T extends User<T>> {
     void reload();
 
     /**
-     * @param p
      * @return the user with user.getPlayers().contains(p) == true or null
      */
     T getUser(Player p);
@@ -59,11 +58,11 @@ public interface UserManager<T extends User<T>> {
         return names;
     }
 
-    default File getUserFile(String uid) {
+    default @NotNull File getUserFile(String uid) {
         return new File(getManager().getFolder(), "users_database" + File.separator + uid + ".yml");
     }
 
-    default YMLConfig getUserConfig(String uid) {
+    default @NotNull YMLConfig getUserConfig(String uid) {
         return getManager().getConfig("users_database" + File.separator + uid + ".yml");
     }
 

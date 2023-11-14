@@ -33,7 +33,7 @@ import java.util.List;
 public class EnterRegionWithItemTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "enter_region_with_item";
 
-    public EnterRegionWithItemTaskType(QuestManager<T> manager) {
+    public EnterRegionWithItemTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

@@ -22,7 +22,7 @@ public class TownQuestManager extends AQuestManager<QuestTown> {
     public final static String NAME = "towns";
     private final TownUserManager userManager;
 
-    public TownQuestManager(String name, CorePlugin plugin) {
+    public TownQuestManager(@NotNull String name, @NotNull CorePlugin plugin) {
         super(name, plugin);
         userManager = new TownUserManager(this);
 
@@ -31,12 +31,12 @@ public class TownQuestManager extends AQuestManager<QuestTown> {
     }
 
     @Override
-    public TownUserManager getUserManager() {
+    public @NotNull TownUserManager getUserManager() {
         return userManager;
     }
 
     @Override
-    public SortableButton getEditorButton(Gui parent) {
+    public @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 

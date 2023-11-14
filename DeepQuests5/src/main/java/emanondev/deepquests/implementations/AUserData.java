@@ -3,24 +3,23 @@ package emanondev.deepquests.implementations;
 import emanondev.core.YMLSection;
 import emanondev.deepquests.interfaces.Navigable;
 import emanondev.deepquests.interfaces.User;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class AUserData<T extends User<T>> implements Navigable {
 
     protected final YMLSection section;
     private final T user;
 
-    public AUserData(T user, YMLSection section) {
-        if (user == null || section == null)
-            throw new NullPointerException();
+    public AUserData(@NotNull T user, @NotNull YMLSection section) {
         this.user = user;
         this.section = section;
     }
 
-    public T getUser() {
+    public @NotNull T getUser() {
         return user;
     }
 
-    public YMLSection getConfig() {
+    public @NotNull YMLSection getConfig() {
         return section;
     }
 

@@ -13,6 +13,8 @@ import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,12 +23,12 @@ import java.util.List;
 public class TargetMissionData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private Integer missionKey;
 
-    public TargetMissionData(E parent, YMLSection section) {
+    public TargetMissionData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         missionKey = getConfig().getInteger(Paths.DATA_TARGET_MISSION_KEY, null);
     }
 
-    public Mission<T> getMission() {
+    public @Nullable Mission<T> getMission() {
         if (missionKey == null)
             return null;
         return getQuestManager().getMission(missionKey);
@@ -44,7 +46,7 @@ public class TargetMissionData<T extends User<T>, E extends QuestComponent<T>> e
         return desc;
     }
 
-    public void setMission(Mission<T> mission) {
+    public void setMission(@Nullable Mission<T> mission) {
         if (mission == null) {
             missionKey = null;
             getConfig().set(Paths.DATA_TARGET_MISSION_KEY, missionKey);
@@ -56,7 +58,7 @@ public class TargetMissionData<T extends User<T>, E extends QuestComponent<T>> e
         getConfig().set(Paths.DATA_TARGET_MISSION_KEY, missionKey);
     }
 
-    public Button getMissionSelectorButton(Gui gui) {
+    public @NotNull Button getMissionSelectorButton(@NotNull Gui gui) {
         return new MissionSelectorButton(gui);
     }
 

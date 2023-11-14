@@ -15,19 +15,17 @@ public class AQuestBag<T extends User<T>> implements QuestBag<T> {
     private final T user;
     private final YMLSection section;
 
-    public AQuestBag(T user, YMLSection section) {
-        if (section == null || user == null)
-            throw new NullPointerException();
+    public AQuestBag(@NotNull T user, @NotNull YMLSection section) {
         this.user = user;
         this.section = section;
     }
 
-    public YMLSection getConfig() {
+    public @NotNull YMLSection getConfig() {
         return section;
     }
 
     @Override
-    public T getUser() {
+    public @NotNull T getUser() {
         return user;
     }
 

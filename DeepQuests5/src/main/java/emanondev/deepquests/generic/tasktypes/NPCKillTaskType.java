@@ -30,7 +30,7 @@ import java.util.List;
 public class NPCKillTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "kill_npc";
 
-    public NPCKillTaskType(QuestManager<T> manager) {
+    public NPCKillTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

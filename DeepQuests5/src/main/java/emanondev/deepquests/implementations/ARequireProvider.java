@@ -6,6 +6,7 @@ import emanondev.core.YMLSection;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.interfaces.*;
 import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,9 +23,7 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     private final YMLConfig config;
     private final Permission editPermission;
 
-    public ARequireProvider(QuestManager<T> manager) {
-        if (manager == null)
-            throw new NullPointerException();
+    public ARequireProvider(@NotNull QuestManager<T> manager) {
         this.manager = manager;
         editPermission = new PermissionBuilder("deepquests.editor." + this.getManager().getName() + ".requiretype.*")
                 .setDescription("Allows to edit any require with type for manager " + this.getManager().getName())
@@ -36,9 +35,7 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
         config.reload();
     }
 
-    public YMLSection getTypeConfig(RequireType<T> t) {
-        if (t == null)
-            throw new NullPointerException();
+    public @NotNull YMLSection getTypeConfig(@NotNull RequireType<T> t) {
         return config.loadSection(t.getKeyID());
     }
 
@@ -47,24 +44,22 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     }
 
     @Override
-    public QuestManager<T> getManager() {
+    public @NotNull QuestManager<T> getManager() {
         return manager;
     }
 
     @Override
-    public RequireType<T> getType(String id) {
+    public RequireType<T> getType(@NotNull String id) {
         return types.get(id);
     }
 
     @Override
-    public Collection<RequireType<T>> getTypes() {
+    public @NotNull Collection<RequireType<T>> getTypes() {
         return types.values();
     }
 
     @Override
-    public void registerQuestType(RequireType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
+    public void registerQuestType(@NotNull RequireType<T> type) {
         if (type.getManager() != manager)
             throw new IllegalArgumentException();
         types.put(type.getKeyID(), type);
@@ -75,9 +70,7 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     }
 
     @Override
-    public void registerMissionType(RequireType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
+    public void registerMissionType(@NotNull RequireType<T> type) {
         if (type.getManager() != manager)
             throw new IllegalArgumentException();
         types.put(type.getKeyID(), type);
@@ -88,9 +81,7 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     }
 
     @Override
-    public void registerTaskType(RequireType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
+    public void registerTaskType(@NotNull RequireType<T> type) {
         if (type.getManager() != manager)
             throw new IllegalArgumentException();
         types.put(type.getKeyID(), type);
@@ -101,9 +92,7 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     }
 
     @Override
-    public void registerType(RequireType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
+    public void registerType(@NotNull RequireType<T> type) {
         if (type.getManager() != manager)
             throw new IllegalArgumentException();
         types.put(type.getKeyID(), type);
@@ -116,24 +105,22 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     }
 
     @Override
-    public Collection<RequireType<T>> getQuestTypes() {
+    public @NotNull Collection<RequireType<T>> getQuestTypes() {
         return Collections.unmodifiableCollection(questTypes.values());
     }
 
     @Override
-    public Collection<RequireType<T>> getMissionTypes() {
+    public @NotNull Collection<RequireType<T>> getMissionTypes() {
         return Collections.unmodifiableCollection(missionTypes.values());
     }
 
     @Override
-    public Collection<RequireType<T>> getTaskTypes() {
+    public @NotNull Collection<RequireType<T>> getTaskTypes() {
         return Collections.unmodifiableCollection(taskTypes.values());
     }
 
     @Override
-    public Require<T> getInstance(int id, QuestManager<T> manager, YMLSection section) {
-        if (manager == null)
-            throw new NullPointerException();
+    public @NotNull Require<T> getInstance(int id, @NotNull YMLSection section) {
         try {
             return getType(section.getString(Paths.TYPE_NAME, null)).getInstance(id, manager, section);
         } catch (Exception e) {
@@ -146,7 +133,7 @@ public class ARequireProvider<T extends User<T>> implements RequireProvider<T> {
     }
 
     @Override
-    public final Permission getEditorPermission() {
+    public final @NotNull Permission getEditorPermission() {
         return editPermission;
     }
 

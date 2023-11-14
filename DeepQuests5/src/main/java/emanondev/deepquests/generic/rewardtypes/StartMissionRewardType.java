@@ -25,7 +25,7 @@ import java.util.List;
 public class StartMissionRewardType<T extends User<T>> extends ARewardType<T> {
     private final static String ID = "start_mission";
 
-    public StartMissionRewardType(QuestManager<T> manager) {
+    public StartMissionRewardType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -51,7 +51,7 @@ public class StartMissionRewardType<T extends User<T>> extends ARewardType<T> {
     }
 
     @Override
-    public StartMissionReward getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull StartMissionReward getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new StartMissionReward(id, manager, section);
     }
 
@@ -89,7 +89,7 @@ public class StartMissionRewardType<T extends User<T>> extends ARewardType<T> {
         }
 
         @Override
-        public void apply(T user, int amount) {
+        public void apply(@NotNull T user, int amount) {
             if (amount <= 0)
                 return;
             try {

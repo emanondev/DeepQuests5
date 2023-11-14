@@ -1,12 +1,13 @@
 package emanondev.deepquests.interfaces;
 
 import emanondev.core.YMLSection;
+import org.jetbrains.annotations.NotNull;
 
 public interface RequireType<T extends User<T>> extends QuestComponentType<T, Require<T>> {
 
-    Require<T> getInstance(int id, QuestManager<T> manager, YMLSection nav);
+    @NotNull Require<T> getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section);
 
-    default RequireProvider<T> getProvider() {
+    default @NotNull RequireProvider<T> getProvider() {
         return getManager().getRequireProvider();
     }
 }

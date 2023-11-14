@@ -71,18 +71,6 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
         };
     }
 
-    /*
-     * @Override public Navigator getNavigator() { super.getNavigator();
-     * nav.setNavigator(Paths.QUESTCOMPONENT_DISPLAY_INFO,
-     * displayInfo.getNavigator()); for (PhaseChange phase:PhaseChange.values()) {
-     * nav.setBoolean(this.getPhaseShowMessagePath(phase),
-     * this.showMessage.get(phase));
-     * nav.setBoolean(this.getPhaseMessageIsDefaultPath(phase),
-     * this.messageIsDefault.get(phase)); if (!this.messageIsDefault.get(phase))
-     * nav.setStringList(this.getPhaseMessagePath(phase),
-     * this.rawMessages.get(phase)); } return nav; }
-     */
-
     private String getPhaseShowMessagePath(PhaseChange phase) {
         return "show-" + phase.toString() + "-message";
     }
@@ -116,7 +104,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
             info.add("&9Tasks:");
             for (Task<T> task : tasks.values()) {
                 info.add("&9 - &e" + task.getDisplayName());
-                info.add("   &7Type: " + (task.getType() != null ? task.getType().getKeyID() : "&cError"));
+                info.add("   &7Type: " + task.getTypeName());
             }
         }
         List<String> blackList = new ArrayList<>();
@@ -140,28 +128,28 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
             info.add("&9Requires:");
             for (Require<T> require : requires.values()) {
                 info.add("&9 - &e" + require.getDisplayName());
-                info.add("   &7" + (require.getType() != null ? require.getType().getKeyID() : "&cError"));
+                info.add("   &7" + require.getTypeName());
             }
         }
         if (startRewards.size() > 0) {
             info.add("&9Start Rewards:");
             for (Reward<T> reward : startRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
-                info.add("   &7" + (reward.getType() == null ? "&cError" : reward.getType().getKeyID()));
+                info.add("   &7" + reward.getTypeName());
             }
         }
         if (completeRewards.size() > 0) {
             info.add("&9Complete Rewards:");
             for (Reward<T> reward : completeRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
-                info.add("   &7" + (reward.getType() == null ? "&cError" : reward.getType().getKeyID()));
+                info.add("   &7" + reward.getTypeName());
             }
         }
         if (failRewards.size() > 0) {
             info.add("&9Fail Rewards:");
             for (Reward<T> reward : failRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
-                info.add("   &7" + (reward.getType() == null ? "&cError" : reward.getType().getKeyID()));
+                info.add("   &7" + reward.getTypeName());
             }
         }
         return info;
@@ -173,12 +161,12 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final Collection<Task<T>> getTasks() {
+    public final @NotNull Collection<Task<T>> getTasks() {
         return Collections.unmodifiableCollection(tasks.values());
     }
 
     @Override
-    public final boolean addTask(Task<T> task) {
+    public final boolean addTask(@NotNull Task<T> task) {
         if (tasks.containsKey(task.getID()))
             throw new IllegalArgumentException();
         tasks.put(task.getID(), task);
@@ -186,17 +174,17 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean removeTask(Task<T> task) {
+    public final boolean removeTask(@NotNull Task<T> task) {
         return tasks.remove(task.getID()) != null;
     }
 
     @Override
-    public final Quest<T> getQuest() {
+    public final @NotNull Quest<T> getQuest() {
         return parent;
     }
 
     @Override
-    public final Collection<Require<T>> getRequires() {
+    public final @NotNull Collection<Require<T>> getRequires() {
         return Collections.unmodifiableCollection(requires.values());
     }
 
@@ -206,7 +194,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean addRequire(Require<T> require) {
+    public final boolean addRequire(@NotNull Require<T> require) {
         if (requires.containsKey(require.getID()))
             throw new IllegalArgumentException();
         requires.put(require.getID(), require);
@@ -214,12 +202,12 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean removeRequire(Require<T> require) {
+    public final boolean removeRequire(@NotNull Require<T> require) {
         return requires.remove(require.getID()) != null;
     }
 
     @Override
-    public final Collection<Reward<T>> getStartRewards() {
+    public final @NotNull Collection<Reward<T>> getStartRewards() {
         return Collections.unmodifiableCollection(startRewards.values());
     }
 
@@ -229,7 +217,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean addStartReward(Reward<T> reward) {
+    public final boolean addStartReward(@NotNull Reward<T> reward) {
         if (startRewards.containsKey(reward.getID()))
             throw new IllegalArgumentException();
         startRewards.put(reward.getID(), reward);
@@ -237,12 +225,12 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean removeStartReward(Reward<T> reward) {
+    public final boolean removeStartReward(@NotNull Reward<T> reward) {
         return startRewards.remove(reward.getID()) != null;
     }
 
     @Override
-    public final Collection<Reward<T>> getCompleteRewards() {
+    public final @NotNull Collection<Reward<T>> getCompleteRewards() {
         return Collections.unmodifiableCollection(completeRewards.values());
     }
 
@@ -252,7 +240,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean addCompleteReward(Reward<T> reward) {
+    public final boolean addCompleteReward(@NotNull Reward<T> reward) {
         if (completeRewards.containsKey(reward.getID()))
             throw new IllegalArgumentException();
         completeRewards.put(reward.getID(), reward);
@@ -260,12 +248,12 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean removeCompleteReward(Reward<T> reward) {
+    public final boolean removeCompleteReward(@NotNull Reward<T> reward) {
         return completeRewards.remove(reward.getID()) != null;
     }
 
     @Override
-    public final Collection<Reward<T>> getFailRewards() {
+    public final @NotNull Collection<Reward<T>> getFailRewards() {
         return Collections.unmodifiableCollection(failRewards.values());
     }
 
@@ -275,7 +263,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean addFailReward(Reward<T> reward) {
+    public final boolean addFailReward(@NotNull Reward<T> reward) {
         if (failRewards.containsKey(reward.getID()))
             throw new IllegalArgumentException();
         failRewards.put(reward.getID(), reward);
@@ -283,7 +271,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean removeFailReward(Reward<T> reward) {
+    public final boolean removeFailReward(@NotNull Reward<T> reward) {
         return failRewards.remove(reward.getID()) != null;
     }
 
@@ -305,17 +293,17 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final MissionDisplayInfo<T> getDisplayInfo() {
+    public final @NotNull MissionDisplayInfo<T> getDisplayInfo() {
         return displayInfo;
     }
 
     @Override
-    public final ArrayList<String> getRawPhaseMessage(PhaseChange phase) {
+    public final ArrayList<String> getRawPhaseMessage(@NotNull PhaseChange phase) {
         return new ArrayList<>(rawMessages.get(phase));
     }
 
     @Override
-    public final void setPhaseMessage(PhaseChange phase, List<String> message) {
+    public final void setPhaseMessage(@NotNull PhaseChange phase, List<String> message) {
         if (message == null) {
             message = getDefaultPhaseMessage(phase);
             this.messageIsDefault.put(phase, true);
@@ -330,12 +318,12 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
     }
 
     @Override
-    public final boolean showPhaseMessage(PhaseChange phase) {
+    public final boolean showPhaseMessage(@NotNull PhaseChange phase) {
         return showMessage.get(phase);
     }
 
     @Override
-    public final void toggleShowPhaseMessage(PhaseChange phase) {
+    public final void toggleShowPhaseMessage(@NotNull PhaseChange phase) {
         this.showMessage.put(phase, !this.showMessage.get(phase));
         getConfig().set(this.getPhaseShowMessagePath(phase), this.showMessage.get(phase));
     }

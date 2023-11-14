@@ -11,14 +11,14 @@ public interface Require<T extends User<T>> extends QuestComponent<T> {
     /**
      * @return the Type
      */
-    @NotNull RequireType<T> getType();
+    RequireType<T> getType();
 
     /**
      * @return true if user satisfy this require
      */
-    boolean isAllowed(T user);
+    boolean isAllowed(@NotNull T user);
 
-    default String[] getHolders(T user) {
+    default @NotNull String[] getHolders(T user) {
         String[] list = new String[4];
         list[0] = Holders.REQUIRE_DESCRIPTION;
         list[1] = this.getDisplayName();
@@ -33,13 +33,13 @@ public interface Require<T extends User<T>> extends QuestComponent<T> {
     }
 
     @Override
-    default SortableButton getEditorButton(Gui parent) {
+    default @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 
     @NotNull QuestManager<T> getManager();
 
-    default String getTypeName() {
+    default @NotNull String getTypeName() {
         return getType().getKeyID();
     }
 

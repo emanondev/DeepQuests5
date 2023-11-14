@@ -1,12 +1,18 @@
 package emanondev.deepquests.gui;
 
 import emanondev.core.ItemBuilder;
-import emanondev.deepquests.config.ConfigFile;
+import emanondev.core.YMLConfig;
+import emanondev.deepquests.Quests;
 import emanondev.deepquests.utils.DisplayState;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -19,7 +25,7 @@ public class GuiConfig {
     @Deprecated
     public static final String AMOUNT_HOLDER = "%amount%";
 
-    private static final ConfigFile guiConfig = new ConfigFile("guiconfig");
+    private static final YMLConfig guiConfig = Quests.get().getConfig("guiconfig.yml");
     private static final ItemStack defaultItem = new ItemBuilder(Material.BARRIER).setGuiProperty().build();
 
     public static void reload() {
@@ -29,21 +35,53 @@ public class GuiConfig {
         PlayerQuests.reload();
     }
 
-    private static List<String> getStringList(String path) {
+    private static @Nullable List<String> getStringList(@NotNull String path) {
+        return guiConfig.getStringList(path, null, false);
+        /*
         try {
-            return guiConfig.getNavigator().getStringList(path, null, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return null;*/
     }
 
-    private static String getString(String path) {
-        return guiConfig.getNavigator().getString(path, null, true);
+    private static String getString(@NotNull String path) {
+        return Utils.fixString(guiConfig.getString(path, null),null,true);
+         // guiConfig.getNavigator().getString(path, null, true);
     }
 
     private static ItemStack getItem(String path) {
-        return guiConfig.getNavigator().getItemStack(path, new ItemStack(defaultItem));
+        Object value = guiConfig.get(path, new ItemStack(defaultItem));
+        if (value instanceof ItemStack)
+            return (ItemStack) value;
+        if (value instanceof String) {
+            String[] infos = ((String) value).split(":");
+            try {
+                ItemStack item = new ItemStack(Material.valueOf(infos[0].toUpperCase()));
+                if (infos.length == 1)
+                    return item;
+                ItemMeta meta = item.getItemMeta();
+                for (int i = 1; i < infos.length; i++) {
+                    if (infos[i].startsWith("amount-"))
+                        item.setAmount(Integer.parseInt(infos[i].replace("amount-", "")));
+                    else if (infos[i].startsWith("damage-"))
+                        ((Damageable) meta).setDamage(Integer.parseInt(infos[i].replace("damage-", "")));
+                    else if (infos[i].equals("unbreakable"))
+                        meta.setUnbreakable(true);
+                    else if (infos[i].equals("hideall"))
+                        meta.addItemFlags(ItemFlag.values());
+                }
+                item.setItemMeta(meta);
+                return item;
+            } catch (Exception e) {
+                new IllegalArgumentException("Attemping to read ItemStack failed: unable to convert value for '" + value + "' returning default").printStackTrace();
+                return new ItemStack(defaultItem);
+            }
+
+        }
+        new IllegalArgumentException("Attemping to read ItemStack failed: unable to convert value for '" + value + "' returning default").printStackTrace();
+        return new ItemStack(defaultItem);
+        //return guiConfig.getNavigator().getItemStack(path, new ItemStack(defaultItem));
     }
 
     public static class Generic {

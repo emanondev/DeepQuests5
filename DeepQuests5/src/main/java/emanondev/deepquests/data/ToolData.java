@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
     private boolean doCheckEnchants = true;
     private boolean doCheckAttributes = true;
     private boolean usePlaceHolder = true;
-    public ToolData(E parent, YMLSection section) {
+    public ToolData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         this.enabled = getConfig().getBoolean("is-enabled", this.enabled);
         this.item = getConfig().getItemStack("item", this.item);

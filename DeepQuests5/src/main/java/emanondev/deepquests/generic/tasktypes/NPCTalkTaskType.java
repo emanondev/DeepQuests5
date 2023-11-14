@@ -27,7 +27,7 @@ import java.util.List;
 public class NPCTalkTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "talk_to_npc";
 
-    public NPCTalkTaskType(QuestManager<T> manager) {
+    public NPCTalkTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

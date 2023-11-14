@@ -56,7 +56,6 @@ public class Paths {
     public static final String DATA_TARGET_QUEST_KEY = "target-quest";
     public static final String DATA_TARGET_MISSION_KEY = "target-mission";
 
-    //public static final String DATA_EXPERIENCE = "experience";
 
     public static final String DATA_REGION_LIST = "region-list";
     public static final String DATA_REGION_LIST_IS_WHITELIST = "region-is-whitelist";

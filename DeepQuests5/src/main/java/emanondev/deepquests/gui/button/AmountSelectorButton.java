@@ -36,7 +36,7 @@ public abstract class AmountSelectorButton extends AButton {
         this.subGuiTitle = subGuiTitle;
         for (long val : values)
             this.values.add(val);
-        update();
+        update();//TODO may remove?
     }
 
     /**

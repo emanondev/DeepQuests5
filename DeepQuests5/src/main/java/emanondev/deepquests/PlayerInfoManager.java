@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -102,7 +103,7 @@ public class PlayerInfoManager implements Listener {
             return Bukkit.getPlayer(player);
         }
 
-        public UUID getUUID() {
+        public @NotNull UUID getUUID() {
             return player;
         }
 

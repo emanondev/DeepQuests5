@@ -15,13 +15,13 @@ import java.util.List;
 
 public class ErrorReward<T extends User<T>> extends AQuestComponent<T> implements Reward<T> {
 
-    public ErrorReward(int id, QuestManager<T> manager, YMLSection section) {
+    public ErrorReward(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         super(id, section, manager);
     }
 
     @Override
-    public String getTypeName() {
-        return "error";
+    public @NotNull String getTypeName() {
+        return "&cError";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ErrorReward<T extends User<T>> extends AQuestComponent<T> implement
     }
 
     @Override
-    public void apply(T user, int amount) {
+    public void apply(@NotNull T user, int amount) {
 
     }
 

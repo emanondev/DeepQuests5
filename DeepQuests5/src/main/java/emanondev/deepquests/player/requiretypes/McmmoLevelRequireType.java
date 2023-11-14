@@ -39,7 +39,7 @@ public class McmmoLevelRequireType extends ARequireType<QuestPlayer> {
     }
 
     @Override
-    public Require<QuestPlayer> getInstance(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
+    public @NotNull Require<QuestPlayer> getInstance(int id, @NotNull QuestManager<QuestPlayer> manager, @NotNull YMLSection section) {
         return new McmmoLevelRequire(id, manager, section);
     }
 
@@ -64,7 +64,7 @@ public class McmmoLevelRequireType extends ARequireType<QuestPlayer> {
             return amountData;
         }
 
-        public boolean isAllowed(QuestPlayer p) {
+        public boolean isAllowed(@NotNull QuestPlayer p) {
             if (skillData.getSkillType() == null)
                 return false;
             try {

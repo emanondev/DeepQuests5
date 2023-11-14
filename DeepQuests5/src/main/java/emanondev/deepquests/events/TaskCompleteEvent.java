@@ -9,7 +9,7 @@ public class TaskCompleteEvent<T extends User<T>> extends UserEventWithRewards<T
     private static final HandlerList handlers = new HandlerList();
     private final Task<T> task;
 
-    public TaskCompleteEvent(T user, Task<T> task) {
+    public TaskCompleteEvent(@NotNull T user, @NotNull Task<T> task) {
         super(user, task.getCompleteRewards());
         this.task = task;
     }
@@ -22,7 +22,7 @@ public class TaskCompleteEvent<T extends User<T>> extends UserEventWithRewards<T
         return handlers;
     }
 
-    public Task<T> getTask() {
+    public @NotNull Task<T> getTask() {
         return task;
     }
 }

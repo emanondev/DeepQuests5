@@ -5,6 +5,7 @@ import emanondev.deepquests.interfaces.Mission;
 import emanondev.deepquests.interfaces.MissionData;
 import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -12,14 +13,12 @@ public class AMissionData<T extends User<T>> extends AUserComplexData<T> impleme
 
     private final Mission<T> mission;
 
-    public AMissionData(T user, Mission<T> mission, YMLSection section) {
+    public AMissionData(@NotNull T user, @NotNull Mission<T> mission, @NotNull YMLSection section) {
         super(user, section);
-        if (mission == null)
-            throw new NullPointerException();
         this.mission = mission;
     }
 
-    public Mission<T> getMission() {
+    public @NotNull Mission<T> getMission() {
         return mission;
     }
 

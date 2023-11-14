@@ -17,14 +17,14 @@ public interface Reward<T extends User<T>> extends QuestComponent<T> {
     /**
      * @param user
      */
-    default void apply(T user) {
+    default void apply(@NotNull T user) {
         apply(user, 1);
     }
 
     /**
      * @param user
      */
-    void apply(T user, int amount);
+    void apply(@NotNull T user, int amount);
 
     @Override
     default @NotNull Material getGuiMaterial() {
@@ -32,13 +32,13 @@ public interface Reward<T extends User<T>> extends QuestComponent<T> {
     }
 
     @Override
-    default SortableButton getEditorButton(Gui parent) {
+    default @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 
     @NotNull QuestManager<T> getManager();
 
-    default String getTypeName() {
+    default @NotNull String getTypeName() {
         return getType().getKeyID();
     }
 

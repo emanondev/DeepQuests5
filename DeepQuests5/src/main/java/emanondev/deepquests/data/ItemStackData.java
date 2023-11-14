@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +27,7 @@ import java.util.List;
 public class ItemStackData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private ItemStack item;
 
-    public ItemStackData(E parent, YMLSection section) {
+    public ItemStackData(@NotNull E parent,@NotNull  YMLSection section) {
         super(parent, section);
         item = getConfig().getItemStack(Paths.ITEMSTACK_INFO, null);
     }
@@ -51,13 +53,18 @@ public class ItemStackData<T extends User<T>, E extends QuestComponent<T>> exten
         getConfig().set(Paths.ITEMSTACK_INFO, this.item);
     }
 
-    public ItemStack getItem() {
+    public @Nullable ItemStack getItem() {
         if (item == null)
             return null;
         return new ItemStack(item);
     }
 
-    public void setupButtons(PagedMapGui gui, int slot) {
+    /**
+     * require 2 vertical slots
+     * @param gui
+     * @param slot slot on the top line
+     */
+    public void setupButtons(@NotNull PagedMapGui gui, int slot) {
         gui.putButton(slot, new ItemEditor(gui));
         gui.putButton(slot + 9, new ItemDisplayButton(gui));
     }

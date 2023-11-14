@@ -41,9 +41,9 @@ public interface QuestComponentType<T extends User<T>, E extends QuestComponent<
      */
     @NotNull String getKeyID();
 
-    QuestManager<T> getManager();
+    @NotNull QuestManager<T> getManager();
 
     boolean getDefaultIsHidden();
 
-    Permission getEditorPermission();
+    @NotNull Permission getEditorPermission();
 }

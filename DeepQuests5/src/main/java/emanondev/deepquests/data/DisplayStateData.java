@@ -11,6 +11,7 @@ import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DisplayState;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -18,7 +19,7 @@ public class DisplayStateData<T extends User<T>, E extends QuestComponent<T>> ex
 
     private final Set<DisplayState> states = EnumSet.noneOf(DisplayState.class);
 
-    public DisplayStateData(E parent, YMLSection section) {
+    public DisplayStateData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         states.addAll(getConfig().loadEnumSet(Paths.DATA_DISPLAY_STATES, EnumSet.of(DisplayState.COMPLETED),
                 DisplayState.class));
@@ -82,23 +83,13 @@ public class DisplayStateData<T extends User<T>, E extends QuestComponent<T>> ex
 
         @Override
         public ItemStack getElementItem(DisplayState element) {
-            switch (element) {
-                case COMPLETED:
-                    return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE).setGuiProperty().build();
-                case COOLDOWN:
-                    return new ItemBuilder(Material.ORANGE_STAINED_GLASS_PANE).setGuiProperty().build();
-                case FAILED:
-                    return new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setGuiProperty().build();
-                case LOCKED:
-                    return new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setGuiProperty().build();
-                case ONPROGRESS:
-                    return new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE).setGuiProperty().build();
-                case UNSTARTED:
-                    return new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE).setGuiProperty().build();
-                default:
-                    break;
-            }
-            return new ItemBuilder(Material.GLASS_PANE).setGuiProperty().build();
+            return switch (element) {
+                case COMPLETED -> new ItemBuilder(Material.LIME_STAINED_GLASS_PANE).setGuiProperty().build();
+                case COOLDOWN -> new ItemBuilder(Material.ORANGE_STAINED_GLASS_PANE).setGuiProperty().build();
+                case FAILED, LOCKED -> new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setGuiProperty().build();
+                case ONPROGRESS, UNSTARTED -> new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE).setGuiProperty().build();
+                default -> new ItemBuilder(Material.GLASS_PANE).setGuiProperty().build();
+            };
         }
 
         @Override

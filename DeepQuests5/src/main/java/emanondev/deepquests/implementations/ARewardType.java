@@ -8,6 +8,7 @@ import emanondev.deepquests.interfaces.RewardType;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ARewardType<T extends User<T>> extends AType<T, Reward<T>> implements RewardType<T> {
 
@@ -21,7 +22,7 @@ public abstract class ARewardType<T extends User<T>> extends AType<T, Reward<T>>
                 .setAccess(PermissionDefault.FALSE).buildAndRegister(getManager().getPlugin(), true);
     }
 
-    public final Permission getEditorPermission() {
+    public final @NotNull Permission getEditorPermission() {
         return editPermission;
     }
 

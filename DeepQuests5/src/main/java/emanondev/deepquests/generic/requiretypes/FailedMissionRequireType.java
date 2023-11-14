@@ -23,7 +23,7 @@ public class FailedMissionRequireType<T extends User<T>> extends ARequireType<T>
 
     public static final String ID = "failed_mission";
 
-    public FailedMissionRequireType(QuestManager<T> manager) {
+    public FailedMissionRequireType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -44,7 +44,7 @@ public class FailedMissionRequireType<T extends User<T>> extends ARequireType<T>
     }
 
     @Override
-    public Require<T> getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull Require<T> getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new FailedMissionRequire(id, manager, section);
     }
 
@@ -62,7 +62,7 @@ public class FailedMissionRequireType<T extends User<T>> extends ARequireType<T>
         }
 
         @Override
-        public boolean isAllowed(T user) {
+        public boolean isAllowed(@NotNull T user) {
             Mission<T> mission = targetMission.getMission();
             if (mission == null)
                 return false;

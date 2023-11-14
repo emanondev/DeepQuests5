@@ -21,90 +21,90 @@ public interface QuestManager<T extends User<T>> extends GuiElement {
     /**
      * @return require manager of this
      */
-    RequireProvider<T> getRequireProvider();
+    @NotNull RequireProvider<T> getRequireProvider();
 
     /**
      * @return reward manager of this
      */
-    RewardProvider<T> getRewardProvider();
+    @NotNull RewardProvider<T> getRewardProvider();
 
     /**
      * @return task manager of this
      */
-    TaskProvider<T> getTaskProvider();
+    @NotNull TaskProvider<T> getTaskProvider();
 
     /**
      * @return user manager of this
      */
-    UserManager<T> getUserManager();
+    @NotNull UserManager<T> getUserManager();
 
     void save();
 
-    YMLConfig getConfig();
+    @NotNull YMLConfig getConfig();
 
-    YMLConfig getConfig(String fileName);
+    @NotNull YMLConfig getConfig(String fileName);
 
-    File getFolder();
+    @NotNull File getFolder();
 
-    BossBarManager<T> getBossBarManager();
+    @NotNull BossBarManager<T> getBossBarManager();
 
     int getPriority();
 
-    Collection<Quest<T>> getQuests();
+    @NotNull Collection<Quest<T>> getQuests();
 
     Quest<T> getQuest(int id);
 
-    Collection<Reward<T>> getRewards();
+    @NotNull Collection<Reward<T>> getRewards();
 
-    Collection<Require<T>> getRequires();
+    @NotNull Collection<Require<T>> getRequires();
 
-    Quest<T> createQuest(OfflinePlayer author);
+    @NotNull Quest<T> createQuest(OfflinePlayer author);
 
-    Mission<T> createMission(Quest<T> quest, OfflinePlayer author);
+    @NotNull Mission<T> createMission(Quest<T> quest, OfflinePlayer author);
 
-    Task<T> createTask(Mission<T> mission, TaskType<T> type, OfflinePlayer author);
+    @NotNull Task<T> createTask(Mission<T> mission, TaskType<T> type, OfflinePlayer author);
 
-    Reward<T> createReward(RewardType<T> type, OfflinePlayer author);
+    @NotNull Reward<T> createReward(RewardType<T> type, OfflinePlayer author);
 
-    Require<T> createRequire(RequireType<T> type, OfflinePlayer author);
+    @NotNull Require<T> createRequire(RequireType<T> type, OfflinePlayer author);
 
-    void linkRequire(Require<T> require, Quest<T> quest);
+    void linkRequire(@NotNull Require<T> require, @NotNull Quest<T> quest);
 
-    void unlinkRequire(Require<T> require, Quest<T> quest);
+    void unlinkRequire(@NotNull Require<T> require, @NotNull Quest<T> quest);
 
-    void linkRequire(Require<T> require, Mission<T> mission);
+    void linkRequire(@NotNull Require<T> require, @NotNull Mission<T> mission);
 
-    void unlinkRequire(Require<T> require, Mission<T> mission);
+    void unlinkRequire(@NotNull Require<T> require, @NotNull Mission<T> mission);
 
-    void linkCompleteReward(Reward<T> reward, Mission<T> mission);
+    void linkCompleteReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission);
 
-    void unlinkCompleteReward(Reward<T> reward, Mission<T> mission);
+    void unlinkCompleteReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission);
 
-    void linkStartReward(Reward<T> reward, Mission<T> mission);
+    void linkStartReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission);
 
-    void unlinkStartReward(Reward<T> reward, Mission<T> mission);
+    void unlinkStartReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission);
 
-    void linkFailReward(Reward<T> reward, Mission<T> mission);
+    void linkFailReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission);
 
-    void unlinkFailReward(Reward<T> reward, Mission<T> mission);
+    void unlinkFailReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission);
 
-    void linkProgressReward(Reward<T> reward, Task<T> task);
+    void linkProgressReward(@NotNull Reward<T> reward, @NotNull Task<T> task);
 
-    void unlinkProgressReward(Reward<T> reward, Task<T> task);
+    void unlinkProgressReward(@NotNull Reward<T> reward, @NotNull Task<T> task);
 
-    void linkCompleteReward(Reward<T> reward, Task<T> task);
+    void linkCompleteReward(@NotNull Reward<T> reward, @NotNull Task<T> task);
 
-    void unlinkCompleteReward(Reward<T> reward, Task<T> task);
+    void unlinkCompleteReward(@NotNull Reward<T> reward, @NotNull Task<T> task);
 
-    void delete(Reward<T> reward);
+    void delete(@NotNull Reward<T> reward);
 
-    void delete(Require<T> require);
+    void delete(@NotNull Require<T> require);
 
-    void delete(Mission<T> mission);
+    void delete(@NotNull Mission<T> mission);
 
-    void delete(Quest<T> quest);
+    void delete(@NotNull Quest<T> quest);
 
-    void delete(Task<T> task);
+    void delete(@NotNull Task<T> task);
 
     void reload();
 
@@ -122,9 +122,9 @@ public interface QuestManager<T extends User<T>> extends GuiElement {
 
     Require<T> getRequire(int id);
 
-    Collection<Mission<T>> getMissions();
+    @NotNull Collection<Mission<T>> getMissions();
 
-    Collection<Task<T>> getTasks();
+    @NotNull Collection<Task<T>> getTasks();
 
     void disable();
 
@@ -146,7 +146,7 @@ public interface QuestManager<T extends User<T>> extends GuiElement {
 
     @NotNull CorePlugin getPlugin();
 
-    Permission getEditorPermission();
+    @NotNull Permission getEditorPermission();
 
 
 }

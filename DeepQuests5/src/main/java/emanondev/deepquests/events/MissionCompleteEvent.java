@@ -9,7 +9,7 @@ public class MissionCompleteEvent<T extends User<T>> extends UserEventWithReward
     private static final HandlerList handlers = new HandlerList();
     private final Mission<T> mission;
 
-    public MissionCompleteEvent(T user, Mission<T> mission) {
+    public MissionCompleteEvent(@NotNull T user, @NotNull Mission<T> mission) {
         super(user, mission.getCompleteRewards());
         this.mission = mission;
     }
@@ -22,7 +22,7 @@ public class MissionCompleteEvent<T extends User<T>> extends UserEventWithReward
         return handlers;
     }
 
-    public Mission<T> getMission() {
+    public @NotNull Mission<T> getMission() {
         return mission;
     }
 }

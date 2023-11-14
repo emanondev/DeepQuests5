@@ -11,6 +11,8 @@ import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.Objects;
 public class PermissionData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private String permission;
 
-    public PermissionData(E parent, YMLSection section) {
+    public PermissionData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         permission = getConfig().getString(Paths.DATA_PERMISSION, null);
         if (permission != null && (permission.contains(" ") || permission.isEmpty()))
@@ -30,7 +32,7 @@ public class PermissionData<T extends User<T>, E extends QuestComponent<T>> exte
         return permission;
     }
 
-    public void setPermission(String value) {
+    public void setPermission(@Nullable String value) {
         if (Objects.equals(this.permission, value))
             return;
         if (value != null && (value.contains(" ") || value.isEmpty()))
@@ -54,7 +56,7 @@ public class PermissionData<T extends User<T>, E extends QuestComponent<T>> exte
         return info;
     }
 
-    public Button getPermissionButtonEditor(Gui gui) {
+    public @NotNull Button getPermissionButtonEditor(@NotNull Gui gui) {
         return new PermissionEditor(gui);
     }
 

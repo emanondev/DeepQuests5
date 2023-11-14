@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,18 +23,18 @@ public class TownUserManager extends AUserManager<QuestTown> implements Listener
 
     private final Map<Town, QuestTown> users = new HashMap<>();
 
-    public TownUserManager(TownQuestManager questManager) {
+    public TownUserManager(@NotNull TownQuestManager questManager) {
         super(questManager);
         Bukkit.getPluginManager().registerEvents(this, Quests.get());
     }
 
     @Override
-    public TownQuestManager getManager() {
+    public @NotNull TownQuestManager getManager() {
         return (TownQuestManager) super.getManager();
     }
 
     @Override
-    public Collection<QuestTown> getUsers() {
+    public @NotNull Collection<QuestTown> getUsers() {
         return Collections.unmodifiableCollection(users.values());
     }
 

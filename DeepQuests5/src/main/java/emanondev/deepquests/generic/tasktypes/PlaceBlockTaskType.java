@@ -27,7 +27,7 @@ import java.util.List;
 public class PlaceBlockTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "place_block";
 
-    public PlaceBlockTaskType(QuestManager<T> manager) {
+    public PlaceBlockTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

@@ -29,7 +29,7 @@ import java.util.List;
 public class FishingTaskType<T extends User<T>> extends ATaskType<T> {
     private static final String ID = "fishing";
 
-    public FishingTaskType(QuestManager<T> manager) {
+    public FishingTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

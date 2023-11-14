@@ -22,14 +22,7 @@ abstract class AQuestComponentWithCooldown<T extends User<T>> extends AQuestComp
         implements HasCooldown<T> {
 
     private long cooldownMinutes;
-	
-	/*
-	public Navigator getNavigator() {
-		super.getNavigator();
-		nav.setLong(Paths.COOLDOWN_MINUTES,cooldownMinutes);
-		nav.setBoolean(Paths.REPEATABLE,repeatable);
-		return nav;
-	}*/
+
     private boolean repeatable;
     public AQuestComponentWithCooldown(int id, YMLSection section, QuestManager<T> manager) {
         super(id, section, manager);

@@ -30,7 +30,7 @@ import java.util.List;
 public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "shear_sheep";
 
-    public ShearSheepTaskType(QuestManager<T> manager) {
+    public ShearSheepTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

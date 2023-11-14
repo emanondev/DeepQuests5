@@ -25,7 +25,7 @@ import java.util.List;
 public class CompleteQuestRewardType<T extends User<T>> extends ARewardType<T> {
     private final static String ID = "complete_quest";
 
-    public CompleteQuestRewardType(QuestManager<T> manager) {
+    public CompleteQuestRewardType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -51,7 +51,7 @@ public class CompleteQuestRewardType<T extends User<T>> extends ARewardType<T> {
     }
 
     @Override
-    public CompleteQuestReward getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull CompleteQuestReward getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new CompleteQuestReward(id, manager, section);
     }
 
@@ -89,7 +89,7 @@ public class CompleteQuestRewardType<T extends User<T>> extends ARewardType<T> {
         }
 
         @Override
-        public void apply(T qPlayer, int amount) {
+        public void apply(@NotNull T qPlayer, int amount) {
             if (amount <= 0)
                 return;
             try {

@@ -24,7 +24,7 @@ import java.util.List;
 public class CurrentQuestStateRequireType<T extends User<T>> extends ARequireType<T> {
     public static final String ID = "current_quest_state";
 
-    public CurrentQuestStateRequireType(QuestManager<T> manager) {
+    public CurrentQuestStateRequireType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -45,7 +45,7 @@ public class CurrentQuestStateRequireType<T extends User<T>> extends ARequireTyp
     }
 
     @Override
-    public Require<T> getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull Require<T> getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new CurrentQuestStateRequire(id, manager, section);
     }
 
@@ -62,7 +62,7 @@ public class CurrentQuestStateRequireType<T extends User<T>> extends ARequireTyp
         }
 
         @Override
-        public boolean isAllowed(T user) {
+        public boolean isAllowed(@NotNull T user) {
             Quest<T> quest = targetQuest.getQuest();
             if (quest == null)
                 return false;

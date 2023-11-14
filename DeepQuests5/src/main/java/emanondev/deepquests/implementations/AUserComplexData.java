@@ -3,6 +3,7 @@ package emanondev.deepquests.implementations;
 import emanondev.core.YMLSection;
 import emanondev.deepquests.interfaces.ComplexData;
 import emanondev.deepquests.interfaces.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -13,7 +14,7 @@ public abstract class AUserComplexData<T extends User<T>> extends AUserData<T> i
     private int completedTimes;
     private long lastFailed;
     private int failedTimes;
-    public AUserComplexData(T user, YMLSection section) {
+    public AUserComplexData(@NotNull T user, @NotNull YMLSection section) {
         super(user, section);
         lastStarted = Math.max(0, getConfig().getLong(Paths.USERDATA_LAST_STARTED, 0L));
         lastCompleted = Math.max(0, getConfig().getLong(Paths.USERDATA_LAST_COMPLETED, 0L));

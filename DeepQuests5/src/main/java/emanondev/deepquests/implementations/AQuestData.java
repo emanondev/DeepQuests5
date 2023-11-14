@@ -6,6 +6,7 @@ import emanondev.deepquests.interfaces.Quest;
 import emanondev.deepquests.interfaces.QuestData;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DisplayState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -13,15 +14,13 @@ public class AQuestData<T extends User<T>> extends AUserComplexData<T> implement
     private final Quest<T> quest;
     private int missionPoints;
 
-    public AQuestData(T user, Quest<T> quest, YMLSection section) {
+    public AQuestData(@NotNull T user, @NotNull Quest<T> quest, @NotNull YMLSection section) {
         super(user, section);
-        if (quest == null)
-            throw new NullPointerException();
         this.quest = quest;
         missionPoints = getConfig().getInteger(Paths.USERDATA_POINTS, 0);
     }
 
-    public Quest<T> getQuest() {
+    public @NotNull Quest<T> getQuest() {
         return quest;
     }
 

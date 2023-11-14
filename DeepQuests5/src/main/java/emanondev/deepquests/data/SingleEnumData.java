@@ -10,6 +10,8 @@ import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,16 +24,16 @@ public class SingleEnumData<T extends User<T>, E extends QuestComponent<T>, Z ex
     private final Class<Z> typeClass;
     private Z type;
 
-    public SingleEnumData(E parent, YMLSection section, Class<Z> type) {
+    public SingleEnumData(@NotNull E parent, @NotNull YMLSection section, @NotNull Class<Z> type) {
         super(parent, section);
         this.typeClass = type;
     }
 
-    public Z getType() {
+    public @Nullable Z getType() {
         return type;
     }
 
-    public void setType(Z type) {
+    public void setType(@Nullable Z type) {
         if (this.type == type)
             return;
         this.type = type;
@@ -51,7 +53,7 @@ public class SingleEnumData<T extends User<T>, E extends QuestComponent<T>, Z ex
     }
 
 
-    public Button getEditorButton(Gui parent) {
+    public @NotNull Button getEditorButton(@NotNull Gui parent) {
         return new SingleEnumSelector(parent);
     }
 

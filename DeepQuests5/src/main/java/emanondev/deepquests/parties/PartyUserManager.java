@@ -15,6 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -25,18 +26,18 @@ public class PartyUserManager extends AUserManager<QuestParty> implements Listen
 
     private final Map<Party, QuestParty> users = new HashMap<>();
 
-    public PartyUserManager(PartyQuestManager questManager) {
+    public PartyUserManager(@NotNull PartyQuestManager questManager) {
         super(questManager);
         Bukkit.getPluginManager().registerEvents(this, Quests.get());
     }
 
     @Override
-    public PartyQuestManager getManager() {
+    public @NotNull PartyQuestManager getManager() {
         return (PartyQuestManager) super.getManager();
     }
 
     @Override
-    public Collection<QuestParty> getUsers() {
+    public @NotNull Collection<QuestParty> getUsers() {
         return Collections.unmodifiableCollection(users.values());
     }
 

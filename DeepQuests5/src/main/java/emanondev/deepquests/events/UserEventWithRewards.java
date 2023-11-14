@@ -2,6 +2,7 @@ package emanondev.deepquests.events;
 
 import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.interfaces.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.SortedSet;
@@ -11,12 +12,12 @@ public abstract class UserEventWithRewards<T extends User<T>> extends UserEvent<
 
     private final TreeSet<Reward<T>> rewards = new TreeSet<>();
 
-    public UserEventWithRewards(T user, Collection<Reward<T>> rewards) {
+    public UserEventWithRewards(@NotNull T user, @NotNull Collection<Reward<T>> rewards) {
         super(user);
         this.rewards.addAll(rewards);
     }
 
-    public SortedSet<Reward<T>> getRewards() {
+    public @NotNull SortedSet<Reward<T>> getRewards() {
         return rewards;
     }
 

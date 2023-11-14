@@ -39,7 +39,7 @@ public class ConsoleCommandRewardType extends ARewardType<QuestTown> {
     }
 
     @Override
-    public ConsoleCommandReward getInstance(int id, QuestManager<QuestTown> manager, YMLSection section) {
+    public @NotNull ConsoleCommandReward getInstance(int id, @NotNull QuestManager<QuestTown> manager, @NotNull YMLSection section) {
         return new ConsoleCommandReward(id, manager, section);
     }
 
@@ -82,7 +82,7 @@ public class ConsoleCommandRewardType extends ARewardType<QuestTown> {
         }
 
         @Override
-        public void apply(QuestTown qTown, int amount) {
+        public void apply(@NotNull QuestTown qTown, int amount) {
             if (cmdData.getCommand() == null)
                 return;
             String command = Utils

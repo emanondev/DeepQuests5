@@ -8,12 +8,13 @@ import emanondev.deepquests.interfaces.RequireType;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ARequireType<T extends User<T>> extends AType<T, Require<T>> implements RequireType<T> {
 
     private final Permission editPermission;
 
-    public ARequireType(String id, QuestManager<T> manager) {
+    public ARequireType(@NotNull String id, @NotNull QuestManager<T> manager) {
         super(id, manager);
         this.editPermission = new PermissionBuilder(
                 "deepquests.editor." + this.getManager().getName() + ".requiretype." + this.getKeyID())
@@ -21,7 +22,7 @@ public abstract class ARequireType<T extends User<T>> extends AType<T, Require<T
                 .setAccess(PermissionDefault.FALSE).buildAndRegister(getManager().getPlugin(), true);
     }
 
-    public final Permission getEditorPermission() {
+    public final @NotNull Permission getEditorPermission() {
         return editPermission;
     }
 

@@ -13,6 +13,7 @@ import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
     private boolean classesIsWhitelist = false;
     private boolean groupsIsWhitelist = false;
 
-    public SkillAPIClassData(E parent, YMLSection section) {
+    public SkillAPIClassData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         List<String> classNames = getConfig().getStringList(Paths.DATA_SKILLAPI_CLASSES, null);
         for (String className : classNames) {

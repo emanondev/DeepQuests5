@@ -38,9 +38,7 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
     private final EnumMap<DisplayState, List<String>> desc = new EnumMap<>(
             DisplayState.class);
 
-    public ADisplayInfo(YMLSection section, E parent) {
-        if (parent == null || section == null)
-            throw new NullPointerException();
+    public ADisplayInfo(@NotNull YMLSection section, @NotNull E parent) {
         this.parent = parent;
         this.section = section;
         for (DisplayState state : DisplayState.values()) {
@@ -70,11 +68,11 @@ abstract class ADisplayInfo<T extends User<T>, E extends HasDisplay<T>> implemen
         }
     }
 
-    public YMLSection getConfig() {
+    public @NotNull YMLSection getConfig() {
         return section;
     }
 
-    public E getParent() {
+    public @NotNull E getParent() {
         return parent;
     }
 

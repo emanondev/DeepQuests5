@@ -1,8 +1,9 @@
 package emanondev.deepquests.interfaces;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface MissionData<T extends User<T>> extends ComplexData<T> {
 
-    Mission<T> getMission();
-
+    @NotNull Mission<T> getMission();
 
 }

@@ -1,8 +1,10 @@
 package emanondev.deepquests.interfaces;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface QuestData<T extends User<T>> extends ComplexData<T> {
 
-    Quest<T> getQuest();
+    @NotNull Quest<T> getQuest();
 
     int getPoints();
 

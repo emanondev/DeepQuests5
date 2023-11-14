@@ -9,6 +9,7 @@ import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -17,7 +18,7 @@ public class DropData<T extends User<T>, E extends QuestComponent<T>> extends Qu
     private boolean removeDrops;
     private boolean removeExp;
 
-    public DropData(E parent, YMLSection section) {
+    public DropData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         removeDrops = getConfig().getBoolean(Paths.DATA_DENY_ITEM_DROPS, false);
         removeExp = getConfig().getBoolean(Paths.DATA_DENY_EXP_DROPS, false);
@@ -45,11 +46,11 @@ public class DropData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         getConfig().set(Paths.DATA_DENY_EXP_DROPS, removeExp);
     }
 
-    public ItemDropsFlag getItemDropsFlagButton(Gui gui) {
+    public @NotNull ItemDropsFlag getItemDropsFlagButton(@NotNull Gui gui) {
         return new ItemDropsFlag(gui);
     }
 
-    public ExpDropsFlag getExpDropsFlagButton(Gui gui) {
+    public @NotNull ExpDropsFlag getExpDropsFlagButton(@NotNull Gui gui) {
         return new ExpDropsFlag(gui);
     }
 

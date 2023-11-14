@@ -15,7 +15,7 @@ public class QuestNation extends AUser<QuestNation> {
 
     private final Nation nation;
 
-    public QuestNation(UserManager<QuestNation> manager, Nation nation) {
+    public QuestNation(UserManager<QuestNation> manager, @NotNull Nation nation) {
         super(manager, nation.getUUID().toString());
         this.nation = nation;
     }
@@ -35,7 +35,7 @@ public class QuestNation extends AUser<QuestNation> {
         return true;
     }
 
-    public Nation getNation() {
+    public @NotNull Nation getNation() {
         return nation;
     }
 

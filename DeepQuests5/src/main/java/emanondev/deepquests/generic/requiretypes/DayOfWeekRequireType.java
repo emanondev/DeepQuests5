@@ -20,7 +20,7 @@ import java.util.*;
 public class DayOfWeekRequireType<T extends User<T>> extends ARequireType<T> {
     private static final String ID = "day_of_week";
 
-    public DayOfWeekRequireType(QuestManager<T> manager) {
+    public DayOfWeekRequireType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -35,7 +35,7 @@ public class DayOfWeekRequireType<T extends User<T>> extends ARequireType<T> {
     }
 
     @Override
-    public Require<T> getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull Require<T> getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new DayOfWeekRequire(id, manager, section);
     }
 
@@ -49,7 +49,7 @@ public class DayOfWeekRequireType<T extends User<T>> extends ARequireType<T> {
         }
 
         @Override
-        public boolean isAllowed(T user) {
+        public boolean isAllowed(@NotNull T user) {
             return days.contains(DayOfWeek.of(Calendar.getInstance().get(Calendar.DAY_OF_WEEK)));
         }
 

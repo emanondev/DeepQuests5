@@ -127,7 +127,7 @@ public interface Quest<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasC
     }
 
 
-    default String[] getHolders(T user) {
+    default @NotNull String[] getHolders(T user) {
         String[] list = new String[18];
         list[0] = Holders.DISPLAY_NAME;
         list[1] = getDisplayName();
@@ -157,7 +157,7 @@ public interface Quest<T extends User<T>> extends HasWorlds, HasDisplay<T>, HasC
     }
 
     @Override
-    default SortableButton getEditorButton(Gui parent) {
+    default @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 

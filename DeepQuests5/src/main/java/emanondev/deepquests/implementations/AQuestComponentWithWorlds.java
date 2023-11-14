@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ abstract class AQuestComponentWithWorlds<T extends User<T>> extends AQuestCompon
     private final Set<String> worlds = new HashSet<>();
     private boolean isWhitelist;
 
-    public AQuestComponentWithWorlds(int id, YMLSection section, QuestManager<T> manager) {
+    public AQuestComponentWithWorlds(int id, @NotNull YMLSection section, @NotNull QuestManager<T> manager) {
         super(id, section, manager);
         worlds.addAll(getConfig().loadStringSet(Paths.WORLDS_LIST, getDefaultWorldsList()));
         isWhitelist = getConfig().loadBoolean(Paths.WORLDS_IS_WHITELIST, getDefaultWorldsAreWhitelist());

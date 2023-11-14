@@ -12,7 +12,7 @@ public class TaskProgressEvent<T extends User<T>> extends UserEventWithRewards<T
     private final int limit;
     private int progress;
     private boolean cancelled = false;
-    public TaskProgressEvent(T user, Task<T> task, int progress, int limit) {
+    public TaskProgressEvent(@NotNull T user, @NotNull Task<T> task, int progress, int limit) {
         super(user, task.getProgressRewards());
         this.task = task;
         this.progress = progress;
@@ -35,7 +35,7 @@ public class TaskProgressEvent<T extends User<T>> extends UserEventWithRewards<T
         progress = Math.min(Math.max(0, amount), limit);
     }
 
-    public Task<T> getTask() {
+    public @NotNull Task<T> getTask() {
         return task;
     }
 

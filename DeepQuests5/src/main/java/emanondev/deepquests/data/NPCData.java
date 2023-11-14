@@ -12,6 +12,8 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -19,13 +21,13 @@ public class NPCData<T extends User<T>, E extends QuestComponent<T>> extends Que
     private final Set<Integer> ids = new TreeSet<>();
     private boolean isListWhitelist;
 
-    public NPCData(E parent, YMLSection section) {
+    public NPCData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         isListWhitelist = getConfig().getBoolean(Paths.DATA_NPC_ID_LIST_IS_WHITELIST, true);
         ids.addAll(getConfig().getIntegerList(Paths.DATA_NPC_ID_LIST, new ArrayList<>()));
     }
 
-    public void toggleNPC(NPC npc) {
+    public void toggleNPC(@Nullable NPC npc) {
         if (npc == null)
             return;
         toggleNPC(npc.getId());
@@ -46,7 +48,7 @@ public class NPCData<T extends User<T>, E extends QuestComponent<T>> extends Que
         getConfig().set(Paths.DATA_NPC_ID_LIST_IS_WHITELIST, isListWhitelist);
     }
 
-    public boolean isValidNPC(NPC npc) {
+    public boolean isValidNPC(@Nullable NPC npc) {
         if (npc == null)
             return false;
         return isValidNPCId(npc.getId());

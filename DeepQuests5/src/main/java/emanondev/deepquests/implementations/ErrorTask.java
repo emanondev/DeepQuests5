@@ -18,7 +18,7 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
 
     private final Mission<T> mission;
 
-    public ErrorTask(int id, Mission<T> mission, YMLSection section) {
+    public ErrorTask(int id, @NotNull Mission<T> mission, @NotNull YMLSection section) {
         super(id, section, mission.getManager());
         this.mission = mission;
     }
@@ -57,7 +57,7 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
     }
 
     @Override
-    public @NotNull TaskType<T> getType() {
+    public TaskType<T> getType() {
         return null;
     }
 
@@ -90,7 +90,7 @@ public class ErrorTask<T extends User<T>> extends AQuestComponent<T> implements 
 
     @Override
     public @NotNull String getTypeName() {
-        return "error";
+        return "&cError";
     }
 
     @Override

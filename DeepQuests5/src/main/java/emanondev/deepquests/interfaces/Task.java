@@ -20,8 +20,6 @@ import java.util.Collection;
  * <p>
  * remember to add <br>
  * <p>
- * .@SerializableAs("PlayerTask")<br>
- * .@DelegateDeserialization(PlayerTaskManager.class)<br>
  * for playertasks
  */
 public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
@@ -110,7 +108,7 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
     /**
      * @return the TaskType of this
      */
-    @NotNull TaskType<T> getType();
+    TaskType<T> getType();
 
     /**
      * @return BossBar style of this
@@ -214,7 +212,7 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
     }
 
     @Override
-    default SortableButton getEditorButton(Gui parent) {
+    default @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 

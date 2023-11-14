@@ -9,7 +9,6 @@ import emanondev.deepquests.generic.tasktypes.*;
 import emanondev.deepquests.gui.button.*;
 import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.gui.inventory.PagedMapGui;
-import emanondev.deepquests.hooks.Hooks;
 import emanondev.deepquests.interfaces.*;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
@@ -78,9 +77,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
 
     private final Permission editorPermission;
 
-    public AQuestManager(String name, CorePlugin plugin) {
-        if (name == null || plugin == null)
-            throw new NullPointerException();
+    public AQuestManager(@NotNull String name, @NotNull CorePlugin plugin) {
         if (name.isEmpty() || !Paths.ALPHANUMERIC.matcher(name).matches())
             throw new IllegalArgumentException();
         this.name = name;
@@ -151,7 +148,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
             getRequireProvider().registerType(new HaveQuestItemRequireType<>(this));
             getRewardProvider().registerType(new GetQuestItemRewardType<>(this));
         }
-        if (Hooks.isItemEditEnable()) {
+        if (Hooks.isEnabled("ItemEdit")) {//TODO add to core
             if (Hooks.isCitizenEnabled())
                 getTaskProvider().registerType(new DeliverQuestItemTaskType<>(this));
             getTaskProvider().registerType(new ObtainQuestItemTaskType<>(this));
@@ -159,11 +156,11 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         }
     }
 
-    public final YMLConfig getConfig(String fileName) {
+    public final @NotNull YMLConfig getConfig(String fileName) {
         return Quests.get().getConfig(this.getName() + File.separator + fileName);
     }
 
-    public final YMLConfig getConfig() {
+    public final @NotNull YMLConfig getConfig() {
         return managerConfig;
     }
 
@@ -171,12 +168,12 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         SortedSet<Integer> rewardIds = new TreeSet<>(rewards.keySet());
         SortedSet<Integer> requireIds = new TreeSet<>(requires.keySet());
         for (Task<T> task : tasks.values()) {
-            if (task.getCompleteRewards() != null)
-                for (Reward<T> rew : task.getCompleteRewards())
-                    rewardIds.remove(rew.getID());
-            if (task.getProgressRewards() != null)
-                for (Reward<T> rew : task.getProgressRewards())
-                    rewardIds.remove(rew.getID());
+            task.getCompleteRewards();
+            for (Reward<T> rew : task.getCompleteRewards())
+                rewardIds.remove(rew.getID());
+            task.getProgressRewards();
+            for (Reward<T> rew : task.getProgressRewards())
+                rewardIds.remove(rew.getID());
         }
         for (Mission<T> m : missions.values()) {
             if (m.getCompleteRewards() != null)
@@ -193,9 +190,9 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
                     requireIds.remove(rew.getID());
         }
         for (Quest<T> q : quests.values()) {
-            if (q.getRequires() != null)
-                for (Require<T> rew : q.getRequires())
-                    requireIds.remove(rew.getID());
+            q.getRequires();
+            for (Require<T> rew : q.getRequires())
+                requireIds.remove(rew.getID());
         }
 
         for (int id : rewardIds)
@@ -390,7 +387,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public SortableButton getEditorButton(Gui parent) {
+    public @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 
@@ -399,11 +396,11 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     private Require<T> generateRequire(int id, YMLSection section) {
-        return getRequireProvider().getInstance(id, this, section);
+        return getRequireProvider().getInstance(id, section);
     }
 
     private Reward<T> generateReward(int id, YMLSection section) {
-        return getRewardProvider().getInstance(id, this, section);
+        return getRewardProvider().getInstance(id, section);
     }
 
     protected Mission<T> generateMission(int id, Quest<T> quest, YMLSection section) {
@@ -420,27 +417,27 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final Collection<Quest<T>> getQuests() {
+    public final @NotNull Collection<Quest<T>> getQuests() {
         return quests.values();
     }
 
     @Override
-    public final Collection<Mission<T>> getMissions() {
+    public final @NotNull Collection<Mission<T>> getMissions() {
         return missions.values();
     }
 
     @Override
-    public final Collection<Task<T>> getTasks() {
+    public final @NotNull Collection<Task<T>> getTasks() {
         return tasks.values();
     }
 
     @Override
-    public final Collection<Reward<T>> getRewards() {
+    public final @NotNull Collection<Reward<T>> getRewards() {
         return rewards.values();
     }
 
     @Override
-    public final Collection<Require<T>> getRequires() {
+    public final @NotNull Collection<Require<T>> getRequires() {
         return requires.values();
     }
 
@@ -460,7 +457,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final Quest<T> createQuest(OfflinePlayer author) {
+    public final @NotNull Quest<T> createQuest(OfflinePlayer author) {
         int max = 0;
         for (String key : questsDB.getKeys(PATH_QUESTS))
             try {
@@ -477,7 +474,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final Mission<T> createMission(Quest<T> quest, OfflinePlayer author) {
+    public final @NotNull Mission<T> createMission(Quest<T> quest, OfflinePlayer author) {
         int max = 0;
         for (String key : missionsDB.getKeys(PATH_MISSIONS))
             try {
@@ -502,7 +499,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final Task<T> createTask(Mission<T> mission, TaskType<T> type, OfflinePlayer author) {
+    public final @NotNull Task<T> createTask(Mission<T> mission, TaskType<T> type, OfflinePlayer author) {
 
         int max = 0;
         for (String key : tasksDB.getKeys(PATH_TASKS))
@@ -530,7 +527,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final Reward<T> createReward(RewardType<T> type, OfflinePlayer author) {
+    public final @NotNull Reward<T> createReward(RewardType<T> type, OfflinePlayer author) {
         int max = 0;
         for (String key : rewardsDB.getKeys(PATH_REWARDS))
             try {
@@ -549,7 +546,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final Require<T> createRequire(RequireType<T> type, OfflinePlayer author) {
+    public final @NotNull Require<T> createRequire(RequireType<T> type, OfflinePlayer author) {
         int max = 0;
         for (String key : requiresDB.getKeys(PATH_REQUIRES))
             try {
@@ -568,7 +565,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void delete(Quest<T> quest) {
+    public final void delete(@NotNull Quest<T> quest) {
         quests.remove(quest.getID());
         questsDB.set(PATH_QUESTS + "." + quest.getID(), null);
         for (Mission<T> mission : quest.getMissions()) {
@@ -582,7 +579,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void delete(Mission<T> mission) {
+    public final void delete(@NotNull Mission<T> mission) {
         Quest<T> quest = mission.getQuest();
         quest.removeMission(mission);
         TreeSet<Integer> missionsIds = new TreeSet<>(
@@ -600,7 +597,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void delete(Task<T> task) {
+    public final void delete(@NotNull Task<T> task) {
         Mission<T> mission = task.getMission();
         mission.removeTask(task);
         TreeSet<Integer> tasksIds = new TreeSet<>(
@@ -614,7 +611,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void delete(Reward<T> reward) {
+    public final void delete(@NotNull Reward<T> reward) {
         // TODO not bruteforce
         for (Quest<T> quest : quests.values()) {
             for (Mission<T> mission : quest.getMissions()) {
@@ -667,7 +664,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void delete(Require<T> require) {
+    public final void delete(@NotNull Require<T> require) {
         // TODO not bruteforce
         for (Quest<T> quest : quests.values()) {
             if (quest.removeRequire(require)) {
@@ -693,7 +690,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void linkRequire(Require<T> require, Quest<T> quest) {
+    public final void linkRequire(@NotNull Require<T> require, @NotNull Quest<T> quest) {
         quest.addRequire(require);
         TreeSet<Integer> requiresIds = new TreeSet<>(questsDB
                 .getIntegerList(PATH_QUESTS + "." + quest.getID() + "." + SUB_PATH_REQUIRES, Collections.emptyList()));
@@ -704,7 +701,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void unlinkRequire(Require<T> require, Quest<T> quest) {
+    public final void unlinkRequire(@NotNull Require<T> require, @NotNull Quest<T> quest) {
         quest.removeRequire(require);
         TreeSet<Integer> requiresIds = new TreeSet<>(questsDB
                 .getIntegerList(PATH_QUESTS + "." + quest.getID() + "." + SUB_PATH_REQUIRES, Collections.emptyList()));
@@ -715,7 +712,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void linkRequire(Require<T> require, Mission<T> mission) {
+    public final void linkRequire(@NotNull Require<T> require, @NotNull Mission<T> mission) {
         mission.addRequire(require);
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_REQUIRES, Collections.emptyList()));
@@ -725,7 +722,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void unlinkRequire(Require<T> require, Mission<T> mission) {
+    public final void unlinkRequire(@NotNull Require<T> require, @NotNull Mission<T> mission) {
         mission.removeRequire(require);
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_REQUIRES, Collections.emptyList()));
@@ -735,7 +732,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void linkCompleteReward(Reward<T> reward, Mission<T> mission) {
+    public final void linkCompleteReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission) {
         mission.addCompleteReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_COMPLETE_REWARDS, Collections.emptyList()));
@@ -745,7 +742,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void unlinkCompleteReward(Reward<T> reward, Mission<T> mission) {
+    public final void unlinkCompleteReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission) {
         mission.removeCompleteReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_COMPLETE_REWARDS, Collections.emptyList()));
@@ -755,7 +752,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void linkStartReward(Reward<T> reward, Mission<T> mission) {
+    public final void linkStartReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission) {
         mission.addStartReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_START_REWARDS, Collections.emptyList()));
@@ -765,7 +762,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void unlinkStartReward(Reward<T> reward, Mission<T> mission) {
+    public final void unlinkStartReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission) {
         mission.removeStartReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_START_REWARDS, Collections.emptyList()));
@@ -775,7 +772,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void linkFailReward(Reward<T> reward, Mission<T> mission) {
+    public final void linkFailReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission) {
         mission.addFailReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_FAIL_REWARDS, Collections.emptyList()));
@@ -785,7 +782,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void unlinkFailReward(Reward<T> reward, Mission<T> mission) {
+    public final void unlinkFailReward(@NotNull Reward<T> reward, @NotNull Mission<T> mission) {
         mission.removeFailReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_FAIL_REWARDS, Collections.emptyList()));
@@ -795,7 +792,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void linkCompleteReward(Reward<T> reward, Task<T> task) {
+    public final void linkCompleteReward(@NotNull Reward<T> reward, @NotNull Task<T> task) {
         task.addCompleteReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(tasksDB.getIntegerList(
                 PATH_TASKS + "." + task.getID() + "." + SUB_PATH_COMPLETE_REWARDS, Collections.emptyList()));
@@ -805,7 +802,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void unlinkCompleteReward(Reward<T> reward, Task<T> task) {
+    public final void unlinkCompleteReward(@NotNull Reward<T> reward, @NotNull Task<T> task) {
         task.removeCompleteReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(tasksDB.getIntegerList(
                 PATH_TASKS + "." + task.getID() + "." + SUB_PATH_COMPLETE_REWARDS, Collections.emptyList()));
@@ -815,7 +812,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void linkProgressReward(Reward<T> reward, Task<T> task) {
+    public final void linkProgressReward(@NotNull Reward<T> reward, @NotNull Task<T> task) {
         task.addProgressReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(tasksDB.getIntegerList(
                 PATH_TASKS + "." + task.getID() + "." + SUB_PATH_PROGRESS_REWARDS, Collections.emptyList()));
@@ -825,7 +822,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final void unlinkProgressReward(Reward<T> reward, Task<T> task) {
+    public final void unlinkProgressReward(@NotNull Reward<T> reward, @NotNull Task<T> task) {
         task.removeProgressReward(reward);
         TreeSet<Integer> requiresIds = new TreeSet<>(tasksDB.getIntegerList(
                 PATH_TASKS + "." + task.getID() + "." + SUB_PATH_PROGRESS_REWARDS, Collections.emptyList()));
@@ -840,31 +837,27 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final RequireProvider<T> getRequireProvider() {
+    public final @NotNull RequireProvider<T> getRequireProvider() {
         return requireProvider;
     }
 
     @Override
-    public final RewardProvider<T> getRewardProvider() {
+    public final @NotNull RewardProvider<T> getRewardProvider() {
         return rewardProvider;
     }
 
     @Override
-    public final TaskProvider<T> getTaskProvider() {
+    public final @NotNull TaskProvider<T> getTaskProvider() {
         return taskProvider;
     }
 
     @Override
-    public final File getFolder() {
+    public final @NotNull File getFolder() {
         return folder;
     }
 
-    /*
-     * @Override public final ConfigFile getConfig() { return managerConfig; }
-     */
-
     @Override
-    public final BossBarManager<T> getBossBarManager() {
+    public final @NotNull BossBarManager<T> getBossBarManager() {
         return bossBarManager;
     }
 
@@ -899,7 +892,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public Permission getEditorPermission() {
+    public @NotNull Permission getEditorPermission() {
         return this.editorPermission;
     }
 

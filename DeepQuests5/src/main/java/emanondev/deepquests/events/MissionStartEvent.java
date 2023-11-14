@@ -11,7 +11,7 @@ public class MissionStartEvent<T extends User<T>> extends UserEventWithRewards<T
     private final Mission<T> mission;
     private boolean cancelled = false;
 
-    public MissionStartEvent(T user, Mission<T> mission) {
+    public MissionStartEvent(@NotNull T user, @NotNull Mission<T> mission) {
         super(user, mission.getStartRewards());
         this.mission = mission;
     }
@@ -24,7 +24,7 @@ public class MissionStartEvent<T extends User<T>> extends UserEventWithRewards<T
         return handlers;
     }
 
-    public Mission<T> getMission() {
+    public @NotNull Mission<T> getMission() {
         return mission;
     }
 

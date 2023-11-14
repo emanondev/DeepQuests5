@@ -9,7 +9,7 @@ public class QuestCompleteEvent<T extends User<T>> extends UserEvent<T> {
     private static final HandlerList handlers = new HandlerList();
     private final Quest<T> quest;
 
-    public QuestCompleteEvent(T user, Quest<T> quest) {
+    public QuestCompleteEvent(@NotNull T user, @NotNull Quest<T> quest) {
         super(user);
         this.quest = quest;
     }
@@ -22,7 +22,7 @@ public class QuestCompleteEvent<T extends User<T>> extends UserEvent<T> {
         return handlers;
     }
 
-    public Quest<T> getQuest() {
+    public @NotNull Quest<T> getQuest() {
         return quest;
     }
 }

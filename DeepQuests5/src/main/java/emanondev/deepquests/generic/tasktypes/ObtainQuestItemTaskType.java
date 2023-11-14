@@ -24,7 +24,7 @@ public class ObtainQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
 
     private final static String ID = "obtain_quest_item";
 
-    public ObtainQuestItemTaskType(QuestManager<T> manager) {
+    public ObtainQuestItemTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -43,8 +43,6 @@ public class ObtainQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onRightClick(QuestItemObtainEvent<T> event) {
         T user = event.getUser();
-        if (user == null)
-            return;
         QuestBag<T> bag = user.getQuestBag();
         if (bag == null)
             return;

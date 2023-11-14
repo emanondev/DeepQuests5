@@ -30,7 +30,7 @@ public class KillMobTaskType<T extends User<T>> extends ATaskType<T> {
 
     private final static String ID = "kill_mob";
 
-    public KillMobTaskType(QuestManager<T> manager) {
+    public KillMobTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

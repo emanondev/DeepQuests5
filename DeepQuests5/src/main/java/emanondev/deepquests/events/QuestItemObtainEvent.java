@@ -9,7 +9,7 @@ public class QuestItemObtainEvent<T extends User<T>> extends UserEvent<T> {
     private final String id;
     private final int amount;
 
-    public QuestItemObtainEvent(T user, String id, int amount) {
+    public QuestItemObtainEvent(@NotNull T user, @NotNull String id, int amount) {
         super(user);
         this.id = id;
         this.amount = amount;
@@ -23,7 +23,7 @@ public class QuestItemObtainEvent<T extends User<T>> extends UserEvent<T> {
         return handlers;
     }
 
-    public String getID() {
+    public @NotNull String getID() {
         return id;
     }
 

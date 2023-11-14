@@ -15,7 +15,7 @@ public class QuestTown extends AUser<QuestTown> {
 
     private final Town town;
 
-    public QuestTown(UserManager<QuestTown> manager, Town town) {
+    public QuestTown(@NotNull UserManager<QuestTown> manager, @NotNull Town town) {
         super(manager, town.getUUID().toString());
         this.town = town;
     }
@@ -35,7 +35,7 @@ public class QuestTown extends AUser<QuestTown> {
         return true;
     }
 
-    public Town getTown() {
+    public @NotNull Town getTown() {
         return town;
     }
 

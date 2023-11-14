@@ -1,8 +1,10 @@
 package emanondev.deepquests.interfaces;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface TaskData<T extends User<T>> extends UserData<T> {
 
-    Task<T> getTask();
+    @NotNull Task<T> getTask();
 
     boolean isCompleted();
 

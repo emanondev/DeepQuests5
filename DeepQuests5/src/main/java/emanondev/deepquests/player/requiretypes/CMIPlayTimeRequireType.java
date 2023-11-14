@@ -39,7 +39,7 @@ public class CMIPlayTimeRequireType extends ARequireType<QuestPlayer> {
     }
 
     @Override
-    public Require<QuestPlayer> getInstance(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
+    public @NotNull Require<QuestPlayer> getInstance(int id, @NotNull QuestManager<QuestPlayer> manager, @NotNull YMLSection section) {
         return new CMIPlayTimeRequire(id, manager, section);
     }
 
@@ -57,7 +57,7 @@ public class CMIPlayTimeRequireType extends ARequireType<QuestPlayer> {
         }
 
         @Override
-        public boolean isAllowed(QuestPlayer user) {
+        public boolean isAllowed(@NotNull QuestPlayer user) {
             CMIUser cmiUser = CMI.getInstance().getPlayerManager().getUser(user.getOfflinePlayer());
             return cmiUser.getCMIPlayTime().getPlayTime(
                     playtimeRangeData.getType() == null ? PlaytimeRange.total : playtimeRangeData.getType()) / 1000

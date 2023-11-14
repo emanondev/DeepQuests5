@@ -45,7 +45,7 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
     }
 
     @Override
-    public McmmoExpReward getInstance(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
+    public @NotNull McmmoExpReward getInstance(int id, @NotNull QuestManager<QuestPlayer> manager, @NotNull YMLSection section) {
         return new McmmoExpReward(id, manager, section);
     }
 
@@ -84,7 +84,7 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
         }
 
         @Override
-        public void apply(QuestPlayer qPlayer, int amount) {
+        public void apply(@NotNull QuestPlayer qPlayer, int amount) {
             if (amount <= 0 || amountData.getAmount() <= 0 || skillData.getSkillType() == null)
                 return;
             try {

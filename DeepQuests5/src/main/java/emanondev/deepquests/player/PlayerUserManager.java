@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -32,12 +33,12 @@ public class PlayerUserManager extends AUserManager<QuestPlayer> implements List
     }
 
     @Override
-    public PlayerQuestManager getManager() {
+    public @NotNull PlayerQuestManager getManager() {
         return (PlayerQuestManager) super.getManager();
     }
 
     @Override
-    public Collection<QuestPlayer> getUsers() {
+    public @NotNull Collection<QuestPlayer> getUsers() {
         return Collections.unmodifiableCollection(users.values());
     }
 

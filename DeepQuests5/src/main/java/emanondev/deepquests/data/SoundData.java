@@ -12,6 +12,7 @@ import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +25,7 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
     private float volume;
     private float pitch;
 
-    public SoundData(E parent, YMLSection section) {
+    public SoundData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         volume = Math.min(Math.max((float) getConfig().getDouble(Paths.DATA_SOUND_VOLUME, 1D), 0.05F), 1F);
         pitch = Math.min(Math.max((float) getConfig().getDouble(Paths.DATA_SOUND_PITCH, 1D), 0.05F), 20F);

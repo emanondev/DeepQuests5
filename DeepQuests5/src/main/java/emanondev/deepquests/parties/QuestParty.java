@@ -17,7 +17,7 @@ public class QuestParty extends AUser<QuestParty> {
 
     private final Party party;
 
-    public QuestParty(UserManager<QuestParty> manager, Party party) {
+    public QuestParty(@NotNull UserManager<QuestParty> manager, @NotNull Party party) {
         super(manager, party.getName());
         this.party = party;
     }
@@ -40,7 +40,7 @@ public class QuestParty extends AUser<QuestParty> {
         return true;
     }
 
-    public Party getParty() {
+    public @NotNull Party getParty() {
         return party;
     }
 

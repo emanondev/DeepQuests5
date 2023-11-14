@@ -22,7 +22,7 @@ public class NationQuestManager extends AQuestManager<QuestNation> {
     public final static String NAME = "nations";
     private final NationUserManager userManager;
 
-    public NationQuestManager(String name, CorePlugin plugin) {
+    public NationQuestManager(@NotNull String name, @NotNull CorePlugin plugin) {
         super(name, plugin);
         userManager = new NationUserManager(this);
 
@@ -31,12 +31,12 @@ public class NationQuestManager extends AQuestManager<QuestNation> {
     }
 
     @Override
-    public NationUserManager getUserManager() {
+    public @NotNull NationUserManager getUserManager() {
         return userManager;
     }
 
     @Override
-    public SortableButton getEditorButton(Gui parent) {
+    public @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 

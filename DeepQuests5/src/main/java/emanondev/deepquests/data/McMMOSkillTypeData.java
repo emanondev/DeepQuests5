@@ -11,6 +11,8 @@ import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,23 +22,23 @@ import java.util.List;
 public class McMMOSkillTypeData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private PrimarySkillType skillType;
 
-    public McMMOSkillTypeData(E parent, YMLSection section) {
+    public McMMOSkillTypeData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         skillType = getConfig().loadEnum(Paths.DATA_MCMMO_SKILLTYPE, null, PrimarySkillType.class);
     }
 
-    public PrimarySkillType getSkillType() {
+    public @Nullable PrimarySkillType getSkillType() {
         return skillType;
     }
 
-    public void setSkillType(PrimarySkillType skillType) {
+    public void setSkillType(@Nullable PrimarySkillType skillType) {
         if (this.skillType == skillType)
             return;
         this.skillType = skillType;
         getConfig().setEnumAsString(Paths.DATA_MCMMO_SKILLTYPE, skillType);
     }
 
-    public Button getSkillTypeSelector(Gui gui) {
+    public @NotNull Button getSkillTypeSelector(@NotNull Gui gui) {
         return new SkillTypeSelector(gui);
     }
 

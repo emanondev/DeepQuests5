@@ -15,13 +15,13 @@ import java.util.List;
 
 public class ErrorRequire<T extends User<T>> extends AQuestComponent<T> implements Require<T> {
 
-    public ErrorRequire(int id, QuestManager<T> manager, YMLSection section) {
+    public ErrorRequire(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         super(id, section, manager);
     }
 
     @Override
-    public String getTypeName() {
-        return "error";
+    public @NotNull String getTypeName() {
+        return "&cError";
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ErrorRequire<T extends User<T>> extends AQuestComponent<T> implemen
     }
 
     @Override
-    public @NotNull RequireType<T> getType() {
+    public RequireType<T> getType() {
         return null;
     }
 
@@ -44,7 +44,7 @@ public class ErrorRequire<T extends User<T>> extends AQuestComponent<T> implemen
     }
 
     @Override
-    public boolean isAllowed(T user) {
+    public boolean isAllowed(@NotNull T user) {
         return false;
     }
 

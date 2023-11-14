@@ -1,6 +1,7 @@
 package emanondev.deepquests.interfaces;
 
 import emanondev.core.YMLSection;
+import org.jetbrains.annotations.NotNull;
 
 public interface Navigable {
 
@@ -9,6 +10,6 @@ public interface Navigable {
         return getConfig();
     }
 
-    YMLSection getConfig();
+    @NotNull YMLSection getConfig();
 
 }

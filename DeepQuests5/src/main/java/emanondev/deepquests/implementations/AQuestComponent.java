@@ -26,9 +26,7 @@ abstract class AQuestComponent<T extends User<T>> implements QuestComponent<T> {
     private int priority;
     private String displayName;
 
-    public AQuestComponent(int id, YMLSection section, QuestManager<T> manager) {
-        if (manager == null || section == null)
-            throw new NullPointerException();
+    public AQuestComponent(int id, @NotNull YMLSection section, @NotNull QuestManager<T> manager) {
         this.id = id;
         this.section = section;
         this.manager = manager;
@@ -37,7 +35,7 @@ abstract class AQuestComponent<T extends User<T>> implements QuestComponent<T> {
     }
 
     @Override
-    public final YMLSection getConfig() {
+    public final @NotNull YMLSection getConfig() {
         return section;
     }
 

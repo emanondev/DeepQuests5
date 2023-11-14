@@ -30,7 +30,7 @@ public class InteractAtTaskType<T extends User<T>> extends ATaskType<T> {
 
     private final static String ID = "interact_at";
 
-    public InteractAtTaskType(QuestManager<T> manager) {
+    public InteractAtTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

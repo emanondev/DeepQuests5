@@ -22,7 +22,7 @@ public class MissionsPointsRequireType<T extends User<T>> extends ARequireType<T
 
     private static final String ID = "missions_points";
 
-    public MissionsPointsRequireType(QuestManager<T> manager) {
+    public MissionsPointsRequireType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 
@@ -37,7 +37,7 @@ public class MissionsPointsRequireType<T extends User<T>> extends ARequireType<T
     }
 
     @Override
-    public MissionsPointsRequire getInstance(int id, QuestManager<T> manager, YMLSection section) {
+    public @NotNull MissionsPointsRequire getInstance(int id, @NotNull QuestManager<T> manager, @NotNull YMLSection section) {
         return new MissionsPointsRequire(id, manager, section);
     }
 
@@ -58,7 +58,7 @@ public class MissionsPointsRequireType<T extends User<T>> extends ARequireType<T
             return amountData;
         }
 
-        public boolean isAllowed(T p) {
+        public boolean isAllowed(@NotNull T p) {
             Quest<T> quest = targetQuestData.getQuest();
             if (quest == null)
                 return false;

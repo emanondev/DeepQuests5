@@ -9,11 +9,9 @@ import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +36,7 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
             worldName = null;
     }
 
-    public Location getLocation() {
+    public @Nullable Location getLocation() {
         if (worldName == null)
             return null;
         World world = Bukkit.getServer().getWorld(worldName);
@@ -47,14 +45,14 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
         return new Location(world, x, y, z);
     }
 
-    public void setWorld(World world) {
+    public void setWorld(@Nullable World world) {
         if (world == null)
             setWorld((String) null);
         else
             setWorld(world.getName());
     }
 
-    public void setWorld(String value) {
+    public void setWorld(@Nullable String value) {
         if (Objects.equals(this.worldName, value))
             return;
         if (value != null && value.isEmpty())
@@ -106,16 +104,12 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
         getConfig().set(Paths.DATA_LOCATION_Z, z);
     }
 
-    public boolean isValidLocation(Location loc) {
-        if (loc == null)
+    public boolean isValidLocation(@Nullable Location loc) {
+        if (loc == null || loc.getWorld()==null)
             return false;
-        if (loc.getBlockX() != x)
+        if (loc.getBlockX() != x||loc.getBlockZ() != z||loc.getBlockY() != y)
             return false;
-        if (loc.getBlockZ() != z)
-            return false;
-        if (loc.getBlockY() != y)
-            return false;
-        return loc.getWorld().getName().equals(worldName);
+        return Objects.equals(loc.getWorld().getName(),worldName);
     }
 
     public ArrayList<String> getInfo() {
@@ -137,17 +131,17 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
     }
 
     public Button getXButton(Gui gui) {
-        return new XCoordButton(gui);
+        return new CoordButton(gui,Axis.X);
     }
 
     public Button getYButton(Gui gui) {
-        return new YCoordButton(gui);
+        return new CoordButton(gui,Axis.Y);
     }
 
     public Button getZButton(Gui gui) {
-        return new ZCoordButton(gui);
+        return new CoordButton(gui,Axis.Z);
     }
-
+/*
     public class XCoordButton extends AmountSelectorButton {
 
         public XCoordButton(Gui parent) {
@@ -175,35 +169,46 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
         }
 
     }
+*/
+    public class CoordButton extends AmountSelectorButton {
+        private Axis axis = Axis.X;//Keep as update and getbuttondescription is called on super()
 
-    public class YCoordButton extends AmountSelectorButton {
-
-        public YCoordButton(Gui parent) {
-            super("&9Y Coordinate Editor", new ItemBuilder(Material.REPEATER).setGuiProperty().build(), parent, 1, 10,
+        public CoordButton(Gui parent, Axis axis) {
+            super("&9"+axis.name()+" Coordinate Editor", new ItemBuilder(Material.REPEATER).setGuiProperty().build(), parent, 1, 10,
                     100, 1000, 10000, 100000, 1000000);
+            this.axis = axis;
+            update();
         }
 
         @Override
         public List<String> getButtonDescription() {
             ArrayList<String> list = new ArrayList<>();
-            list.add("&6Y Coordinate Editor");
-            list.add("&9Current value: &e" + getY());
+            list.add("&6"+axis.name()+" Coordinate Editor");
+            list.add("&9Current value: &e" + getCurrentAmount());
             return list;
         }
 
         @Override
         public long getCurrentAmount() {
-            return getY();
+            return switch (axis){
+                case X -> getX();
+                case Y -> getY();
+                case Z -> getZ();
+            };
         }
 
         @Override
         public boolean onAmountChangeRequest(long value) {
-            setY((int) value);
+            switch (axis){
+                case X -> setX((int) value);
+                case Y -> setY((int) value);
+                case Z -> setZ((int) value);
+            }
             return true;
         }
 
     }
-
+/*
     public class ZCoordButton extends AmountSelectorButton {
 
         public ZCoordButton(Gui parent) {
@@ -231,7 +236,7 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
         }
 
     }
-
+*/
     private class WorldButton extends ElementSelectorButton<World> {
 
         public WorldButton(Gui parent) {

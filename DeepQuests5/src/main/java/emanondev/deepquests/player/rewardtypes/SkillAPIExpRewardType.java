@@ -47,7 +47,7 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
     }
 
     @Override
-    public SkillAPIExpReward getInstance(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
+    public @NotNull SkillAPIExpReward getInstance(int id, @NotNull QuestManager<QuestPlayer> manager, @NotNull YMLSection section) {
         return new SkillAPIExpReward(id, manager, section);
     }
 
@@ -87,7 +87,7 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
         }
 
         @Override
-        public void apply(QuestPlayer qPlayer, int amount) {
+        public void apply(@NotNull QuestPlayer qPlayer, int amount) {
             if (amount <= 0 || amountData.getAmount() <= 0)
                 return;
             PlayerData data = SkillAPI.getPlayerData(qPlayer.getOfflinePlayer());

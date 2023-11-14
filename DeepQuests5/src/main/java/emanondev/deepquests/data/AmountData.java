@@ -8,6 +8,7 @@ import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,11 @@ public class AmountData<T extends User<T>, E extends QuestComponent<T>> extends 
     private final int defaultAmount;
     private int amount;
 
-    public AmountData(E parent, YMLSection section) {
+    public AmountData(@NotNull E parent, @NotNull YMLSection section) {
         this(parent, section, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
     }
 
-    public AmountData(E parent, YMLSection section, int min, int max, int defaultAmount) {
+    public AmountData(@NotNull E parent, @NotNull YMLSection section, int min, int max, int defaultAmount) {
         super(parent, section);
         this.minAmount = Math.min(min, max);
         this.maxAmount = Math.max(min, max);
@@ -65,7 +66,7 @@ public class AmountData<T extends User<T>, E extends QuestComponent<T>> extends 
         return true;
     }
 
-    public AmountEditor getAmountEditorButton(String subGuiTitle, List<String> desc, ItemStack item, Gui parent) {
+    public @NotNull AmountEditor getAmountEditorButton(String subGuiTitle, List<String> desc, ItemStack item, Gui parent) {
         return new AmountEditor(subGuiTitle, desc, item, parent);
     }
 

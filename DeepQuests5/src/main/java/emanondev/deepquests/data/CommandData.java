@@ -10,6 +10,8 @@ import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,18 +22,18 @@ public class CommandData<T extends User<T>, E extends QuestComponent<T>> extends
 
     private String command;
 
-    public CommandData(E parent, YMLSection section) {
+    public CommandData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         command = getConfig().getString(Paths.DATA_COMMAND, null);
         if (command != null && command.isEmpty())
             command = null;
     }
 
-    public String getCommand() {
+    public @Nullable String getCommand() {
         return command;
     }
 
-    public void setCommand(String value) {
+    public void setCommand(@Nullable String value) {
         if (Objects.equals(this.command, value))
             return;
         if (value != null && value.isEmpty())
@@ -49,13 +51,13 @@ public class CommandData<T extends User<T>, E extends QuestComponent<T>> extends
         return list;
     }
 
-    public CommandEditor getCommandEditorButton(Gui gui) {
+    public @NotNull CommandEditor getCommandEditorButton(@NotNull Gui gui) {
         return new CommandEditor(gui);
     }
 
     private class CommandEditor extends TextEditorButton {
 
-        public CommandEditor(Gui parent) {
+        public CommandEditor(@NotNull Gui parent) {
             super(new ItemBuilder(Material.COMMAND_BLOCK).setGuiProperty().build(), parent);
         }
 

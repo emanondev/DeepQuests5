@@ -67,6 +67,6 @@ public interface QuestBag<T extends User<T>> {
 
     int getQuestItemAmount(String id);
 
-    T getUser();
+    @NotNull T getUser();
 
 }

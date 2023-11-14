@@ -29,7 +29,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      *
      * @return not null immutable collection of tasks
      */
-    Collection<Task<T>> getTasks();
+    @NotNull Collection<Task<T>> getTasks();
 
     /**
      * Register Task for this
@@ -39,7 +39,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @throws IllegalArgumentException if task.getParent() != null
      * @throws IllegalArgumentException if getTask(task.getKey()) != null
      */
-    boolean addTask(Task<T> task);
+    boolean addTask(@NotNull Task<T> task);
 
     /**
      * Unregister Task with key equals task.getKey() for this if exist
@@ -47,21 +47,21 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @param task target to remove
      * @return true if successfully removed
      */
-    boolean removeTask(Task<T> task);
+    boolean removeTask(@NotNull Task<T> task);
 
     /**
      * Get the quest which contains this
      *
      * @return parent quest or null
      */
-    Quest<T> getQuest();
+    @NotNull Quest<T> getQuest();
 
     /**
      * Get all registered Require for this
      *
      * @return not null immutable collection of requires
      */
-    Collection<Require<T>> getRequires();
+    @NotNull Collection<Require<T>> getRequires();
 
     /**
      * Get mission require with key equals to require.getKey() if exist
@@ -79,7 +79,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @throws IllegalArgumentException if require.getParent() != null
      * @throws IllegalArgumentException if getRequire(require.getKey()) != null
      */
-    boolean addRequire(Require<T> require);
+    boolean addRequire(@NotNull Require<T> require);
 
     /**
      * Unregister require with key equals require.getKey() for this if exist
@@ -87,14 +87,14 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @param require the require to remove
      * @return true if successfully removed
      */
-    boolean removeRequire(Require<T> require);
+    boolean removeRequire(@NotNull Require<T> require);
 
     /**
      * Get all registered Start Rewards for this
      *
      * @return not null immutable collection of rewards
      */
-    Collection<Reward<T>> getStartRewards();
+    @NotNull Collection<Reward<T>> getStartRewards();
 
     /**
      * Get start reward with key equals to reward.getKey() if exist
@@ -112,7 +112,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @throws IllegalArgumentException if reward.getParent() != null
      * @throws IllegalArgumentException if getStartReward(require.getKey()) != null
      */
-    boolean addStartReward(Reward<T> reward);
+    boolean addStartReward(@NotNull Reward<T> reward);
 
     /**
      * Unregister getStartReward(key) if exist
@@ -120,14 +120,14 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @param reward target to remove
      * @return true if successfully removed
      */
-    boolean removeStartReward(Reward<T> reward);
+    boolean removeStartReward(@NotNull Reward<T> reward);
 
     /**
      * Get all registered Complete Rewards for this
      *
      * @return not null immutable collection of rewards
      */
-    Collection<Reward<T>> getCompleteRewards();
+    @NotNull Collection<Reward<T>> getCompleteRewards();
 
     /**
      * Get complete reward with key equals to reward.getKey() if exist
@@ -145,7 +145,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @throws IllegalArgumentException if reward.getParent() != null
      * @throws IllegalArgumentException if getCompleteReward(require.getKey()) != null
      */
-    boolean addCompleteReward(Reward<T> reward);
+    boolean addCompleteReward(@NotNull Reward<T> reward);
 
     /**
      * Unregister getCompleteReward(key) if exist
@@ -153,14 +153,14 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @param reward target to remove
      * @return true if successfully removed
      */
-    boolean removeCompleteReward(Reward<T> reward);
+    boolean removeCompleteReward(@NotNull Reward<T> reward);
 
     /**
      * Get all registered Fail Rewards for this
      *
      * @return not null immutable collection of rewards
      */
-    Collection<Reward<T>> getFailRewards();
+    @NotNull Collection<Reward<T>> getFailRewards();
 
     /**
      * Get fail reward with key equals to reward.getKey() if exist
@@ -178,7 +178,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @throws IllegalArgumentException if reward.getParent() != null
      * @throws IllegalArgumentException if getFailReward(require.getKey()) != null
      */
-    boolean addFailReward(Reward<T> reward);
+    boolean addFailReward(@NotNull Reward<T> reward);
 
     /**
      * Unregister getFailReward(key) if exist
@@ -186,9 +186,9 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
      * @param reward target to remove
      * @return true if successfully removed
      */
-    boolean removeFailReward(Reward<T> reward);
+    boolean removeFailReward(@NotNull Reward<T> reward);
 
-    default String[] getHolders(T user) {
+    default @NotNull String[] getHolders(T user) {
         String[] list = new String[4];
         list[0] = Holders.DISPLAY_NAME;
         list[1] = this.getDisplayName();
@@ -197,7 +197,6 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
         return list;
     }
 
-    // @SuppressWarnings("unchecked")
     default @NotNull List<String> getDisplayDescription(ArrayList<String> desc, T user, Player player) {
         if (desc != null)
             for (int i = 0; i < desc.size(); i++) {
@@ -255,7 +254,7 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
     }
 
     @Override
-    default SortableButton getEditorButton(Gui parent) {
+    default @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
     }
 
@@ -263,13 +262,13 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
         return getDisplayDescription(getRawPhaseMessage(phase), user, p);
     }
 
-    void setPhaseMessage(PhaseChange phase, List<String> message);
+    void setPhaseMessage(@NotNull PhaseChange phase, List<String> message);
 
-    boolean showPhaseMessage(PhaseChange phase);
+    boolean showPhaseMessage(@NotNull PhaseChange phase);
 
-    void toggleShowPhaseMessage(PhaseChange phase);
+    void toggleShowPhaseMessage(@NotNull PhaseChange phase);
 
-    ArrayList<String> getRawPhaseMessage(PhaseChange phase);
+    ArrayList<String> getRawPhaseMessage(@NotNull PhaseChange phase);
 
     enum PhaseChange {
         START(List.of("&aMission &l{name} &a➤ Started!")), PAUSE(

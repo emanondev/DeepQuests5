@@ -12,18 +12,19 @@ import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
 public class VirginBlockData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private boolean checkVirgin;
 
-    public VirginBlockData(E parent, YMLSection section) {
+    public VirginBlockData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
         checkVirgin = getConfig().getBoolean(Paths.DATA_CHECK_VIRGIN, true);
     }
 
-    public boolean isValidBlock(Block block) {
+    public boolean isValidBlock(@NotNull Block block) {
         if (!checkVirgin)
             return true;
         return Hooks.isBlockVirgin(block);
@@ -40,7 +41,7 @@ public class VirginBlockData<T extends User<T>, E extends QuestComponent<T>> ext
         return checkVirgin;
     }
 
-    public VirginStatus getVirginStatusEditor(Gui gui) {
+    public @NotNull VirginStatus getVirginStatusEditor(@NotNull Gui gui) {
         return new VirginStatus(gui);
     }
 

@@ -34,7 +34,7 @@ import java.util.List;
 public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
     private final static String ID = "deliver_to_npc";
 
-    public NPCDeliverTaskType(QuestManager<T> manager) {
+    public NPCDeliverTaskType(@NotNull QuestManager<T> manager) {
         super(ID, manager);
     }
 

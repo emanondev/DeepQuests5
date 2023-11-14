@@ -10,6 +10,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Date;
@@ -20,22 +21,22 @@ public class TaskBossBar<T extends User<T>> {
     private final TaskData<T> taskData;
     private long lastUpdate = 0;
 
-    public TaskBossBar(TaskData<T> taskData) {
+    public TaskBossBar(@NotNull TaskData<T> taskData) {
         this.taskData = taskData;
         bar = Bukkit.createBossBar("", taskData.getTask().getBossBarColor(), taskData.getTask().getBossBarStyle());
         updateProgress();
     }
 
-    public void addPlayers(Collection<Player> players) {
+    public void addPlayers(@NotNull Collection<Player> players) {
         for (Player p : players)
-            bar.addPlayer(p.getPlayer());
+            bar.addPlayer(p);
     }
 
     public void dispose() {
         bar.removeAll();
     }
 
-    public BarColor getColor() {
+    public @NotNull BarColor getColor() {
         return bar.getColor();
     }
 
@@ -43,7 +44,7 @@ public class TaskBossBar<T extends User<T>> {
         return bar.getProgress();
     }
 
-    public BarStyle getStyle() {
+    public @NotNull BarStyle getStyle() {
         return bar.getStyle();
     }
 
@@ -55,7 +56,7 @@ public class TaskBossBar<T extends User<T>> {
         return bar.isVisible();
     }
 
-    public void setColor(BarColor color) {
+    public void setColor(@NotNull BarColor color) {
         bar.setColor(color);
     }
 
@@ -80,7 +81,7 @@ public class TaskBossBar<T extends User<T>> {
         return taskData.getTask();
     }
 
-    public void setStyle(BarStyle style) {
+    public void setStyle(@NotNull BarStyle style) {
         bar.setStyle(style);
     }
 

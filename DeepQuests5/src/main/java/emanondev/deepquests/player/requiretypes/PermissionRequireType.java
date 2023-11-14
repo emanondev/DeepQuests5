@@ -34,7 +34,7 @@ public class PermissionRequireType extends ARequireType<QuestPlayer> {
     }
 
     @Override
-    public Require<QuestPlayer> getInstance(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
+    public @NotNull Require<QuestPlayer> getInstance(int id, @NotNull QuestManager<QuestPlayer> manager, @NotNull YMLSection section) {
         return new PermissionRequire(id, manager, section);
     }
 
@@ -52,7 +52,7 @@ public class PermissionRequireType extends ARequireType<QuestPlayer> {
             return permissionData;
         }
 
-        public boolean isAllowed(QuestPlayer p) {
+        public boolean isAllowed(@NotNull QuestPlayer p) {
             return permissionData.hasPermission(p.getPlayer());
         }
 

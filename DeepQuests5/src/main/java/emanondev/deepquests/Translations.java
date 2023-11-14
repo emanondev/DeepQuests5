@@ -1,19 +1,20 @@
 package emanondev.deepquests;
 
-import emanondev.deepquests.config.ConfigFile;
+import emanondev.core.YMLConfig;
 import emanondev.deepquests.utils.Time;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Translations {
-    private static final ConfigFile config = new ConfigFile("translations.yml");
+    private static final YMLConfig config = Quests.get().getConfig("translations.yml");
 
     private static final EnumMap<Time, String> timeSingle = loadTimeSingle();
     private static final EnumMap<Time, String> timeMulti = loadTimeMulti();
@@ -86,44 +87,44 @@ public class Translations {
         return map;
     }
 
-    public static String translateSingle(Time type) {
+    public static String translateSingle(@NotNull Time type) {
         return timeSingle.get(type);
     }
 
-    public static String translateMulti(Time type) {
+    public static String translateMulti(@NotNull Time type) {
         return timeMulti.get(type);
     }
 
-    public static String translate(EntityType entity) {
+    public static String translate(@NotNull EntityType entity) {
         return entities.get(entity);
     }
 
-    public static String translate(Material mat) {
+    public static String translate(@NotNull Material mat) {
         return materials.get(mat);
     }
 
-    public static String trasnlate(Enchantment ench) {
+    public static String translate(@NotNull Enchantment ench) {
         return enchantments.get(ench);
     }
 
-    public static String translateConjunction(String conjunction) {
+    public static String translateConjunction(@NotNull String conjunction) {
         return getOrRead(conjunctions, conjunction, "conjunctions", conjunction);
     }
 
-    public static String translateAction(String actionName) {
+    public static String translateAction(@NotNull String actionName) {
         return getOrRead(actions, actionName, "actions", actionName);
     }
 
-    public static String translateRegion(String regionName) {
+    public static String translateRegion(@NotNull String regionName) {
         return getOrRead(regions, regionName, "regions", regionName);
     }
 
-    public static String translate(World world) {
+    public static String translate(@NotNull World world) {
         return getOrRead(worlds, world.getName(), "worlds", world.getName());
     }
 
 
-    private static String getOrRead(Map<String, String> map, String key, String pathNoKey, String defaultName) {
+    private static String getOrRead(@NotNull Map<String, String> map, @NotNull String key, String pathNoKey, String defaultName) {
         if (map.containsKey(key))
             return map.get(key);
         String value = read(pathNoKey + "." + key, defaultName);
@@ -132,14 +133,15 @@ public class Translations {
     }
 
     private static String read(String path, String defaultName) {
-        if (config.getNavigator().getString(path, null, false) != null)
+        return config.loadString(path, defaultName);
+        /*if (config.getNavigator().getString(path, null, false) != null)
             return config.getNavigator().getString(path, null, false);
         config.getNavigator().setString(path, defaultName);
         config.save();
-        return defaultName;
+        return defaultName;*/
     }
 
-    public static String translateMythicMob(String internalName) {
+    public static String translateMythicMob(@NotNull String internalName) {
         return getOrRead(mythicMobs, internalName, "mythic_mobs", internalName);
     }
 
