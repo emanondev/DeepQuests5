@@ -3,6 +3,7 @@ package emanondev.deepquests;
 public class Holders {
 
     public static final String DISPLAY_NAME = holder("name");
+    public static final String QUEST_DISPLAY_NAME = holder("quest-name");
     public static final String TASK_MAX_PROGRESS = holder("max-progress");
     public static final String TASK_STATUS = holder("task-status");
     public static final String TASK_CURRENT_PROGRESS = holder("current-progress");

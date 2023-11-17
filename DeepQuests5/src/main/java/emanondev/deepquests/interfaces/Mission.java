@@ -189,11 +189,13 @@ public interface Mission<T extends User<T>> extends HasWorlds, HasDisplay<T>, Ha
     boolean removeFailReward(@NotNull Reward<T> reward);
 
     default @NotNull String[] getHolders(T user) {
-        String[] list = new String[4];
+        String[] list = new String[6];
         list[0] = Holders.DISPLAY_NAME;
         list[1] = this.getDisplayName();
         list[2] = Holders.COOLDOWN_LEFT;
         list[3] = this.getStringCooldownLeft(user);
+        list[4] = Holders.QUEST_DISPLAY_NAME;
+        list[5] = this.getQuest().getDisplayName();
         return list;
     }
 

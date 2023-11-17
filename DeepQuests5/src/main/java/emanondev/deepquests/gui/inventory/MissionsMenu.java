@@ -43,9 +43,9 @@ public class MissionsMenu extends ListGui<MissionButton> {
 
         }
         rawMissionButtons.sort((b1, b2) -> {
-            int result = b1.getQuestComponent().getQuest().getPriority() - b2.getQuestComponent().getQuest().getPriority();
+            int result = b2.getQuestComponent().getQuest().getPriority() - b1.getQuestComponent().getQuest().getPriority();
             if (result == 0)
-                return b1.getQuestComponent().getPriority() - b2.getQuestComponent().getPriority();
+                return b2.getQuestComponent().getPriority() - b1.getQuestComponent().getPriority();
             return result;
         });
         this.setControlButton(0, new MissionStateShowToggler(this, DisplayState.LOCKED));

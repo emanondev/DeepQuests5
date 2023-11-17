@@ -147,7 +147,7 @@ public class PlayerQuestManager extends AQuestManager<QuestPlayer> {
     public QuestPlayer getArgomentUser(String argument) {
         @SuppressWarnings("deprecation")
         OfflinePlayer player = Bukkit.getOfflinePlayer(argument);
-        if (player.getLastPlayed() <= 0)
+        if (player.getFirstPlayed() <= 0)
             return null;
         if (player.isOnline()) {
             QuestPlayer user = getUserManager().getUser(player.getPlayer());
