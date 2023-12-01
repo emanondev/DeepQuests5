@@ -3,6 +3,7 @@ package emanondev.deepquests;
 import emanondev.core.CorePlugin;
 import emanondev.core.Hooks;
 import emanondev.core.ItemBuilder;
+import emanondev.core.UtilsString;
 import emanondev.deepquests.command.*;
 import emanondev.deepquests.gui.GuiConfig;
 import emanondev.deepquests.gui.GuiHandler;
@@ -47,7 +48,6 @@ public class Quests extends CorePlugin {
 
     /**
      * utility: register a command for this plugin
-     *
      */
     @Deprecated
     private void registerCommand(ACommand cmdManager) {
@@ -163,9 +163,12 @@ public class Quests extends CorePlugin {
     }
 
     public final boolean registerQuestManager(@NotNull QuestManager<?> questManager) {
+        if (!UtilsString.isLowcasedValidID(questManager.getName())){
+            logIssue("Could not register QuestManager &e" + questManager.getName() + " &fbecause name is not valid");
+            return false;
+        }
         if (managers.containsValue(questManager)) {
-            logIssue(
-                    "Could not register QuestManager &e" + questManager.getName() + " &fbecause is already registered");
+            logIssue("Could not register QuestManager &e" + questManager.getName() + " &fbecause is already registered");
             return false;
         }
         if (managers.containsKey(questManager.getName())) {
@@ -197,7 +200,7 @@ public class Quests extends CorePlugin {
 
     @SuppressWarnings("unchecked")
     public final <T extends User<T>> @Nullable QuestManager<T> getQuestManager(@NotNull String name) {
-        return (QuestManager<T>) managers.get(name);
+        return (QuestManager<T>) managers.get(name.toLowerCase(Locale.ENGLISH));
     }
 
     public final @NotNull Collection<QuestManager<?>> getManagers() {

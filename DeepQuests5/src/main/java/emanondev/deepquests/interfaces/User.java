@@ -127,7 +127,6 @@ public interface User<T extends User<T>> extends Navigable {
      * Reset data of selected quest
      *
      * @param quest selected quest
-     * @throws NullPointerException     if quest is null
      * @throws IllegalArgumentException if quest manager is unequal to this manager
      */
     default void resetQuest(@NotNull Quest<T> quest) {
@@ -138,7 +137,6 @@ public interface User<T extends User<T>> extends Navigable {
      * Reset data of selected task
      *
      * @param task selected task
-     * @throws NullPointerException     if task is null
      * @throws IllegalArgumentException if task manager is unequal to this manager
      */
     default void resetTask(@NotNull Task<T> task) {
@@ -151,8 +149,6 @@ public interface User<T extends User<T>> extends Navigable {
      * @param player - selected player
      * @param quest  - selected quest
      * @return true if selected player may see selected quest
-     * @throws NullPointerException if player is null
-     * @throws NullPointerException if quest is null
      */
     default boolean canSee(@NotNull Player player, @NotNull Quest<T> quest) {
         return// quest.isWorldAllowed(player.getWorld()) &&
@@ -166,8 +162,6 @@ public interface User<T extends User<T>> extends Navigable {
      * @param player  - selected player
      * @param mission - selected quest
      * @return true if selected player may see selected mission
-     * @throws NullPointerException if player is null
-     * @throws NullPointerException if mission is null
      */
     default boolean canSee(@NotNull Player player, @NotNull Mission<T> mission) {
         return (mission.getQuest().isDeveloped() || player.hasPermission(Perms.ADMIN_EDITOR)) && Quests.get().getPlayerInfo(player).canSeeMissionState(getDisplayState(mission));
@@ -178,7 +172,6 @@ public interface User<T extends User<T>> extends Navigable {
      *
      * @param task selected task
      * @return progress of selected task for this
-     * @throws NullPointerException if task is null
      */
     default int getTaskProgress(@NotNull Task<T> task) {
         return getTaskData(task).getProgress();
@@ -364,18 +357,20 @@ public interface User<T extends User<T>> extends Navigable {
         MissionData<T> data = getMissionData(mission);
         if (data.isStarted())
             return DisplayState.ONPROGRESS;
+        boolean hasRequires = hasRequires(mission);
+        if (!hasRequires)
+            return DisplayState.LOCKED;
         if (data.isOnCooldown())
             return DisplayState.COOLDOWN;
-        boolean hasRequires = hasRequires(mission);
-        if (mission.isRepeatable() && hasRequires)
+        if (mission.isRepeatable())// && hasRequires)
             return DisplayState.UNSTARTED;
         if (data.isCompleted())
             return DisplayState.COMPLETED;
         if (data.isFailed())
             return DisplayState.FAILED;
-        if (hasRequires)
+        //if (hasRequires)
             return DisplayState.UNSTARTED;
-        return DisplayState.LOCKED;
+        //return DisplayState.LOCKED;
     }
 
     /**

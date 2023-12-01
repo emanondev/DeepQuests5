@@ -101,7 +101,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
             case "debugunused" -> {
                 for (QuestManager<?> qManager : Quests.get().getManagers()) {
                     getPlugin().logDone("checking manager &e" + qManager.getName());
-                    ((AQuestManager) qManager).debugUnused();
+                    qManager.debugUnused();
                 }
                 return;
             }

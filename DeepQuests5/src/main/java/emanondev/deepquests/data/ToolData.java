@@ -73,8 +73,11 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
     }
 
     public void setItem(ItemStack item) {
-        this.item = item;
-        getConfig().set("item", this.item);
+        this.enabled = item!=null;
+        getConfig().set("is-enabled", this.enabled);
+
+        this.item = item==null?null:new ItemStack(item);
+        getConfig().set("item", this.item==null?null:this.item);
         if (item == null)
             return;
         ItemMeta meta = item.getItemMeta();
@@ -176,7 +179,7 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
     }
 
     public void setAmount(int amount) {
-        amount = (int) Math.max(1, Math.min(127, amount));
+        amount = Math.max(1, Math.min(127, amount));
         this.amountValue = amount;
         if (this.item != null)
             this.item.setAmount(amount);
@@ -184,7 +187,7 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
     }
 
     public void setDamage(int damage) {
-        damage = (int) Math.max(0, Math.min(damage, 1562));
+        damage = Math.max(0, Math.min(damage, 1562));
         this.damageValue = damage;
         if (this.item != null) {
             ItemMeta meta = item.getItemMeta();

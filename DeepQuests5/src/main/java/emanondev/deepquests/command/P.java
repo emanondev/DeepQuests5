@@ -29,6 +29,12 @@ public class P {
     public static final Permission COMMAND_DEEPQUESTS_RELOAD = new PermissionBuilder("deepquests.command.deepquests.reload")
             .addChild(COMMAND_DEEPQUESTS_HELP, true)
             .buildAndRegister(Quests.get());
+    public static final Permission COMMAND_DEEPQUESTS_MANIPULATOR = new PermissionBuilder("deepquests.command.deepquests.manipulator")
+            .addChild(COMMAND_DEEPQUESTS_HELP, true)
+            .buildAndRegister(Quests.get());
+    public static final Permission COMMAND_DEEPQUESTS_CHECKCYCLES = new PermissionBuilder("deepquests.command.deepquests.checkcycles")
+            .addChild(COMMAND_DEEPQUESTS_HELP, true)
+            .buildAndRegister(Quests.get());
     public static final Permission COMMAND_DEEPQUESTS_SWAPPLAYERS = new PermissionBuilder("deepquests.command.deepquests.swapplayers")
             .addChild(COMMAND_DEEPQUESTS_HELP, true)
             .buildAndRegister(Quests.get());
@@ -41,6 +47,8 @@ public class P {
 
     public static final Permission COMMAND_DEEPQUESTS = new PermissionBuilder("deepquests.command.deepquests")
             .addChild(COMMAND_DEEPQUESTS_MANAGER, true)
+            .addChild(COMMAND_DEEPQUESTS_MANIPULATOR, true)
+            .addChild(COMMAND_DEEPQUESTS_CHECKCYCLES, true)
             .addChild(COMMAND_DEEPQUESTS_LISTMANAGERS, true)
             .addChild(COMMAND_DEEPQUESTS_EDITOR, true)
             .addChild(COMMAND_DEEPQUESTS_OPENGUI, true)

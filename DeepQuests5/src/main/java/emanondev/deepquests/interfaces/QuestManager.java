@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public interface QuestManager<T extends User<T>> extends GuiElement {
 
@@ -16,7 +18,7 @@ public interface QuestManager<T extends User<T>> extends GuiElement {
      * name of this, must be unique and immutable, used for folder name
      *
      */
-    String getName();
+    @NotNull String getName();
 
     /**
      * @return require manager of this
@@ -109,18 +111,17 @@ public interface QuestManager<T extends User<T>> extends GuiElement {
     void reload();
 
     /**
-     * @param user
-     * @return
+     * @return null if no limit
      */
-    Integer getDefaultMissionLimit(T user);
+    @Nullable Integer getDefaultMissionLimit(T user);
 
-    Mission<T> getMission(int id);
+    @Nullable Mission<T> getMission(int id);
 
-    Task<T> getTask(int id);
+    @Nullable Task<T> getTask(int id);
 
-    Reward<T> getReward(int id);
+    @Nullable Reward<T> getReward(int id);
 
-    Require<T> getRequire(int id);
+    @Nullable Require<T> getRequire(int id);
 
     @NotNull Collection<Mission<T>> getMissions();
 
@@ -148,5 +149,39 @@ public interface QuestManager<T extends User<T>> extends GuiElement {
 
     @NotNull Permission getEditorPermission();
 
+    default void debugUnused() {
+        SortedSet<Integer> rewardIds = new TreeSet<>();
+        SortedSet<Integer> requireIds = new TreeSet<>();
+        getRewards().forEach(r->rewardIds.add(r.getID()));
+        getRequires().forEach(r->requireIds.add(r.getID()));
+        for (Task<T> task : getTasks()) {
+            task.getCompleteRewards();
+            for (Reward<T> rew : task.getCompleteRewards())
+                rewardIds.remove(rew.getID());
+            task.getProgressRewards();
+            for (Reward<T> rew : task.getProgressRewards())
+                rewardIds.remove(rew.getID());
+        }
+        for (Mission<T> m : getMissions()) {
+            for (Reward<T> rew : m.getCompleteRewards())
+                rewardIds.remove(rew.getID());
+            for (Reward<T> rew : m.getFailRewards())
+                rewardIds.remove(rew.getID());
+            for (Reward<T> rew : m.getStartRewards())
+                rewardIds.remove(rew.getID());
+            for (Require<T> rew : m.getRequires())
+                requireIds.remove(rew.getID());
+        }
+        for (Quest<T> q : getQuests()) {
+            q.getRequires();
+            for (Require<T> rew : q.getRequires())
+                requireIds.remove(rew.getID());
+        }
+
+        for (int id : rewardIds)
+            getPlugin().logInfo("on manager &e"+getName()+ "&f reward &e" + id + "&f is unused");
+        for (int id : requireIds)
+            getPlugin().logInfo("on manager &e"+getName()+ "&f require &e" + id + "&f is unused");
+    }
 
 }

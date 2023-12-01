@@ -80,7 +80,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     public AQuestManager(@NotNull String name, @NotNull CorePlugin plugin) {
         if (name.isEmpty() || !Paths.ALPHANUMERIC.matcher(name).matches())
             throw new IllegalArgumentException();
-        this.name = name;
+        this.name = name.toLowerCase(Locale.ENGLISH);
         this.plugin = plugin;
         this.folder = new File(Quests.get().getDataFolder(), this.name);
         if (!folder.exists())
@@ -162,43 +162,6 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
 
     public final @NotNull YMLConfig getConfig() {
         return managerConfig;
-    }
-
-    public void debugUnused() {
-        SortedSet<Integer> rewardIds = new TreeSet<>(rewards.keySet());
-        SortedSet<Integer> requireIds = new TreeSet<>(requires.keySet());
-        for (Task<T> task : tasks.values()) {
-            task.getCompleteRewards();
-            for (Reward<T> rew : task.getCompleteRewards())
-                rewardIds.remove(rew.getID());
-            task.getProgressRewards();
-            for (Reward<T> rew : task.getProgressRewards())
-                rewardIds.remove(rew.getID());
-        }
-        for (Mission<T> m : missions.values()) {
-            if (m.getCompleteRewards() != null)
-                for (Reward<T> rew : m.getCompleteRewards())
-                    rewardIds.remove(rew.getID());
-            if (m.getFailRewards() != null)
-                for (Reward<T> rew : m.getFailRewards())
-                    rewardIds.remove(rew.getID());
-            if (m.getStartRewards() != null)
-                for (Reward<T> rew : m.getStartRewards())
-                    rewardIds.remove(rew.getID());
-            if (m.getRequires() != null)
-                for (Require<T> rew : m.getRequires())
-                    requireIds.remove(rew.getID());
-        }
-        for (Quest<T> q : quests.values()) {
-            q.getRequires();
-            for (Require<T> rew : q.getRequires())
-                requireIds.remove(rew.getID());
-        }
-
-        for (int id : rewardIds)
-            getPlugin().logDone("reward &e" + id + " &fis unused");
-        for (int id : requireIds)
-            getPlugin().logDone("require &e" + id + " &fis unused");
     }
 
     @Override
@@ -832,7 +795,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     }
 
     @Override
-    public final String getName() {
+    public final @NotNull String getName() {
         return name;
     }
 

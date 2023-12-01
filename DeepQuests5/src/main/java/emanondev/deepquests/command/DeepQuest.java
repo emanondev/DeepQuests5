@@ -116,11 +116,6 @@ class SubCheckCicles extends ASubCommand {
     }
 }
 
-/*
- * qa reload editor player <player> opengui
- *
- */
-
 class SubReload extends ASubCommand {
     SubReload() {
         super("reload", Perms.ADMIN_RELOAD);
@@ -269,7 +264,7 @@ class SubEditorUser extends ASubCommand {
                 new SubEditorUserFailquest(), new SubEditorUserErasequest(), new SubEditorUserResetmission(),
                 new SubEditorUserStartmission(), new SubEditorUserCompletemission(), new SubEditorUserFailmission(),
                 new SubEditorUserErasemission(), new SubEditorUserResettask(), new SubEditorUserProgresstask(),
-                new SubEditorUserErasetask());
+                new SubEditorUserErasetask(), new SubEditorUserTestMission());
         this.setDescription(ChatColor.GOLD + "Edit user\n" + ChatColor.GOLD + "Select a user to maipolate it");
         this.setPlayersOnly(false);
         this.setParams("<user>");
@@ -298,6 +293,7 @@ class SubEditorUser extends ASubCommand {
     }
 
     public ArrayList<String> onTab(ArrayList<String> params, CommandSender sender, String label, String[] args) {
+        //qa editor players user <name>
         if (params.size() == 1)
             return new ArrayList<>();
         params.remove(0);
@@ -591,6 +587,47 @@ class SubEditorUserFailmission extends ASubCommand {
 }
 
 @SuppressWarnings({"unchecked", "rawtypes"})
+class SubEditorUserTestMission extends ASubCommand {
+    SubEditorUserTestMission() {
+        super("testmission", Perms.ADMIN_EDITOR);
+        this.setDescription(ChatColor.GOLD + "Test selected mission");
+        this.setParams("<id>");
+        this.setPlayersOnly(false);
+    }
+
+    @Override
+    public void onCmd(ArrayList<String> params, CommandSender sender, String label, String[] args) {
+        if (params.isEmpty()) {
+            super.onHelp(params, sender, label, args);
+            return;
+        }
+        int id;
+        try {
+            id = Integer.parseInt(args[5]);
+        } catch (Exception e) {
+            sender.sendMessage(
+                    ChatColor.RED + "Cound't read " + ChatColor.GOLD + args[5] + ChatColor.RED + " as a valid number");
+            return;
+        }
+        QuestManager manager = Quests.get().getQuestManager(args[1].toLowerCase());
+        Mission mission = manager.getMission(id);
+        if (mission == null) {
+            sender.sendMessage(ChatColor.RED + "Cound't find any mission with ID " + ChatColor.GOLD + args[5]);
+            return;
+        }
+        User user = manager.getArgomentUser(args[3]);
+        //user.failMission(mission);
+        //user.saveOnDisk();
+        String msg = ChatColor.GREEN + "Mission " + ChatColor.YELLOW + id + ChatColor.GREEN + " of " + ChatColor.YELLOW
+                + manager.getName() + ChatColor.GREEN + " is " +
+                ChatColor.YELLOW + user.getDisplayState(mission) + ChatColor.GREEN + " for user " + ChatColor.YELLOW + user.getUID();
+        Bukkit.getConsoleSender().sendMessage(Utils.clearColors(msg));
+        if (!sender.equals(Bukkit.getConsoleSender()))
+            sender.sendMessage(msg);
+    }
+}
+
+@SuppressWarnings({"unchecked", "rawtypes"})
 class SubEditorUserStartmission extends ASubCommand {
     SubEditorUserStartmission() {
         super("startmission", Perms.ADMIN_EDITOR);
@@ -748,7 +785,7 @@ class SubEditorUserProgresstask extends ASubCommand {
             sender.sendMessage(ChatColor.RED + "Cound't find any task with ID " + ChatColor.GOLD + args[5]);
             return;
         }
-        int amount;
+        int amount = 1;
         if (args.length >= 7)
             try {
                 amount = Integer.parseInt(args[6]);
@@ -763,7 +800,7 @@ class SubEditorUserProgresstask extends ASubCommand {
                 return;
             }
         User user = manager.getArgomentUser(args[3]);
-        user.progressTask(task, 1, null, true);
+        user.progressTask(task, amount, null, true);
         user.saveOnDisk();
         String msg = ChatColor.GREEN + "Task " + ChatColor.YELLOW + id + ChatColor.GREEN + " of " + ChatColor.YELLOW
                 + manager.getName() + ChatColor.GREEN + " progressed for user " + ChatColor.YELLOW + user.getUID();
