@@ -1,8 +1,5 @@
 package emanondev.deepquests.player.requiretypes;
 
-import com.sucy.skill.SkillAPI;
-import com.sucy.skill.api.player.PlayerClass;
-import com.sucy.skill.api.player.PlayerData;
 import emanondev.core.ItemBuilder;
 import emanondev.core.YMLSection;
 import emanondev.deepquests.data.AmountData;
@@ -17,6 +14,9 @@ import emanondev.deepquests.player.QuestPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import studio.magemonkey.fabled.Fabled;
+import studio.magemonkey.fabled.api.player.PlayerClass;
+import studio.magemonkey.fabled.api.player.PlayerData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -69,7 +69,7 @@ public class SkillAPILevelRequireType extends ARequireType<QuestPlayer> {
         public boolean isAllowed(@NotNull QuestPlayer user) {
             if (user.getPlayer() == null)
                 return false;
-            PlayerData data = SkillAPI.getPlayerData(user.getOfflinePlayer());
+            PlayerData data = Fabled.getData(user.getOfflinePlayer());
             if (data == null)
                 return false;
             try {

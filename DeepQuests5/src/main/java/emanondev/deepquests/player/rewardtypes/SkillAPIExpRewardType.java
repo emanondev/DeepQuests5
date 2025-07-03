@@ -1,9 +1,6 @@
 package emanondev.deepquests.player.rewardtypes;
 
 import com.sucy.skill.SkillAPI;
-import com.sucy.skill.api.enums.ExpSource;
-import com.sucy.skill.api.player.PlayerClass;
-import com.sucy.skill.api.player.PlayerData;
 import emanondev.core.ItemBuilder;
 import emanondev.core.YMLSection;
 import emanondev.deepquests.Translations;
@@ -20,6 +17,10 @@ import emanondev.deepquests.utils.DataUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import studio.magemonkey.fabled.Fabled;
+import studio.magemonkey.fabled.api.enums.ExpSource;
+import studio.magemonkey.fabled.api.player.PlayerClass;
+import studio.magemonkey.fabled.api.player.PlayerData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -90,7 +91,7 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
         public void apply(@NotNull QuestPlayer qPlayer, int amount) {
             if (amount <= 0 || amountData.getAmount() <= 0)
                 return;
-            PlayerData data = SkillAPI.getPlayerData(qPlayer.getOfflinePlayer());
+            PlayerData data = Fabled.getData(qPlayer.getOfflinePlayer());
             if (data == null)
                 return;
             try {

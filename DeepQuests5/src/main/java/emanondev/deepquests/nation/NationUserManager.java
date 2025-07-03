@@ -3,7 +3,7 @@ package emanondev.deepquests.nation;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.object.Nation;
-import emanondev.core.UtilsTowny;
+import emanondev.core.util.TownyUtility;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.implementations.AUserManager;
 import org.bukkit.Bukkit;
@@ -48,7 +48,7 @@ public class NationUserManager extends AUserManager<QuestNation> implements List
     @Override
     public QuestNation getUser(Player p) {
         try {
-            return users.get(UtilsTowny.getNation(p));
+            return users.get(TownyUtility.getNation(p));
         } catch (Exception e) {
             return null;
         }
@@ -75,7 +75,7 @@ public class NationUserManager extends AUserManager<QuestNation> implements List
     public void reload() {
         saveAll();
         users.clear();
-        for (Nation nation : UtilsTowny.getNations()) {
+        for (Nation nation : TownyUtility.getNations()) {
             if (!users.containsKey(nation)) {
                 QuestNation questUser = new QuestNation(this, nation);
                 users.put(nation, questUser);

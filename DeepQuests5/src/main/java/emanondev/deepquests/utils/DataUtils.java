@@ -1,6 +1,5 @@
 package emanondev.deepquests.utils;
 
-import com.sucy.skill.api.classes.RPGClass;
 import emanondev.deepquests.Translations;
 import emanondev.deepquests.data.*;
 import emanondev.deepquests.interfaces.QuestComponent;
@@ -12,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import studio.magemonkey.fabled.api.classes.FabledClass;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -198,7 +198,7 @@ public class DataUtils {
                     text.append(groups.get(groups.size() - 2) + " " + Translations.translateConjunction("or") + " ");
                 text.append(groups.get(groups.size() - 1));
             } else {
-                ArrayList<RPGClass> classes = new ArrayList<>(data.getRPGClasses());
+                ArrayList<FabledClass> classes = new ArrayList<>(data.getRPGClasses());
                 for (int i = 0; i < classes.size() - 2; i++)
                     text.append(classes.get(i).getName() + ", ");
                 if (classes.size() > 2)

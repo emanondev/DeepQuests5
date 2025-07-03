@@ -1,6 +1,5 @@
 package emanondev.deepquests.command;
 
-import emanondev.core.MessageBuilder;
 import emanondev.core.command.CoreCommand;
 import emanondev.core.message.DMessage;
 import emanondev.deepquests.ItemEditUtils;
@@ -543,14 +542,14 @@ public class QuestAdminCommand extends CoreCommand {
     @SuppressWarnings("rawtypes")
     private void questbag(CommandSender sender, String alias, String[] args) {
         if (args.length != 5 && args.length != 6) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.questbag.wrong_params",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.questbag.wrong_params",
                     "&4[&c✘&4] &c/%alias% questbag <manager> <user> <add/remove> <id> [amount]", "%alias%",
                     alias).send();
             return;
         }
         QuestManager qm = Quests.get().getQuestManager(args[1]);
         if (qm == null) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.questbag.invalid_manager", "&4[&c✘&4] &cInvalid manager name",
                     "%alias%", alias).send();
             return;
@@ -558,7 +557,7 @@ public class QuestAdminCommand extends CoreCommand {
         User u = qm.getArgomentUser(args[2]);
         if (u == null) {
 
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.questbag.invalid_user", "&4[&c✘&4] &cInvalid user name", "%alias%", alias).send();
             return;
         }
@@ -567,7 +566,7 @@ public class QuestAdminCommand extends CoreCommand {
             case "add" -> add = true;
             case "remove" -> add = false;
             default -> {
-                new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+               new DMessage(this.getPlugin(), sender).appendLang(
                         "command.deepquests.questbag.invalid_operation",
                         "&4[&c✘&4] &cInvalid operation name, user &eadd &cor &eremove", "%alias%", alias).send();
                 return;
@@ -586,19 +585,19 @@ public class QuestAdminCommand extends CoreCommand {
         String id = args[4].toLowerCase();
         if (add) {
             u.getQuestBag().addQuestItem(id, amount);
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.questbag.success.add",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.questbag.success.add",
                     "&2[&a✔&2] &aAdded &e%amount% &aof &e%id% &ato &e%user% &aquestbag", "%amount%",
                     String.valueOf(amount), "%id%", id, "%user%", args[2]).send();
             return;
         }
 
         if (u.getQuestBag().getQuestItemAmount(id) == 0) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.questbag.has_no_items",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.questbag.has_no_items",
                     "&2[&a✔&2] &e%user% &ahas no &e%id% &aon his questbag", "%id%", id, "%user%", args[2]).send();
             return;
         }
         int removed = u.getQuestBag().removeQuestItem(id, amount);
-        new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.questbag.success.remove",
+       new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.questbag.success.remove",
                 "&2[&a✔&2] &aRemoved &e%amount% &aof &e%id% &ato &e%user% &aquestbag", "%amount%",
                 String.valueOf(removed), "%id%", id, "%user%", args[2]).send();
     }
@@ -607,14 +606,14 @@ public class QuestAdminCommand extends CoreCommand {
     @SuppressWarnings("rawtypes")
     private void seequestbag(CommandSender sender, String alias, String[] args) {
         if (args.length != 3) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.seequestbag.wrong_params",
+            new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.seequestbag.wrong_params",
                     "&4[&c✘&4] &c/%alias% seequestbag <manager> <user>", "%alias%",
                     alias).send();
             return;
         }
         QuestManager qm = Quests.get().getQuestManager(args[1]);
         if (qm == null) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.seequestbag.invalid_manager", "&4[&c✘&4] &cInvalid manager name",
                     "%alias%", alias).send();
             return;
@@ -622,12 +621,12 @@ public class QuestAdminCommand extends CoreCommand {
         User u = qm.getArgomentUser(args[2]);
         if (u == null) {
 
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.seequestbag.invalid_user", "&4[&c✘&4] &cInvalid user name", "%alias%", alias).send();
             return;
         }
 
-        Gui gui = ItemEditUtils.craftGui(u, u.getQuestBag().getQuestItems(), (Player) sender, new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+        Gui gui = ItemEditUtils.craftGui(u, u.getQuestBag().getQuestItems(), (Player) sender,new DMessage(this.getPlugin(), sender).appendLang(
                 "command.deepquests.seequestbag.gui-title", "&4QuestBag of %user% for %manager%",
                 "%alias%", alias, "%user%", u.getUID(), "%manager%", qm.getName()).toString());
         //TODO open?

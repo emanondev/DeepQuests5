@@ -1,14 +1,13 @@
 package emanondev.deepquests.command;
 
 import emanondev.core.command.CoreCommand;
-import emanondev.core.MessageBuilder;
 import emanondev.core.UtilsMessages;
 import emanondev.core.YMLConfig;
+import emanondev.core.message.DMessage;
 import emanondev.deepquests.ItemEditUtils;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.gui.inventory.QuestsMenu;
-import emanondev.deepquests.implementations.AQuestManager;
 import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.player.PlayerQuestManager;
@@ -113,14 +112,14 @@ public class DeepQuestsNewCommand extends CoreCommand {
     @SuppressWarnings("rawtypes")
     private void questbag(CommandSender sender, String alias, String[] args) {
         if (args.length != 5 && args.length != 6) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.questbag.wrong_params",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.questbag.wrong_params",
                     "&4[&c✘&4] &c/%alias% questbag <manager> <user> <add/remove> <id> [amount]", "%alias%",
                     alias).send();
             return;
         }
         QuestManager qm = Quests.get().getQuestManager(args[1]);
         if (qm == null) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.questbag.invalid_manager", "&4[&c✘&4] &cInvalid manager name",
                     "%alias%", alias).send();
             return;
@@ -128,7 +127,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
         User u = qm.getArgomentUser(args[2]);
         if (u == null) {
 
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.questbag.invalid_user", "&4[&c✘&4] &cInvalid user name", "%alias%", alias).send();
             return;
         }
@@ -137,7 +136,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
             case "add" -> add = true;
             case "remove" -> add = false;
             default -> {
-                new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+               new DMessage(this.getPlugin(), sender).appendLang(
                         "command.deepquests.questbag.invalid_operation",
                         "&4[&c✘&4] &cInvalid operation name, user &eadd &cor &eremove", "%alias%", alias).send();
                 return;
@@ -156,19 +155,19 @@ public class DeepQuestsNewCommand extends CoreCommand {
         String id = args[4].toLowerCase();
         if (add) {
             u.getQuestBag().addQuestItem(id, amount);
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.questbag.success.add",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.questbag.success.add",
                     "&2[&a✔&2] &aAdded &e%amount% &aof &e%id% &ato &e%user% &aquestbag", "%amount%",
                     String.valueOf(amount), "%id%", id, "%user%", args[2]).send();
             return;
         }
 
         if (u.getQuestBag().getQuestItemAmount(id) == 0) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.questbag.has_no_items",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.questbag.has_no_items",
                     "&2[&a✔&2] &e%user% &ahas no &e%id% &aon his questbag", "%id%", id, "%user%", args[2]).send();
             return;
         }
         int removed = u.getQuestBag().removeQuestItem(id, amount);
-        new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.questbag.success.remove",
+       new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.questbag.success.remove",
                 "&2[&a✔&2] &aRemoved &e%amount% &aof &e%id% &ato &e%user% &aquestbag", "%amount%",
                 String.valueOf(removed), "%id%", id, "%user%", args[2]).send();
     }
@@ -177,14 +176,14 @@ public class DeepQuestsNewCommand extends CoreCommand {
     @SuppressWarnings("rawtypes")
     private void seeQuestbag(CommandSender sender, String alias, String[] args) {
         if (args.length != 3) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.seequestbag.wrong_params",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.seequestbag.wrong_params",
                     "&4[&c✘&4] &c/%alias% seequestbag <manager> <user>", "%alias%",
                     alias).send();
             return;
         }
         QuestManager qm = Quests.get().getQuestManager(args[1]);
         if (qm == null) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.seequestbag.invalid_manager", "&4[&c✘&4] &cInvalid manager name",
                     "%alias%", alias).send();
             return;
@@ -192,12 +191,12 @@ public class DeepQuestsNewCommand extends CoreCommand {
         User u = qm.getArgomentUser(args[2]);
         if (u == null) {
 
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.seequestbag.invalid_user", "&4[&c✘&4] &cInvalid user name", "%alias%", alias).send();
             return;
         }
 
-        Gui gui = ItemEditUtils.craftGui(u, u.getQuestBag().getQuestItems(), (Player) sender, new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+        Gui gui = ItemEditUtils.craftGui(u, u.getQuestBag().getQuestItems(), (Player) sender,new DMessage(this.getPlugin(), sender).appendLang(
                 "command.deepquests.seequestbag.gui-title", "&4QuestBag of %user% for %manager%",
                 "%alias%", alias, "%user%", u.getUID(), "%manager%", qm.getName()).toString());
         //TODO open?
@@ -206,13 +205,13 @@ public class DeepQuestsNewCommand extends CoreCommand {
 
     private void reload(CommandSender sender, String alias, String[] args) {
         if (args.length != 1) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.reload.wrong_params", "&4[&c✘&4] &c/%alias% reload", "%alias%", alias).send();
             return;
         }
         Quests.get().onReload();
         if (sender instanceof Player)
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.reload.success", "&2[&a✔&2] &aPlugin reloaded").send();
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.reload.success", "&2[&a✔&2] &aPlugin reloaded").send();
     }
 
     private void editor(CommandSender sender, String alias, String[] args) {
@@ -226,13 +225,13 @@ public class DeepQuestsNewCommand extends CoreCommand {
     // opengui <player>
     private void opengui(CommandSender sender, String alias, String[] args) {
         if (args.length != 2) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.opengui.wrong_params",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.opengui.wrong_params",
                     "&4[&c✘&4] &c/%alias% opengui &6<player>", "%alias%", alias).send();
             return;
         }
         Player target = this.readPlayer(sender, args[1]);
         if (target == null) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation("command.deepquests.opengui.wrong_target",
+           new DMessage(this.getPlugin(), sender).appendLang("command.deepquests.opengui.wrong_target",
                     "&4[&c✘&4] &cTarget player is offline", "%alias%", alias).send();
             return;
         }
@@ -241,7 +240,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
 
     private void listmanagers(CommandSender sender, String alias, String[] args) {
         if (args.length != 1) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.listmanagers.wrong_params", "&4[&c✘&4] &c/%alias% listmanagers",
                     "%alias%", alias).send();
             return;
@@ -279,7 +278,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
         if (args.length == 2) {
             QuestManager<?> manager = Quests.get().getQuestManager(args[1]);
             if (manager == null) {
-                new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+               new DMessage(this.getPlugin(), sender).appendLang(
                         "command.deepquests.manager.invalid_manager",
                         "&4[&c✘&4] &cUnable to find manager &e%name%", "%name%", args[1]).send();
                 return;
@@ -289,7 +288,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
             return;
         }
 
-        new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+       new DMessage(this.getPlugin(), sender).appendLang(
                 "command.deepquests.manager.wrong_params", "&4[&c✘&4] &c/%alias% manager <manager>", "%alias%", alias).send();
     }
 
@@ -297,7 +296,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
     @SuppressWarnings("deprecation")
     private void swapplayers(CommandSender sender, String alias, String[] args) {
         if (args.length != 3) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.swapplayers.wrong_params", "&4[&c✘&4] &c/%alias% listmanagers",
                     "%alias%", alias).send();
             return;
@@ -305,7 +304,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
 
         OfflinePlayer p1 = Bukkit.getOfflinePlayer(args[1]);
         if (p1.getFirstPlayed() == 0 && !p1.isOnline()) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.database.swapplayers.invalid_player",
                     "&4[&c✘&4] &cTarget &6%player% &cnever joined the server", "%alias%", alias, "%player%",
                     p1.getName()).send();
@@ -314,7 +313,7 @@ public class DeepQuestsNewCommand extends CoreCommand {
 
         OfflinePlayer p2 = Bukkit.getOfflinePlayer(args[2]);
         if (p2.getFirstPlayed() == 0 && !p2.isOnline()) {
-            new MessageBuilder(this.getPlugin(), sender).addTextTranslation(
+           new DMessage(this.getPlugin(), sender).appendLang(
                     "command.deepquests.database.swapplayers.invalid_player",
                     "&4[&c✘&4] &cTarget &6%player% &cnever joined the server", "%alias%", alias, "%player%",
                     p2.getName()).send();

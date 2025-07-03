@@ -4,7 +4,7 @@ import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import emanondev.core.UtilsTowny;
+import emanondev.core.util.TownyUtility;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.implementations.AUserManager;
 import org.bukkit.Bukkit;
@@ -49,7 +49,7 @@ public class TownUserManager extends AUserManager<QuestTown> implements Listener
     @Override
     public QuestTown getUser(Player p) {
         try {
-            Resident r = UtilsTowny.getResident(p);
+            Resident r = TownyUtility.getResident(p);
             return r == null ? null : r.hasTown() ? users.get(r.getTown()) : null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,7 +82,7 @@ public class TownUserManager extends AUserManager<QuestTown> implements Listener
     public void reload() {
         saveAll();
         users.clear();
-        for (Town town : UtilsTowny.getTowns()) {
+        for (Town town : TownyUtility.getTowns()) {
             if (!users.containsKey(town)) {
                 QuestTown questUser = new QuestTown(this, town);
                 users.put(town, questUser);

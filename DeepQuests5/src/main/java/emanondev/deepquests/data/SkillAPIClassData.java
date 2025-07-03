@@ -1,7 +1,5 @@
 package emanondev.deepquests.data;
 
-import com.sucy.skill.SkillAPI;
-import com.sucy.skill.api.classes.RPGClass;
 import emanondev.core.ItemBuilder;
 import emanondev.core.YMLSection;
 import emanondev.deepquests.gui.button.Button;
@@ -14,11 +12,13 @@ import emanondev.deepquests.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import studio.magemonkey.fabled.Fabled;
+import studio.magemonkey.fabled.api.classes.FabledClass;
 
 import java.util.*;
 
 public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
-    private final HashSet<RPGClass> classes = new HashSet<>();
+    private final HashSet<FabledClass> classes = new HashSet<>();
     private final HashSet<String> groups = new HashSet<>();
     private boolean classesIsWhitelist = false;
     private boolean groupsIsWhitelist = false;
@@ -27,16 +27,16 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         super(parent, section);
         List<String> classNames = getConfig().getStringList(Paths.DATA_SKILLAPI_CLASSES, null);
         for (String className : classNames) {
-            RPGClass clazz = SkillAPI.getClass(className);
+            FabledClass clazz = Fabled.getClass(className);
             if (clazz == null)
-                new IllegalArgumentException("Couldn't find RPGClass '" + className + "' skipping it")
+                new IllegalArgumentException("Couldn't find FabledClass '" + className + "' skipping it")
                         .printStackTrace();
             else
                 classes.add(clazz);
         }
         List<String> groupNames = getConfig().getStringList(Paths.DATA_SKILLAPI_GROUPS, null);
         for (String groupName : groupNames) {
-            if (SkillAPI.getGroups().contains(groupName))
+            if (Fabled.getGroups().contains(groupName))
                 new IllegalArgumentException("Couldn't find SkillAPI group '" + groupName + "' skipping it")
                         .printStackTrace();
             else
@@ -57,7 +57,7 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         getConfig().set(Paths.DATA_SKILLAPI_GROUPS, groups);
     }
 
-    public void toggleRPGClass(RPGClass rpgClass) {
+    public void toggleRPGClass(FabledClass rpgClass) {
         if (rpgClass == null)
             return;
         if (classes.contains(rpgClass))
@@ -66,14 +66,14 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
             classes.add(rpgClass);
         if (!classes.isEmpty()) {
             ArrayList<String> classNames = new ArrayList<>();
-            for (RPGClass clazz : classes)
+            for (FabledClass clazz : classes)
                 classNames.add(clazz.getName());
             getConfig().set(Paths.DATA_SKILLAPI_CLASSES, classNames);
         }
         getConfig().set(Paths.DATA_SKILLAPI_CLASSES, null);
     }
 
-    public boolean isValidRPGClass(RPGClass type) {
+    public boolean isValidRPGClass(FabledClass type) {
         if (type == null)
             return false;
         if (!isValidGroup(type.getGroup()))
@@ -120,21 +120,21 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         else if (classes.isEmpty()) {
             info.add("&9Any Class from Enabled Groups is &aAllowed:");
             info.add("&9Enabled Groups are:");
-            for (String group : SkillAPI.getGroups())
+            for (String group : Fabled.getGroups())
                 if (isValidGroup(group))
                     info.add("&9  - &a" + group);
         } else {
             info.add("&aAllowed &9Classes:");
-            for (RPGClass clazz : SkillAPI.getClasses().values())
+            for (FabledClass clazz : Fabled.getClasses().values())
                 if (isValidRPGClass(clazz))
                     info.add("&9  - &a" + clazz.getName());
         }
         return info;
     }
 
-    public Set<RPGClass> getRPGClasses() {
-        LinkedHashSet<RPGClass> set = new LinkedHashSet<>();
-        for (RPGClass clazz : SkillAPI.getClasses().values())
+    public Set<FabledClass> getRPGClasses() {
+        LinkedHashSet<FabledClass> set = new LinkedHashSet<>();
+        for (FabledClass clazz : Fabled.getClasses().values())
             if (isValidRPGClass(clazz))
                 set.add(clazz);
         return set;
@@ -142,13 +142,13 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
 
     public Set<String> getGroups() {
         LinkedHashSet<String> set = new LinkedHashSet<>();
-        for (String group : SkillAPI.getGroups())
+        for (String group : Fabled.getGroups())
             if (isValidGroup(group))
                 set.add(group);
         return set;
     }
 
-    public Set<RPGClass> getStoredRPGClasses() {
+    public Set<FabledClass> getStoredRPGClasses() {
         return Collections.unmodifiableSet(classes);
     }
 
@@ -164,16 +164,16 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         return groupsIsWhitelist;
     }
 
-    private class RPGClassButton extends CollectionSelectorButton<RPGClass> {
+    private class RPGClassButton extends CollectionSelectorButton<FabledClass> {
 
         public RPGClassButton(Gui parent) {
             super("&6RPGClass Button", new ItemBuilder(Material.IRON_SWORD).setGuiProperty().build(), parent, true);
         }
 
         @Override
-        public Collection<RPGClass> getPossibleValues() {
-            LinkedHashSet<RPGClass> set = new LinkedHashSet<>();
-            for (RPGClass clazz : SkillAPI.getClasses().values())
+        public Collection<FabledClass> getPossibleValues() {
+            LinkedHashSet<FabledClass> set = new LinkedHashSet<>();
+            for (FabledClass clazz : Fabled.getClasses().values())
                 if (isValidGroup(clazz.getGroup()))
                     set.add(clazz);
             return set;
@@ -189,11 +189,11 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
             else {
                 if (classesIsWhitelist) {
                     list.add("&9RPGClasss Allowed:");
-                    for (RPGClass type : classes)
+                    for (FabledClass type : classes)
                         list.add("&9  - &a" + type.getName());
                 } else {
                     list.add("&9RPGClasss Unallowed:");
-                    for (RPGClass type : classes)
+                    for (FabledClass type : classes)
                         list.add("&9  - &c" + type.toString());
                 }
             }
@@ -203,7 +203,7 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         }
 
         @Override
-        public List<String> getElementDescription(RPGClass type) {
+        public List<String> getElementDescription(FabledClass type) {
 
             ArrayList<String> desc = new ArrayList<String>();
             desc.add("&6RPGClass: '&e" + type.getName() + "&6'");
@@ -215,12 +215,12 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         }
 
         @Override
-        public ItemStack getElementItem(RPGClass element) {
+        public ItemStack getElementItem(FabledClass element) {
             return new ItemBuilder(Material.IRON_SWORD).setGuiProperty().build();
         }
 
         @Override
-        public boolean isValidContains(RPGClass element) {
+        public boolean isValidContains(FabledClass element) {
             return isValidRPGClass(element);
         }
 
@@ -230,7 +230,7 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         }
 
         @Override
-        public boolean onToggleElementRequest(RPGClass element) {
+        public boolean onToggleElementRequest(FabledClass element) {
             toggleRPGClass(element);
             return true;
         }
@@ -251,7 +251,7 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
         @Override
         public Collection<String> getPossibleValues() {
             LinkedHashSet<String> set = new LinkedHashSet<>();
-            set.addAll(SkillAPI.getGroups());
+            set.addAll(Fabled.getGroups());
             return set;
         }
 
