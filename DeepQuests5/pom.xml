@@ -1,6 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>emanondev.deepquests</groupId>
     <artifactId>DeepQuests5</artifactId>
     <version>5.0.0</version>
@@ -22,14 +25,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.14.0</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>21</source>
+                    <target>21</target>
+                    <release>21</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.46</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
     <repositories>
         <repository>
             <id>spigot-repo</id>
@@ -78,34 +90,43 @@
             <id>sonatype</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+        <!-- Fabled -->
+        <repository>
+            <id>magemonkey-snapshots</id>
+            <url>https://repo.travja.dev/snapshots</url>
+        </repository>
+        <!-- Mcmmo -->
+        <repository>
+            <id>neetgames</id>
+            <url>https://nexus.neetgames.com/repository/maven-releases/</url>
+        </repository>
     </repositories>
     <dependencies>
         <!-- Spigot -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>26.2-R0.1-SNAPSHOT</version>
             <type>jar</type>
+            <scope>provided</scope>
         </dependency>
         <!-- JetBrains Annotations -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>24.0.1</version>
+            <version>26.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Vault -->
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>craftbukkit</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -113,7 +134,8 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.6</version>
+            <version>2.12.2</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>*</groupId>
@@ -151,16 +173,16 @@
         <dependency>
             <groupId>emanondev.core</groupId>
             <artifactId>DeepCore</artifactId>
-            <version>3.9.3</version>
+            <version>4.0.0</version>
             <scope>provided</scope>
         </dependency>
         <!-- Parties -->
-            <dependency>
-                <groupId>com.alessiodp.parties</groupId>
-                <artifactId>parties-api</artifactId>
-                <version>3.2.16</version>
-                <scope>provided</scope>
-            </dependency>
+        <dependency>
+            <groupId>com.alessiodp.parties</groupId>
+            <artifactId>parties-api</artifactId>
+            <version>3.2.16</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- Citizen -->
         <dependency>
             <groupId>net.citizensnpcs</groupId>
@@ -172,18 +194,24 @@
         <!-- MythicMobs -->
         <dependency>
             <groupId>io.lumine</groupId>
-            <artifactId>MythicMobs</artifactId>
-            <version>5.0.2</version>
-            <scope>system</scope>
-            <systemPath>C:/MavenDependency/MythicMobs-5.0.2-4068.jar</systemPath>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>5.6.1</version>
+            <scope>provided</scope>
         </dependency>
         <!-- MCmmo -->
         <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
-            <version>2.1.209</version>
-            <scope>system</scope>
-            <systemPath>C:/MavenDependency/mcMMO-2.1.209.jar</systemPath>
+            <version>2.2.055-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>*</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
+<!--            <scope>system</scope>-->
+<!--            <systemPath>C:/MavenDependency/mcMMO-2.1.209.jar</systemPath>-->
         </dependency>
         <!-- CMI -->
         <dependency>
@@ -197,7 +225,7 @@
         <dependency>
             <groupId>studio.magemonkey</groupId>
             <artifactId>fabled</artifactId>
-            <version>1.0.4-R0.55-SNAPSHOT</version>
+            <version>1.0.4-R0.92-SNAPSHOT</version>
         </dependency>
         <!-- WG events -->
         <dependency>
@@ -274,6 +302,20 @@
                     <artifactId>paperlib</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.46</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.17</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

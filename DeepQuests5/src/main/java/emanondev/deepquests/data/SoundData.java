@@ -10,6 +10,8 @@ import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +31,7 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
         super(parent, section);
         volume = Math.min(Math.max((float) getConfig().getDouble(Paths.DATA_SOUND_VOLUME, 1D), 0.05F), 1F);
         pitch = Math.min(Math.max((float) getConfig().getDouble(Paths.DATA_SOUND_PITCH, 1D), 0.05F), 20F);
-        sound = getConfig().getEnum(Paths.DATA_SOUND_NAME, null, Sound.class);
+        sound = Registry.SOUNDS.get(NamespacedKey.fromString(getConfig().getString(Paths.DATA_SOUND_NAME, Sound.ENTITY_PLAYER_LEVELUP.getKeyOrNull().toString())));
     }
 
     private static Material getMaterial(Sound sound) {
@@ -75,7 +77,7 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
             if (sound.name().contains("TRIPWIRE"))
                 return Material.TRIPWIRE_HOOK;
             if (sound.name().contains("WET_GRASS"))
-                return Material.GRASS;
+                return Material.GRASS_BLOCK;
             if (sound.name().contains("WOOD"))
                 return Material.OAK_WOOD;
             if (sound.name().contains("WOOL"))
@@ -179,7 +181,7 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
         if (this.sound != null && this.sound.equals(sound))
             return;
         this.sound = sound;
-        getConfig().setEnumAsString(Paths.DATA_SOUND_NAME, sound);
+        getConfig().set(Paths.DATA_SOUND_NAME, sound.getKeyOrThrow());
     }
 
     public float getVolume() {

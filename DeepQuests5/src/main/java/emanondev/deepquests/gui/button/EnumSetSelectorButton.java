@@ -36,7 +36,7 @@ public abstract class EnumSetSelectorButton<E extends Enum<E>> extends AButton {
     }
 
     private static ItemStack createSelectedElementItem(ItemStack item) {
-        return new ItemBuilder(item).setGuiProperty().addEnchantment(Enchantment.DURABILITY, 1).build();
+        return new ItemBuilder(item).setGuiProperty().addEnchantment(Enchantment.UNBREAKING, 1).build();
     }
 
     private static ItemStack createBlacklistItem() {

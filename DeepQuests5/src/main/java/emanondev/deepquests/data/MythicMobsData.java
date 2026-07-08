@@ -202,7 +202,7 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
             super(Utils.setDescription(new ItemBuilder(Material.LEVER).setGuiProperty().build(),
                             Arrays.asList("&6Level Check", "&9Status: &cDisabled"), null, true),
                     Utils.setDescription(new ItemBuilder(Material.LEVER).setGuiProperty()
-                                    .addEnchantment(Enchantment.DURABILITY, 1).build(),
+                                    .addEnchantment(Enchantment.UNBREAKING, 1).build(),
                             Arrays.asList("&6Level Check", "&9Status: &aEnabled"), null, true),
                     parent);
         }

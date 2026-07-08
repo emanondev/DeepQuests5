@@ -40,7 +40,7 @@ public class CurrentMissionStateRequireType<T extends User<T>> extends ARequireT
 
     @Override
     public ItemStack getGuiItem() {
-        return new ItemBuilder(getGuiMaterial()).addPattern(DyeColor.WHITE, PatternType.RHOMBUS_MIDDLE).setGuiProperty()
+        return new ItemBuilder(getGuiMaterial()).addPattern(DyeColor.WHITE, PatternType.RHOMBUS).setGuiProperty()
                 .build();
     }
 

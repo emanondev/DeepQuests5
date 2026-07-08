@@ -34,7 +34,7 @@ public class FailedMissionRequireType<T extends User<T>> extends ARequireType<T>
 
     @Override
     public ItemStack getGuiItem() {
-        return new ItemBuilder(getGuiMaterial()).addPattern(DyeColor.WHITE, PatternType.RHOMBUS_MIDDLE).setGuiProperty()
+        return new ItemBuilder(getGuiMaterial()).addPattern(DyeColor.WHITE, PatternType.RHOMBUS).setGuiProperty()
                 .build();
     }
 

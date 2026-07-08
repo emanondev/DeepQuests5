@@ -203,7 +203,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
             case CREEPER -> new ItemBuilder(Material.GUNPOWDER).setGuiProperty().build();
             case WOLF -> new ItemBuilder(Material.BONE).setGuiProperty().build();
             case VILLAGER -> new ItemBuilder(Material.EMERALD).setGuiProperty().build();
-            case SNOWMAN -> new ItemBuilder(Material.SNOWBALL).setGuiProperty().build();
+            case SNOW_GOLEM -> new ItemBuilder(Material.SNOWBALL).setGuiProperty().build();
             case IRON_GOLEM -> new ItemBuilder(Material.IRON_BLOCK).setGuiProperty().build();
             case WITHER -> new ItemBuilder(Material.NETHER_STAR).setGuiProperty().build();
             case ENDER_DRAGON -> new ItemBuilder(Material.DRAGON_EGG).setGuiProperty().build();
@@ -214,7 +214,6 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
             case PIG -> new ItemBuilder(Material.PORKCHOP).setGuiProperty().build();
             case SHEEP -> new ItemBuilder(Material.WHITE_WOOL).setGuiProperty().build();
             case RABBIT -> new ItemBuilder(Material.RABBIT_FOOT).setGuiProperty().build();
-            case MUSHROOM_COW -> new ItemBuilder(Material.RED_MUSHROOM).setGuiProperty().build();
             case COW -> new ItemBuilder(Material.MILK_BUCKET).setGuiProperty().build();
             case CHICKEN -> new ItemBuilder(Material.CHICKEN).setGuiProperty().build();
             case PLAYER -> new ItemBuilder(Material.PLAYER_HEAD).setGuiProperty().build();
@@ -240,7 +239,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
             case PUFFERFISH -> new ItemBuilder(Material.PUFFERFISH_BUCKET).setGuiProperty().build();
             case SALMON -> new ItemBuilder(Material.SALMON_BUCKET).setGuiProperty().build();
             case TROPICAL_FISH -> new ItemBuilder(Material.TROPICAL_FISH_BUCKET).setGuiProperty().build();
-            case TURTLE -> new ItemBuilder(Material.SCUTE).setGuiProperty().build();
+            case TURTLE -> new ItemBuilder(Material.TURTLE_SCUTE).setGuiProperty().build();
             default -> new ItemBuilder(Material.BARRIER).setGuiProperty().build();
         };
     }
