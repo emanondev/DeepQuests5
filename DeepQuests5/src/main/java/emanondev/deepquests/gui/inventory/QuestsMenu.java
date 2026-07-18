@@ -16,7 +16,7 @@ import java.util.Collections;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class QuestsMenu extends ListGui<QuestButton> {
-    private ArrayList<QuestButton> rawQuestButtons = new ArrayList<>();
+    private final ArrayList<QuestButton> rawQuestButtons = new ArrayList<>();
 
     public QuestsMenu(Player player, Gui previusHolder, Collection<QuestManager<?>> managers) {
         super(GuiConfig.Generic.getQuestsMenuTitle(player), 6, player, previusHolder, 1);

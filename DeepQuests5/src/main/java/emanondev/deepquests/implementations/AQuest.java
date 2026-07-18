@@ -65,7 +65,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
             info.add("&9Repeatable: &aTrue");
             info.add("&9Cooldown: &e" + StringUtils.getStringCooldown(this.getCooldownTime()));
         }
-        if (missions.size() > 0) {
+        if (!missions.isEmpty()) {
             info.add("&9Missions:");
             for (Mission<T> mission : missions.values()) {
                 info.add("&9 - &e" + mission.getDisplayName());
@@ -79,7 +79,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
             else
                 blackList.add("&9 - &c" + world.getName());
         }
-        if (blackList.size() == 0)
+        if (blackList.isEmpty())
             info.add("&9All Worlds are allowed");
         else if (whiteList.size() <= blackList.size()) {
             info.add("&9Whitelisted Worlds:");
@@ -88,7 +88,7 @@ public class AQuest<T extends User<T>> extends AQuestComponentWithCooldown<T> im
             info.add("&9Blacklisted Worlds:");
             info.addAll(blackList);
         }
-        if (requires.size() > 0) {
+        if (!requires.isEmpty()) {
             info.add("&9Requires:");
             for (Require<T> require : requires.values()) {
                 info.add("&9 - &e" + require.getDisplayName());

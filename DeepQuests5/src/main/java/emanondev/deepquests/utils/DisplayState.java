@@ -9,7 +9,7 @@ public enum DisplayState {
     FAILED("When failed");
     private final String desc;
 
-    private DisplayState(String desc) {
+    DisplayState(String desc) {
         this.desc = desc;
     }
 

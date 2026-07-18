@@ -10,7 +10,7 @@ public enum Time {
     SECOND(1);
     public final long seconds;
 
-    private Time(long seconds) {
+    Time(long seconds) {
         this.seconds = seconds;
     }
 

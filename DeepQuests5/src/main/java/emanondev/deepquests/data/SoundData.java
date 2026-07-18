@@ -166,7 +166,7 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
         if (getSound() == null)
             info.add("&9Sound: &cSound not setted");
         else {
-            info.add("&9Sound: &e" + getSound().toString());
+            info.add("&9Sound: &e" + getSound().getKeyOrNull());
             info.add("&9Volume: &e" + getVolume());
             info.add("&9Pitch: &e" + getPitch());
         }

@@ -414,7 +414,7 @@ public interface User<T extends User<T>> extends Navigable {
             return DisplayState.COOLDOWN;
         if (!hasRequires(quest))
             return DisplayState.LOCKED;
-        if (quest.getMissions().size() == 0)
+        if (quest.getMissions().isEmpty())
             return DisplayState.UNSTARTED;
 
         EnumMap<DisplayState, Integer> values = getMissionsStates(quest);

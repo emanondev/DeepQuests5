@@ -1,9 +1,8 @@
 package emanondev.deepquests.player.rewardtypes;
 
 import emanondev.core.ItemBuilder;
-import emanondev.core.UtilsInventory;
-import emanondev.core.UtilsInventory.ExcessManage;
 import emanondev.core.YMLSection;
+import emanondev.core.utility.InventoryUtility;
 import emanondev.deepquests.Translations;
 import emanondev.deepquests.data.AmountData;
 import emanondev.deepquests.data.ItemStackData;
@@ -15,6 +14,7 @@ import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.player.QuestPlayer;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -27,11 +27,6 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
 
     public ItemStackRewardType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
-    }
-
-    @Override
-    protected boolean getStandardHiddenValue() {
-        return false;
     }
 
     @Override
@@ -65,9 +60,15 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
                 .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 
+    @Override
+    protected boolean getStandardHiddenValue() {
+        return false;
+    }
+
     public class ItemStackReward extends AReward<QuestPlayer> {
-        private ItemStackData<QuestPlayer, ItemStackReward> stackData;
-        private AmountData<QuestPlayer, ItemStackReward> amountData;
+        private final ItemStackData<QuestPlayer, ItemStackReward> stackData;
+        @Getter
+        private final AmountData<QuestPlayer, ItemStackReward> amountData;
 
         public ItemStackReward(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, ItemStackRewardType.this, section);
@@ -88,12 +89,8 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
         public void apply(@NotNull QuestPlayer qPlayer, int amount) {
             if (amount <= 0 || stackData.getItem() == null || amountData.getAmount() <= 0)
                 return;
-            UtilsInventory.giveAmount(qPlayer.getPlayer(), stackData.getItem(), amountData.getAmount() * amount,
-                    ExcessManage.DROP_EXCESS);
-        }
-
-        public AmountData<QuestPlayer, ItemStackReward> getAmountData() {
-            return amountData;
+            InventoryUtility.giveAmount(qPlayer.getPlayer(), stackData.getItem(), amountData.getAmount() * amount,
+                    InventoryUtility.ExcessMode.DROP_EXCESS);
         }
 
         public ItemStackData<QuestPlayer, ItemStackReward> getItemStackData() {

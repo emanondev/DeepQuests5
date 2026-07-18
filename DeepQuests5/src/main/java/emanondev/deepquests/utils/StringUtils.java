@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 public class StringUtils {
-    private static DecimalFormat format = loadDecimalFormat();
+    private static final DecimalFormat format = loadDecimalFormat();
 
     private static DecimalFormat loadDecimalFormat() {
         DecimalFormat format = new DecimalFormat();

@@ -14,7 +14,7 @@ import java.util.Collections;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class EditQuestsMenu extends ListGui<EditQuestButton> {
-    private ArrayList<EditQuestButton> rawQuestButtons = new ArrayList<>();
+    private final ArrayList<EditQuestButton> rawQuestButtons = new ArrayList<>();
 
     public EditQuestsMenu(Player player, Gui previusHolder, Collection<QuestManager<?>> managers) {
         super(GuiConfig.Generic.getQuestsMenuTitle(player), 6, player, previusHolder, 1);

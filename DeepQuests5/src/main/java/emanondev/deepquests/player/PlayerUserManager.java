@@ -128,7 +128,7 @@ public class PlayerUserManager extends AUserManager<QuestPlayer> implements List
             final Map<UUID, QuestPlayer> clone = new HashMap<>(users);
             saving = Bukkit.getScheduler().runTaskTimerAsynchronously(Quests.get(), () -> {
                 UUID uuid = null;
-                if (clone.size() == 0) {
+                if (clone.isEmpty()) {
                     saving.cancel();
                     saving = null;
                     return;

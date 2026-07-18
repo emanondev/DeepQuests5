@@ -100,7 +100,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
             info.add("&9Repeatable: &aTrue");
             info.add("&9Cooldown: &e" + StringUtils.getStringCooldown(getCooldownTime()));
         }
-        if (tasks.size() > 0) {
+        if (!tasks.isEmpty()) {
             info.add("&9Tasks:");
             for (Task<T> task : tasks.values()) {
                 info.add("&9 - &e" + task.getDisplayName());
@@ -115,7 +115,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
             else
                 blackList.add("&9 - &c" + world.getName());
         }
-        if (blackList.size() == 0)
+        if (blackList.isEmpty())
             info.add("&9All Worlds are allowed");
         else if (whiteList.size() <= blackList.size()) {
             info.add("&9Whitelisted Worlds:");
@@ -124,28 +124,28 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
             info.add("&9Blacklisted Worlds:");
             info.addAll(blackList);
         }
-        if (requires.size() > 0) {
+        if (!requires.isEmpty()) {
             info.add("&9Requires:");
             for (Require<T> require : requires.values()) {
                 info.add("&9 - &e" + require.getDisplayName());
                 info.add("   &7" + require.getTypeName());
             }
         }
-        if (startRewards.size() > 0) {
+        if (!startRewards.isEmpty()) {
             info.add("&9Start Rewards:");
             for (Reward<T> reward : startRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
                 info.add("   &7" + reward.getTypeName());
             }
         }
-        if (completeRewards.size() > 0) {
+        if (!completeRewards.isEmpty()) {
             info.add("&9Complete Rewards:");
             for (Reward<T> reward : completeRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
                 info.add("   &7" + reward.getTypeName());
             }
         }
-        if (failRewards.size() > 0) {
+        if (!failRewards.isEmpty()) {
             info.add("&9Fail Rewards:");
             for (Reward<T> reward : failRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class EditTasksMenu<T extends User<T>> extends ListGui<EditTaskButton<T>> {
-    private ArrayList<EditTaskButton<T>> rawTaskButtons = new ArrayList<>();
+    private final ArrayList<EditTaskButton<T>> rawTaskButtons = new ArrayList<>();
 
     public EditTasksMenu(Player player, Gui previusHolder, Mission<T> mission, T user) {
         super("tasks", 6, player, previusHolder, 1);

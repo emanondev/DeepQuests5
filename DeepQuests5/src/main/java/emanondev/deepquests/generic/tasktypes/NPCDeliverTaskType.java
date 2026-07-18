@@ -1,8 +1,7 @@
 package emanondev.deepquests.generic.tasktypes;
 
-import emanondev.core.UtilsInventory;
-import emanondev.core.UtilsInventory.LackManage;
 import emanondev.core.YMLSection;
+import emanondev.core.utility.InventoryUtility;
 import emanondev.deepquests.Holders;
 import emanondev.deepquests.Translations;
 import emanondev.deepquests.data.ItemStackData;
@@ -50,27 +49,6 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
         return list;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    private void onRightClick(NPCRightClickEvent event) {
-        Player p = event.getClicker();
-        T user = getManager().getUserManager().getUser(p);
-        if (user == null)
-            return;
-        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
-            NPCDeliverTask task = (NPCDeliverTask) tTask;
-            if (task.isWorldAllowed(p.getWorld()) && task.npcData.isValidNPC(event.getNPC())) {
-                ItemStack targetItem = task.itemData.getItem();
-                if (targetItem == null)
-                    continue;
-                int removedAmount = UtilsInventory.removeAmount(p, targetItem,
-                        task.getMaxProgress() - user.getTaskProgress(task), LackManage.REMOVE_MAX_POSSIBLE);
-                if (removedAmount > 0) {
-                    task.onProgress(user, removedAmount, p, false);
-                }
-            }
-        }
-    }
-
     @Override
     public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, YMLSection section) {
         return new NPCDeliverTask(id, mission, section);
@@ -108,6 +86,27 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
                         + Holders.TASK_MAX_PROGRESS + " {items} &9{conjun:to} {npcs}");
         return Translations.replaceAll(txt).replace("{npcs}", DataUtils.getNPCHolder(t.getNPCData())).replace("{items}",
                 DataUtils.getItemsHolder(t.getItemStackData()));
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    private void onRightClick(NPCRightClickEvent event) {
+        Player p = event.getClicker();
+        T user = getManager().getUserManager().getUser(p);
+        if (user == null)
+            return;
+        for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
+            NPCDeliverTask task = (NPCDeliverTask) tTask;
+            if (task.isWorldAllowed(p.getWorld()) && task.npcData.isValidNPC(event.getNPC())) {
+                ItemStack targetItem = task.itemData.getItem();
+                if (targetItem == null)
+                    continue;
+                int removedAmount = InventoryUtility.removeAmount(p, targetItem,
+                        task.getMaxProgress() - user.getTaskProgress(task), InventoryUtility.LackMode.REMOVE_MAX_POSSIBLE);
+                if (removedAmount > 0) {
+                    task.onProgress(user, removedAmount, p, false);
+                }
+            }
+        }
     }
 
     public class NPCDeliverTask extends ATask<T> {
@@ -158,7 +157,7 @@ public class NPCDeliverTaskType<T extends User<T>> extends ATaskType<T> {
                         for (Enchantment ench : meta.getEnchants().keySet())
                             info.add("  &9- &e" + ench.getKey().getKey() + " " + meta.getEnchantLevel(ench));
                     }
-                    if (meta.getItemFlags().size() > 0) {
+                    if (!meta.getItemFlags().isEmpty()) {
                         info.add("  &9Flags:");
                         for (ItemFlag flag : meta.getItemFlags())
                             info.add("  &9- &e" + flag);

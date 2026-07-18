@@ -2,15 +2,15 @@ package emanondev.deepquests.gui.inventory;
 
 public interface PagedGui extends Gui {
 
-    public int getPage();
+    int getPage();
 
-    public boolean setPage(int i);
+    boolean setPage(int i);
 
-    public default boolean incPage() {
+    default boolean incPage() {
         return setPage(getPage() + 1);
     }
 
-    public default boolean decPage() {
+    default boolean decPage() {
         return setPage(getPage() - 1);
     }
 
@@ -20,9 +20,9 @@ public interface PagedGui extends Gui {
      *
      * @return
      */
-    public abstract int getMaxSlot();
+    int getMaxSlot();
 
-    public default int getMaxPage() {
+    default int getMaxPage() {
         return getMaxSlot() / getInventorySize() + 1;
     }
 

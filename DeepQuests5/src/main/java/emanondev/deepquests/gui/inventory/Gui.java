@@ -12,7 +12,7 @@ public interface Gui extends InventoryHolder {
      * <br>
      * might be null
      */
-    public Player getTargetPlayer();
+    Player getTargetPlayer();
 
     /**
      * This method is called when a player click the gui
@@ -21,14 +21,14 @@ public interface Gui extends InventoryHolder {
      * @param slot    - raw slot clicked
      * @param click   - clicktype
      */
-    public void onSlotClick(Player clicker, int slot, ClickType click);
+    void onSlotClick(Player clicker, int slot, ClickType click);
 
     /**
      * Called when an update is requested
      *
      * @return true if any relevant changes has been made
      */
-    public boolean updateInventory();
+    boolean updateInventory();
 	/*
 	/**
 	 * Reload the whole inventory replacing all buttons
@@ -39,14 +39,14 @@ public interface Gui extends InventoryHolder {
      * @return the previus used gui<br>
      * might be null
      */
-    public Gui getPreviusGui();
+    Gui getPreviusGui();
 
     /**
      * @return the inventory size
      * <p>
      * shortcut for getInventory().getSize()
      */
-    public default int getInventorySize() {
+    default int getInventorySize() {
         return getInventory().getSize();
     }
 }

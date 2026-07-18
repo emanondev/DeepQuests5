@@ -116,7 +116,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             else
                 blackList.add("&9 - &c" + world.getName());
         }
-        if (blackList.size() == 0)
+        if (blackList.isEmpty())
             info.add("&9All Worlds are allowed");
         else if (whiteList.size() <= blackList.size()) {
             info.add("&9Whitelisted Worlds:");
@@ -125,14 +125,14 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             info.add("&9Blacklisted Worlds:");
             info.addAll(blackList);
         }
-        if (completeRewards.size() > 0) {
+        if (!completeRewards.isEmpty()) {
             info.add("&9Complete Rewards:");
             for (Reward<T> reward : completeRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
                 info.add("   &7" + reward.getTypeName());
             }
         }
-        if (progressRewards.size() > 0) {
+        if (!progressRewards.isEmpty()) {
             info.add("&9Progress Rewards:");
             for (Reward<T> reward : progressRewards.values()) {
                 info.add("&9 - &e" + reward.getDisplayName());
@@ -516,7 +516,7 @@ public abstract class ATask<T extends User<T>> extends AQuestComponentWithWorlds
             public List<String> getButtonDescription() {
                 List<String> desc = new ArrayList<>();
                 desc.add("&6BarStyle Button");
-                desc.add("&9Current Type: &e" + getBossBarStyle().toString());
+                desc.add("&9Current Type: &e" + getBossBarStyle());
                 if (isBarStyleDefault)
                     desc.add("&9Inherit from TaskType");
                 desc.add("");

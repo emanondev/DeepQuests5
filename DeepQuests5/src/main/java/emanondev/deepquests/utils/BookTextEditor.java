@@ -1,8 +1,6 @@
 package emanondev.deepquests.utils;
 
-import emanondev.core.UtilsInventory;
-import emanondev.core.UtilsInventory.ExcessManage;
-import emanondev.core.UtilsInventory.LackManage;
+import emanondev.core.utility.InventoryUtility;
 import emanondev.deepquests.Quests;
 import emanondev.deepquests.gui.button.Button;
 import emanondev.deepquests.gui.button.TextEditorPlusButton;
@@ -25,13 +23,13 @@ public class BookTextEditor implements Listener {
     public static HashMap<Player, Request> editors = new HashMap<>();
 
     public static void requestText(TextEditorPlusButton button, Player p, String def) {
-        UtilsInventory.giveAmount(p, newBook(def), 1, ExcessManage.DELETE_EXCESS);
+        InventoryUtility.giveAmount(p, newBook(def), 1, InventoryUtility.ExcessMode.DELETE_EXCESS);
         editors.put(p, new Request(button));
         p.closeInventory();
     }
 
     public static void requestTextList(TextListEditorPlusButton button, Player p, List<String> def) {
-        UtilsInventory.giveAmount(p, newBook(def), 1, ExcessManage.DELETE_EXCESS);
+        InventoryUtility.giveAmount(p, newBook(def), 1, InventoryUtility.ExcessMode.DELETE_EXCESS);
         editors.put(p, new Request(button));
         p.closeInventory();
     }
@@ -57,10 +55,10 @@ public class BookTextEditor implements Listener {
         if (!editors.containsKey(event.getPlayer()) || !event.isSigning())
             return;
         List<String> list = event.getNewBookMeta().getPages();
-        StringBuilder longText = new StringBuilder("");
+        StringBuilder longText = new StringBuilder();
         for (String text : list)
             if (text != null)
-                longText.append(text + "\n");
+                longText.append(text).append("\n");
             else
                 longText.append("\n");
         String txt;
@@ -81,7 +79,7 @@ public class BookTextEditor implements Listener {
             public void run() {
                 ItemStack item = new ItemStack(Material.WRITTEN_BOOK);
                 item.setItemMeta(event.getNewBookMeta());
-                UtilsInventory.removeAmount(event.getPlayer(), item, 1, LackManage.REMOVE_MAX_POSSIBLE);
+                InventoryUtility.removeAmount(event.getPlayer(), item, 1, InventoryUtility.LackMode.REMOVE_MAX_POSSIBLE);
             }
         }, 1);
     }
