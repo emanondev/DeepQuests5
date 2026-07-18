@@ -250,9 +250,7 @@ public class SkillAPIClassData<T extends User<T>, E extends QuestComponent<T>> e
 
         @Override
         public Collection<String> getPossibleValues() {
-            LinkedHashSet<String> set = new LinkedHashSet<>();
-            set.addAll(Fabled.getGroups());
-            return set;
+            return new LinkedHashSet<>(Fabled.getGroups());
         }
 
         @Override

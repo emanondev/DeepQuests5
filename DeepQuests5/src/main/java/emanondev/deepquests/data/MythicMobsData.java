@@ -79,7 +79,7 @@ public class MythicMobsData<T extends User<T>, E extends QuestComponent<T>> exte
     }
 
     public void setMinLv(int lv) {
-        lv = Math.min(Math.max(lv, 0), maxLv);
+        lv = Math.clamp(lv, 0, maxLv);
         if (lv == minLv)
             return;
         minLv = lv;

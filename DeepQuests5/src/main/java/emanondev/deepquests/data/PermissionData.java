@@ -8,6 +8,7 @@ import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
 public class PermissionData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private String permission;
 
@@ -26,10 +28,6 @@ public class PermissionData<T extends User<T>, E extends QuestComponent<T>> exte
         permission = getConfig().getString(Paths.DATA_PERMISSION, null);
         if (permission != null && (permission.contains(" ") || permission.isEmpty()))
             permission = null;
-    }
-
-    public String getPermission() {
-        return permission;
     }
 
     public void setPermission(@Nullable String value) {

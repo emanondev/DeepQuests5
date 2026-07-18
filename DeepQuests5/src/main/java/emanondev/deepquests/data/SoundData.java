@@ -9,6 +9,7 @@ import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+@Getter
 public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
     private static final Material DEF_SOUND_GUI_MATERIAL = Material.BARRIER;
     private Sound sound;
@@ -29,8 +31,8 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
 
     public SoundData(@NotNull E parent, @NotNull YMLSection section) {
         super(parent, section);
-        volume = Math.min(Math.max((float) getConfig().getDouble(Paths.DATA_SOUND_VOLUME, 1D), 0.05F), 1F);
-        pitch = Math.min(Math.max((float) getConfig().getDouble(Paths.DATA_SOUND_PITCH, 1D), 0.05F), 20F);
+        volume = Math.clamp((float) getConfig().getDouble(Paths.DATA_SOUND_VOLUME, 1D), 0.05F, 1F);
+        pitch = Math.clamp((float) getConfig().getDouble(Paths.DATA_SOUND_PITCH, 1D), 0.05F, 20F);
         sound = Registry.SOUNDS.get(NamespacedKey.fromString(getConfig().getString(Paths.DATA_SOUND_NAME, Sound.ENTITY_PLAYER_LEVELUP.getKeyOrNull().toString())));
     }
 
@@ -171,10 +173,6 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
         return info;
     }
 
-    public Sound getSound() {
-        return sound;
-    }
-
     public void setSound(Sound sound) {
         if (this.sound == null && sound == null)
             return;
@@ -184,20 +182,12 @@ public class SoundData<T extends User<T>, E extends QuestComponent<T>> extends Q
         getConfig().set(Paths.DATA_SOUND_NAME, sound.getKeyOrThrow());
     }
 
-    public float getVolume() {
-        return volume;
-    }
-
     public void setVolume(float volume) {
         volume = Math.min(Math.max(volume, 0.05F), 1F);
         if (this.volume == volume)
             return;
         this.volume = volume;
         getConfig().set(Paths.DATA_SOUND_VOLUME, volume);
-    }
-
-    public float getPitch() {
-        return pitch;
     }
 
     public void setPitch(float pitch) {

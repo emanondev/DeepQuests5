@@ -1,5 +1,6 @@
 package emanondev.deepquests.command;
 
+import lombok.Getter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -9,8 +10,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Getter
 public abstract class ACommand extends ASubCommand implements TabExecutor {
 
+    /**
+     * -- GETTER --
+     *
+     * @return restituisce il nome del comando
+     */
     private final String name;
 
     /**
@@ -26,13 +33,6 @@ public abstract class ACommand extends ASubCommand implements TabExecutor {
         if (commandName.contains(" "))
             throw new IllegalArgumentException("Command Name '" + commandName + "' contains spaces");
         this.name = commandName.toLowerCase();
-    }
-
-    /**
-     * @return restituisce il nome del comando
-     */
-    public String getName() {
-        return name;
     }
 
     /**

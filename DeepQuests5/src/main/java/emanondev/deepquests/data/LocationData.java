@@ -9,6 +9,7 @@ import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
 public class LocationData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
 
     private String worldName;
@@ -67,14 +69,6 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
         return Bukkit.getServer().getWorld(worldName);
     }
 
-    public String getWorldName() {
-        return worldName;
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
     public void setX(int value) {
         if (this.x == value)
             return;
@@ -82,19 +76,11 @@ public class LocationData<T extends User<T>, E extends QuestComponent<T>> extend
         getConfig().set(Paths.DATA_LOCATION_X, x);
     }
 
-    public int getY() {
-        return this.y;
-    }
-
     public void setY(int value) {
         if (this.y == value)
             return;
         this.y = value;
         getConfig().set(Paths.DATA_LOCATION_Y, y);
-    }
-
-    public int getZ() {
-        return this.z;
     }
 
     public void setZ(int value) {

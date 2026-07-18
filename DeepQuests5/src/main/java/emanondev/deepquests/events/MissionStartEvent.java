@@ -2,6 +2,8 @@ package emanondev.deepquests.events;
 
 import emanondev.deepquests.interfaces.Mission;
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 public class MissionStartEvent<T extends User<T>> extends UserEventWithRewards<T> implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final Mission<T> mission;
+    @Setter
+    @Getter
     private boolean cancelled = false;
 
     public MissionStartEvent(@NotNull T user, @NotNull Mission<T> mission) {
@@ -28,11 +32,4 @@ public class MissionStartEvent<T extends User<T>> extends UserEventWithRewards<T
         return mission;
     }
 
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
 }

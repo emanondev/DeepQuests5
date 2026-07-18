@@ -67,7 +67,7 @@ public class SingleEnumData<T extends User<T>, E extends QuestComponent<T>, Z ex
         @Override
         public List<String> getButtonDescription() {
             ArrayList<String> list = getInfo();
-            list.add(0, "&6Type Selector");
+            list.addFirst("&6Type Selector");
             return list;
         }
 

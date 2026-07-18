@@ -72,7 +72,7 @@ public class TargetQuestData<T extends User<T>, E extends QuestComponent<T>> ext
         @Override
         public List<String> getButtonDescription() {
             List<String> list = getInfo();
-            list.add(0, "&6Quest Selector Button");
+            list.addFirst("&6Quest Selector Button");
             return list;
         }
 

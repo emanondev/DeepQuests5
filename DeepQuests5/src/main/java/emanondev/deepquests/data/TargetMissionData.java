@@ -72,7 +72,7 @@ public class TargetMissionData<T extends User<T>, E extends QuestComponent<T>> e
         @Override
         public List<String> getButtonDescription() {
             List<String> list = getInfo();
-            list.add(0, "&6Mission Selector Button");
+            list.addFirst("&6Mission Selector Button");
             return list;
         }
 

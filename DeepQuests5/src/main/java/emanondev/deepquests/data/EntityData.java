@@ -13,6 +13,7 @@ import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -30,6 +31,7 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
     private boolean entityTypeIsWhitelist;
 
     private boolean ignoreNPC;
+    @Getter
     private String entityName;
 
     public EntityData(@NotNull E parent, @NotNull YMLSection section) {
@@ -172,10 +174,6 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
     public void setEntityName(String name) {
         this.entityName = name;
         getConfig().set(Paths.DATA_ENTITY_NAME, entityName);
-    }
-
-    public String getEntityName() {
-        return entityName;
     }
 
     public @NotNull Button getEntityTypeButton(@NotNull Gui gui) {

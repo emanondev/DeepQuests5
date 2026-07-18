@@ -7,12 +7,14 @@ import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
+import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class AmountData<T extends User<T>, E extends QuestComponent<T>> extends QuestComponentData<T, E> {
 
     private final int minAmount;
@@ -33,22 +35,6 @@ public class AmountData<T extends User<T>, E extends QuestComponent<T>> extends 
 
         this.defaultAmount = Math.max(minAmount, Math.min(defaultAmount, maxAmount));
         this.amount = section.getInteger(Paths.DATA_AMOUNT, this.defaultAmount);
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public int getDefaultAmount() {
-        return defaultAmount;
-    }
-
-    public int getMinAmount() {
-        return minAmount;
-    }
-
-    public int getMaxAmount() {
-        return maxAmount;
     }
 
     public void setAmount(int amount) {
