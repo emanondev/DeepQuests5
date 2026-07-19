@@ -36,7 +36,7 @@ public class ItemStackRewardType extends ARewardType<QuestPlayer> {
 
     @Override
     public List<String> getDescription() {
-        return Arrays.asList("&7Reward the player with an Item");
+        return List.of("&7Reward the player with an Item");
     }
 
     @Override

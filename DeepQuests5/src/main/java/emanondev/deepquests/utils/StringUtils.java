@@ -1,25 +1,12 @@
 package emanondev.deepquests.utils;
 
 import emanondev.deepquests.Translations;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 public class StringUtils {
     private static final DecimalFormat format = loadDecimalFormat();
-
-    private static DecimalFormat loadDecimalFormat() {
-        DecimalFormat format = new DecimalFormat();
-        format.setMaximumFractionDigits(2);
-        format.setMinimumFractionDigits(2);
-        format.setRoundingMode(RoundingMode.FLOOR);
-        return format;
-    }
-
 
     public static DecimalFormat getDecimalFormat() {
         return format;
@@ -27,7 +14,7 @@ public class StringUtils {
 
     public static String getStringCooldown(long cooldown) {
         cooldown = cooldown / 1000;
-        StringBuilder result = new StringBuilder("");
+        StringBuilder result = new StringBuilder();
         if (cooldown >= Time.WEEK.seconds) {//week
             int val = (int) (cooldown / Time.WEEK.seconds);
             if (val > 1)
@@ -86,6 +73,14 @@ public class StringUtils {
         else
             result.append(val).append(" ").append(Time.SECOND.getSingleName());
         return result.toString();
+    }
+
+    private static DecimalFormat loadDecimalFormat() {
+        DecimalFormat format = new DecimalFormat();
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
+        format.setRoundingMode(RoundingMode.FLOOR);
+        return format;
     }
 
 }

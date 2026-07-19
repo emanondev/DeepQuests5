@@ -9,6 +9,7 @@ import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.player.QuestPlayer;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ public class PermissionRequireType extends ARequireType<QuestPlayer> {
         return new PermissionRequire(id, manager, section);
     }
 
+    @Getter
     public class PermissionRequire extends ARequire<QuestPlayer> {
 
         private final PermissionData<QuestPlayer, PermissionRequire> permissionData;
@@ -46,10 +48,6 @@ public class PermissionRequireType extends ARequireType<QuestPlayer> {
             super(id, manager, PermissionRequireType.this, section);
             permissionData = new PermissionData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_PERMISSIONDATA));
-        }
-
-        public PermissionData<QuestPlayer, PermissionRequire> getPermissionData() {
-            return permissionData;
         }
 
         public boolean isAllowed(@NotNull QuestPlayer p) {

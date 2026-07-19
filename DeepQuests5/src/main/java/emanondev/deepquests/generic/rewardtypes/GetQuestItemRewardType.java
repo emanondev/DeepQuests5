@@ -13,6 +13,7 @@ import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -61,13 +62,14 @@ public class GetQuestItemRewardType<T extends User<T>> extends ARewardType<T> {
                 .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 
+    @Getter
     public class GetQuestItemReward extends AReward<T> {
-        private final QuestItemData<T, GetQuestItemReward> itemData;
+        private final QuestItemData<T, GetQuestItemReward> questItemData;
         private final AmountData<T, GetQuestItemReward> amountData;
 
         public GetQuestItemReward(int id, QuestManager<T> manager, YMLSection section) {
             super(id, manager, GetQuestItemRewardType.this, section);
-            itemData = new QuestItemData<>(this,
+            questItemData = new QuestItemData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_QUESTITEM));
             amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_AMOUNT), Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
@@ -76,26 +78,18 @@ public class GetQuestItemRewardType<T extends User<T>> extends ARewardType<T> {
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.add("  &9Amount: &e" + amountData.getAmount());
-            info.addAll(itemData.getInfo());
+            info.addAll(questItemData.getInfo());
             return info;
         }
 
         @Override
         public void apply(@NotNull T user, int amount) {
-            if (amount <= 0 || itemData.getQuestItemID() == null)
+            if (amount <= 0 || questItemData.getQuestItemID() == null)
                 return;
             if (amountData.getAmount() > 0)
-                user.getQuestBag().addQuestItem(itemData.getQuestItemID(), amount * amountData.getAmount());
+                user.getQuestBag().addQuestItem(questItemData.getQuestItemID(), amount * amountData.getAmount());
             else if (amountData.getAmount() < 0)
-                user.getQuestBag().removeQuestItem(itemData.getQuestItemID(), -amount * amountData.getAmount());
-        }
-
-        public AmountData<T, GetQuestItemReward> getAmountData() {
-            return amountData;
-        }
-
-        public QuestItemData<T, GetQuestItemReward> getQuestItemData() {
-            return itemData;
+                user.getQuestBag().removeQuestItem(questItemData.getQuestItemID(), -amount * amountData.getAmount());
         }
 
         @Override
@@ -107,7 +101,7 @@ public class GetQuestItemRewardType<T extends User<T>> extends ARewardType<T> {
 
             public GuiEditor(Player player, Gui previusHolder) {
                 super(player, previusHolder);
-                itemData.setupButtons(this, 27);
+                questItemData.setupButtons(this, 27);
                 this.putButton(28,
                         amountData.getAmountEditorButton("&9Amount Selector",
                                 Arrays.asList("&6Amount Selector", "&9Amount: &e%amount%"),

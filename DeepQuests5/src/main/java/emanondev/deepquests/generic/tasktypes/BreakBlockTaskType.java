@@ -18,6 +18,7 @@ import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,13 +52,13 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
         for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             BreakBlockTask task = (BreakBlockTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld())
-                    && task.blockData.isValidMaterial(event.getBlock().getType())
+                    && task.blockTypeData.isValidMaterial(event.getBlock().getType())
                     && task.virginBlockData.isValidBlock(event.getBlock()) && task.toolData
                     .isValidTool(event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer()))
                 if (task.onProgress(user, 1, event.getPlayer(), false) > 0) {
-                    if (task.dropsData.removeExpDrops())
+                    if (task.dropData.removeExpDrops())
                         event.setExpToDrop(0);
-                    if (task.dropsData.removeItemDrops())
+                    if (task.dropData.removeItemDrops())
                         event.setDropItems(false);
                 }
         }
@@ -117,47 +118,32 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
         return Translations.replaceAll(txt.replace("{blocks}", DataUtils.getBlockHolder(t.getBlockTypeData())));
     }
 
+    @Getter
     public class BreakBlockTask extends ATask<T> {
 
-        private final BlockTypeData<T, BreakBlockTask> blockData;
+        private final BlockTypeData<T, BreakBlockTask> blockTypeData;
         private final VirginBlockData<T, BreakBlockTask> virginBlockData;
-        private final DropData<T, BreakBlockTask> dropsData;
+        private final DropData<T, BreakBlockTask> dropData;
         private final ToolData<T, BreakBlockTask> toolData;
 
         public BreakBlockTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, BreakBlockTaskType.this, section);
-            blockData = new BlockTypeData<>(this,
+            blockTypeData = new BlockTypeData<>(this,
                     getConfig().loadSection(Paths.TASK_INFO_BLOCKDATA));
             virginBlockData = new VirginBlockData<>(this,
                     getConfig().loadSection(Paths.TASK_INFO_VIRGINBLOCKDATA));
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            dropData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
             toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-        }
-
-        public BlockTypeData<T, BreakBlockTask> getBlockTypeData() {
-            return blockData;
-        }
-
-        public VirginBlockData<T, BreakBlockTask> getVirginBlockData() {
-            return virginBlockData;
-        }
-
-        public DropData<T, BreakBlockTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, BreakBlockTask> getToolData() {
-            return toolData;
         }
 
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            if (blockData.areMaterialsWhitelist()) {
+            if (blockTypeData.areMaterialsWhitelist()) {
                 info.add("&9Materials &aAllowed&9:");
             } else {
                 info.add("&9Materials &cUnallowed&9:");
             }
-            for (Material mat : blockData.getMaterials())
+            for (Material mat : blockTypeData.getMaterials())
                 info.add("&9  - &e" + mat.toString());
             if (Hooks.isVirginBlockPluginEnabled()) {
                 if (virginBlockData.isVirginCheckEnabled())
@@ -165,9 +151,9 @@ public class BreakBlockTaskType<T extends User<T>> extends ATaskType<T> {
                 else
                     info.add("&9Check Block is Virgin: &cDisabled");
             }
-            if (dropsData.removeExpDrops())
+            if (dropData.removeExpDrops())
                 info.add("&9Exp Drops: &cDisabled");
-            if (dropsData.removeItemDrops())
+            if (dropData.removeItemDrops())
                 info.add("&9Item Drops: &cDisabled");
             if (toolData.isEnabled()) {
                 info.add("&9Tool Check:");

@@ -10,6 +10,7 @@ import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +59,7 @@ public class SoundRewardType<T extends User<T>> extends ARewardType<T> {
                 r.getSoundData().getSound() == null ? "?" : r.getSoundData().getSound().toString().toLowerCase());
     }
 
+    @Getter
     public class SoundReward extends AReward<T> {
         private final SoundData<T, SoundReward> soundData;
 
@@ -70,10 +72,6 @@ public class SoundRewardType<T extends User<T>> extends ARewardType<T> {
             List<String> info = super.getInfo();
             info.addAll(soundData.getInfo());
             return info;
-        }
-
-        public SoundData<T, SoundReward> getSoundData() {
-            return soundData;
         }
 
         @Override

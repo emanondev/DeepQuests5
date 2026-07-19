@@ -15,6 +15,7 @@ import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -44,7 +45,7 @@ public class InteractAtTaskType<T extends User<T>> extends ATaskType<T> {
         for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             InteractAtTask task = (InteractAtTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld())
-                    && task.locData.isValidLocation(event.getClickedBlock().getLocation())
+                    && task.locationData.isValidLocation(event.getClickedBlock().getLocation())
                     && task.toolData.isValidTool(event.getItem(), event.getPlayer()))
                 task.onProgress(user, 1, event.getPlayer(), false);
         }
@@ -111,23 +112,16 @@ public class InteractAtTaskType<T extends User<T>> extends ATaskType<T> {
         return Translations.replaceAll(txt).replace("{location}", DataUtils.getLocationHolder(t.getLocationData()));
     }
 
+    @Getter
     public class InteractAtTask extends ATask<T> {
-        private final LocationData<T, InteractAtTask> locData;
+        private final LocationData<T, InteractAtTask> locationData;
         private final ToolData<T, InteractAtTask> toolData;
 
         public InteractAtTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, InteractAtTaskType.this, section);
-            locData = new LocationData<>(this,
+            locationData = new LocationData<>(this,
                     getConfig().loadSection(Paths.TASK_INFO_LOCATIONDATA));
             toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-        }
-
-        public LocationData<T, InteractAtTask> getLocationData() {
-            return locData;
-        }
-
-        public ToolData<T, InteractAtTask> getToolData() {
-            return toolData;
         }
 
         @Override
@@ -137,7 +131,7 @@ public class InteractAtTaskType<T extends User<T>> extends ATaskType<T> {
 
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            info.addAll(locData.getInfo());
+            info.addAll(locationData.getInfo());
 
             if (toolData.isEnabled()) {
                 info.add("&9Tool Info:");
@@ -155,10 +149,10 @@ public class InteractAtTaskType<T extends User<T>> extends ATaskType<T> {
 
             public GuiEditor(Player player, Gui previusHolder) {
                 super(player, previusHolder);
-                this.putButton(27, locData.getWorldButton(this));
-                this.putButton(28, locData.getXButton(this));
-                this.putButton(29, locData.getYButton(this));
-                this.putButton(30, locData.getZButton(this));
+                this.putButton(27, locationData.getWorldButton(this));
+                this.putButton(28, locationData.getXButton(this));
+                this.putButton(29, locationData.getYButton(this));
+                this.putButton(30, locationData.getZButton(this));
                 toolData.setupButtons("&6Tool Info Button", this, 45);
             }
         }

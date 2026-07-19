@@ -16,6 +16,7 @@ import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -59,11 +60,11 @@ public class KillMobTaskType<T extends User<T>> extends ATaskType<T> {
         for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             KillMobTask task = (KillMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidEntity(event.getEntity())
-                    && task.toolData.isValidTool(p.getInventory().getItemInMainHand(), p)) {
+                    && task.weaponData.isValidTool(p.getInventory().getItemInMainHand(), p)) {
                 if (task.onProgress(user, 1, p, false) > 0) {
-                    if (task.dropsData.removeItemDrops())
+                    if (task.dropData.removeItemDrops())
                         event.getDrops().clear();
-                    if (task.dropsData.removeExpDrops())
+                    if (task.dropData.removeExpDrops())
                         event.setDroppedExp(0);
                 }
             }
@@ -120,29 +121,18 @@ public class KillMobTaskType<T extends User<T>> extends ATaskType<T> {
         return Translations.replaceAll(txt).replace("{entities}", DataUtils.getEntityHolder(t.getEntityData()));
     }
 
+    @Getter
     public class KillMobTask extends ATask<T> {
 
         private final EntityData<T, KillMobTask> entityData;
-        private final DropData<T, KillMobTask> dropsData;
-        private final ToolData<T, KillMobTask> toolData;
+        private final DropData<T, KillMobTask> dropData;
+        private final ToolData<T, KillMobTask> weaponData;
 
         public KillMobTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, KillMobTaskType.this, section);
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            dropData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
             entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
-            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-        }
-
-        public DropData<T, KillMobTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, KillMobTask> getWeaponData() {
-            return toolData;
-        }
-
-        public EntityData<T, KillMobTask> getEntityData() {
-            return entityData;
+            weaponData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
         }
 
         @Override
@@ -153,13 +143,13 @@ public class KillMobTaskType<T extends User<T>> extends ATaskType<T> {
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
             info.addAll(entityData.getInfo());
-            if (dropsData.removeExpDrops())
+            if (dropData.removeExpDrops())
                 info.add("&9Exp Drops: &cDisabled");
-            if (dropsData.removeItemDrops())
+            if (dropData.removeItemDrops())
                 info.add("&9Item Drops: &cDisabled");
-            if (toolData.isEnabled()) {
+            if (weaponData.isEnabled()) {
                 info.add("&9Weapon Check:");
-                info.addAll(toolData.getInfo());
+                info.addAll(weaponData.getInfo());
             }
             return info;
         }

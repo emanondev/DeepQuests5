@@ -75,12 +75,10 @@ public class BookTextEditor implements Listener {
         } else
             throw new IllegalStateException("that shouldn't happen");
 
-        Bukkit.getScheduler().runTaskLater(Quests.get(), new Runnable() {
-            public void run() {
-                ItemStack item = new ItemStack(Material.WRITTEN_BOOK);
-                item.setItemMeta(event.getNewBookMeta());
-                InventoryUtility.removeAmount(event.getPlayer(), item, 1, InventoryUtility.LackMode.REMOVE_MAX_POSSIBLE);
-            }
+        Bukkit.getScheduler().runTaskLater(Quests.get(), () -> {
+            ItemStack item = new ItemStack(Material.WRITTEN_BOOK);
+            item.setItemMeta(event.getNewBookMeta());
+            InventoryUtility.removeAmount(event.getPlayer(), item, 1, InventoryUtility.LackMode.REMOVE_MAX_POSSIBLE);
         }, 1);
     }
 

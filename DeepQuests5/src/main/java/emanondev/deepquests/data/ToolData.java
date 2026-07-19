@@ -8,6 +8,7 @@ import emanondev.deepquests.gui.inventory.PagedMapGui;
 import emanondev.deepquests.interfaces.QuestComponent;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -24,7 +25,9 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
 
     private final EnumSet<ItemFlag> flagValues = EnumSet.noneOf(ItemFlag.class);
     private final HashMap<Enchantment, EnchantCheck> enchMap = new HashMap<>();
+    @Getter
     private boolean enabled = false;
+    @Getter
     private ItemStack item = null;
     private boolean doCheckAmount = false;
     private int amountValue = 1;
@@ -62,14 +65,6 @@ public class ToolData<T extends User<T>, E extends QuestComponent<T>> extends Qu
         this.doCheckAttributes = getConfig().getBoolean("check-attributes", this.doCheckAttributes);
         this.usePlaceHolder = getConfig().getBoolean("use-placeholderapi", this.usePlaceHolder);
         //TODO ench list
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public ItemStack getItem() {
-        return item;
     }
 
     public void setItem(ItemStack item) {

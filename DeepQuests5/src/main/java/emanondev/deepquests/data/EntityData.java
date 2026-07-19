@@ -194,12 +194,11 @@ public class EntityData<T extends User<T>, E extends QuestComponent<T>> extends 
             case WITCH -> new ItemBuilder(Material.GLASS_BOTTLE).setGuiProperty().build();
             case SPIDER, CAVE_SPIDER -> new ItemBuilder(Material.SPIDER_EYE).setGuiProperty().build();
             case SLIME -> new ItemBuilder(Material.SLIME_BALL).setGuiProperty().build();
-            case SKELETON -> new ItemBuilder(Material.BONE).setGuiProperty().build();
+            case SKELETON, WOLF -> new ItemBuilder(Material.BONE).setGuiProperty().build();
             case SILVERFISH -> new ItemBuilder(Material.STONE_BRICKS).setGuiProperty().build();
             case GIANT -> new ItemBuilder(Material.BONE_BLOCK).setGuiProperty().build();
             case ENDERMITE,ENDERMAN -> new ItemBuilder(Material.ENDER_PEARL).setGuiProperty().build();
             case CREEPER -> new ItemBuilder(Material.GUNPOWDER).setGuiProperty().build();
-            case WOLF -> new ItemBuilder(Material.BONE).setGuiProperty().build();
             case VILLAGER -> new ItemBuilder(Material.EMERALD).setGuiProperty().build();
             case SNOW_GOLEM -> new ItemBuilder(Material.SNOWBALL).setGuiProperty().build();
             case IRON_GOLEM -> new ItemBuilder(Material.IRON_BLOCK).setGuiProperty().build();

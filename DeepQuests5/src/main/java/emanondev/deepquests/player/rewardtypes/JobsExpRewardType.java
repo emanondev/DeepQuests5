@@ -15,6 +15,7 @@ import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.player.QuestPlayer;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -65,41 +66,34 @@ public class JobsExpRewardType extends ARewardType<QuestPlayer> {
                 .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 
+    @Getter
     public class JobsExpReward extends AReward<QuestPlayer> {
-        private final JobTypeData<QuestPlayer, JobsExpReward> jobData;
+        private final JobTypeData<QuestPlayer, JobsExpReward> jobsData;
         private final AmountData<QuestPlayer, JobsExpReward> amountData;
 
         public JobsExpReward(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, JobsExpRewardType.this, section);
-            jobData = new JobTypeData<QuestPlayer, JobsExpReward>(this,
+            jobsData = new JobTypeData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_JOB));
-            amountData = new AmountData<QuestPlayer, JobsExpReward>(this,
+            amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
         }
 
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            info.addAll(jobData.getInfo());
+            info.addAll(jobsData.getInfo());
             info.add("&9Exp reward: &e" + amountData.getAmount());
             return info;
         }
 
         @Override
         public void apply(@NotNull QuestPlayer qPlayer, int amount) {
-            if (qPlayer.getPlayer() == null || jobData.getJob() == null || amount <= 0 || amountData.getAmount() <= 0)
+            if (qPlayer.getPlayer() == null || jobsData.getJob() == null || amount <= 0 || amountData.getAmount() <= 0)
                 return;
 
             JobsPlayer jobsPlayer = Jobs.getPlayerManager().getJobsPlayer(qPlayer.getPlayer());
-            if (jobsPlayer != null && jobsPlayer.isInJob(jobData.getJob()))
-                jobsPlayer.getJobProgression(jobData.getJob()).addExperience(amountData.getAmount() * amount);
-        }
-
-        public AmountData<QuestPlayer, JobsExpReward> getAmountData() {
-            return amountData;
-        }
-
-        public JobTypeData<QuestPlayer, JobsExpReward> getJobsData() {
-            return jobData;
+            if (jobsPlayer != null && jobsPlayer.isInJob(jobsData.getJob()))
+                jobsPlayer.getJobProgression(jobsData.getJob()).addExperience(amountData.getAmount() * amount);
         }
 
         @Override

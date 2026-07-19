@@ -45,7 +45,7 @@ public class PagedMapGui extends PagedChestGui {
     /**
      * Remove the specified Button from the gui
      *
-     * @param button
+     * @param slot
      */
     public void removeButton(int slot) {
         if (slot < 0)

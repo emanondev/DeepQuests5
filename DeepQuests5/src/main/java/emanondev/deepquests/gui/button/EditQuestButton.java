@@ -6,6 +6,7 @@ import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.interfaces.Quest;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DisplayState;
+import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.*;
 
 public class EditQuestButton<T extends User<T>> extends QuestComponentButton<Quest<T>> {
+    @Getter
     private final T user;
     private DisplayState state;
     private Player clicker = null;
@@ -56,10 +58,6 @@ public class EditQuestButton<T extends User<T>> extends QuestComponentButton<Que
         }
         clicker.openInventory(
                 new EditMissionsMenu<>(getTargetPlayer(), getGui(), getQuestComponent(), user).getInventory());
-    }
-
-    public T getUser() {
-        return user;
     }
 
     public void handle(ActionType element) {

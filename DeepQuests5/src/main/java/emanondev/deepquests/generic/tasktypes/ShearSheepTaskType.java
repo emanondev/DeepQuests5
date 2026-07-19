@@ -15,6 +15,7 @@ import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -54,7 +55,7 @@ public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
         for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             ShearSheepTask task = (ShearSheepTask) tTask;
             if (task.isWorldAllowed(event.getPlayer().getWorld()) && task.entityData.isValidEntity(event.getEntity())) {
-                if (task.onProgress(user, 1, event.getPlayer(), false) > 0 && task.dropsData.removeItemDrops()
+                if (task.onProgress(user, 1, event.getPlayer(), false) > 0 && task.dropData.removeItemDrops()
                         && event.getEntity() instanceof Sheep) {
                     ((Sheep) event.getEntity()).setSheared(true);
                     event.setCancelled(true);
@@ -113,23 +114,16 @@ public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
         return Translations.replaceAll(txt).replace("{entities}", DataUtils.getEntityHolder(t.getEntityData()));
     }
 
+    @Getter
     public class ShearSheepTask extends ATask<T> {
 
         private final EntityData<T, ShearSheepTask> entityData;
-        private final DropData<T, ShearSheepTask> dropsData;
+        private final DropData<T, ShearSheepTask> dropData;
 
         public ShearSheepTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, ShearSheepTaskType.this, section);
             entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-        }
-
-        public EntityData<T, ShearSheepTask> getEntityData() {
-            return entityData;
-        }
-
-        public DropData<T, ShearSheepTask> getDropData() {
-            return dropsData;
+            dropData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
         }
 
         public @NotNull ShearSheepTaskType<T> getType() {
@@ -140,7 +134,7 @@ public class ShearSheepTaskType<T extends User<T>> extends ATaskType<T> {
             List<String> info = super.getInfo();
             info.addAll(entityData.getInfo());
 
-            if (dropsData.removeItemDrops())
+            if (dropData.removeItemDrops())
                 info.add("&9Item Drops: &cDisabled");
             return info;
         }

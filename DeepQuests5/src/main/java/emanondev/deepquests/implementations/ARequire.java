@@ -6,6 +6,7 @@ import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.interfaces.RequireType;
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,7 @@ import java.util.Objects;
 public abstract class ARequire<T extends User<T>> extends AQuestComponent<T> implements Require<T> {
 
     private final RequireType<T> type;
+    @Getter
     private boolean isHidden;
 
     public ARequire(int id, @NotNull QuestManager<T> manager, @NotNull RequireType<T> type, @NotNull YMLSection section) {
@@ -24,10 +26,6 @@ public abstract class ARequire<T extends User<T>> extends AQuestComponent<T> imp
         this.type = type;
         getConfig().set(Paths.TYPE_NAME, type.getKeyID());
         isHidden = getConfig().getBoolean(Paths.IS_HIDDEN, getType().getDefaultIsHidden());
-    }
-
-    public boolean isHidden() {
-        return isHidden;
     }
 
     public void setHidden(Boolean value) {

@@ -1,9 +1,11 @@
 package emanondev.deepquests.events;
 
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class QuestItemObtainEvent<T extends User<T>> extends UserEvent<T> {
     private static final HandlerList handlers = new HandlerList();
     private final String id;
@@ -23,11 +25,4 @@ public class QuestItemObtainEvent<T extends User<T>> extends UserEvent<T> {
         return handlers;
     }
 
-    public @NotNull String getID() {
-        return id;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
 }

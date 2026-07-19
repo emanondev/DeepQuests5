@@ -9,6 +9,7 @@ import emanondev.deepquests.implementations.ARequire;
 import emanondev.deepquests.implementations.ARequireType;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.*;
+import lombok.Getter;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
@@ -48,14 +49,15 @@ public class CompletedMissionRequireType<T extends User<T>> extends ARequireType
         return new CompletedMissionRequire(id, manager, section);
     }
 
+    @Getter
     public class CompletedMissionRequire extends ARequire<T> {
 
-        private final TargetMissionData<T, CompletedMissionRequire> targetMission;
+        private final TargetMissionData<T, CompletedMissionRequire> targetMissionData;
         private final AmountData<T, CompletedMissionRequire> amountData;
 
         public CompletedMissionRequire(int id, QuestManager<T> manager, YMLSection section) {
             super(id, manager, CompletedMissionRequireType.this, section);
-            targetMission = new TargetMissionData<>(this,
+            targetMissionData = new TargetMissionData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_TARGETMISSION));
             amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
@@ -63,24 +65,16 @@ public class CompletedMissionRequireType<T extends User<T>> extends ARequireType
 
         @Override
         public boolean isAllowed(@NotNull T user) {
-            Mission<T> mission = targetMission.getMission();
+            Mission<T> mission = targetMissionData.getMission();
             if (mission == null)
                 return false;
             MissionData<T> missionData = user.getMissionData(mission);
             return missionData.successfullyCompletedTimes() >= amountData.getAmount();
         }
 
-        public TargetMissionData<T, CompletedMissionRequire> getTargetMissionData() {
-            return targetMission;
-        }
-
-        public AmountData<T, CompletedMissionRequire> getAmountData() {
-            return amountData;
-        }
-
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            info.addAll(targetMission.getInfo());
+            info.addAll(targetMissionData.getInfo());
             if (amountData.getAmount() != 1)
                 info.add("&9Must be Completed: &e" + amountData.getAmount() + " &9times");
             return info;

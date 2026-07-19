@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +41,7 @@ public abstract class ACommand extends ASubCommand implements TabExecutor {
      * se si intende modificarlo sovrascrivere #onTab
      */
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+    public List<String> onTabComplete(@NonNull CommandSender sender, @NonNull Command cmd, @NonNull String label, String[] args) {
         ArrayList<String> params = new ArrayList<>();
         if (!hasPermission(sender))
             return params;
@@ -56,7 +57,7 @@ public abstract class ACommand extends ASubCommand implements TabExecutor {
      * se si intende modificarlo sovrascrivere #onCmd
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NonNull CommandSender sender, @NonNull Command cmd, @NonNull String label, String[] args) {
         if (!hasPermission(sender)) {
             CmdUtils.lackPermission(sender, getPermission());
             return true;

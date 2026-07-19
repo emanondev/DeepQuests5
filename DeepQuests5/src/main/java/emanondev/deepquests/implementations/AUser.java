@@ -87,11 +87,7 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
 
     private boolean register(@NotNull Task<T> task) {
         if (!getTaskData(task).isCompleted()) {
-            List<Task<T>> list = activeTasks.get(task.getType());
-            if (list == null) {
-                list = new Vector<>();
-                activeTasks.put(task.getType(), list);
-            }
+            List<Task<T>> list = activeTasks.computeIfAbsent(task.getType(), k -> new Vector<>());
             return list.add(task);
         }
         return false;
@@ -103,11 +99,7 @@ public abstract class AUser<T extends AUser<T>> implements User<T> {
     }
 
     public final @NotNull List<Task<T>> getActiveTasks(@NotNull TaskType<T> type) {
-        List<Task<T>> list = activeTasks.get(type);
-        if (list == null) {
-            list = new Vector<>();
-            activeTasks.put(type, list);
-        }
+        List<Task<T>> list = activeTasks.computeIfAbsent(type, k -> new Vector<>());
         return Collections.unmodifiableList(list);
     }
 

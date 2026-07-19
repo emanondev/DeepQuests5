@@ -9,6 +9,7 @@ import emanondev.deepquests.implementations.ARequire;
 import emanondev.deepquests.implementations.ARequireType;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.*;
+import lombok.Getter;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
@@ -48,14 +49,15 @@ public class FailedQuestRequireType<T extends User<T>> extends ARequireType<T> {
         return new FailedQuestRequire(id, manager, section);
     }
 
+    @Getter
     public class FailedQuestRequire extends ARequire<T> {
 
-        private final TargetQuestData<T, FailedQuestRequire> targetQuest;
+        private final TargetQuestData<T, FailedQuestRequire> targetQuestData;
         private final AmountData<T, FailedQuestRequire> amountData;
 
         public FailedQuestRequire(int id, QuestManager<T> manager, YMLSection section) {
             super(id, manager, FailedQuestRequireType.this, section);
-            targetQuest = new TargetQuestData<>(this,
+            targetQuestData = new TargetQuestData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_TARGETMISSION));
             amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
@@ -63,24 +65,16 @@ public class FailedQuestRequireType<T extends User<T>> extends ARequireType<T> {
 
         @Override
         public boolean isAllowed(@NotNull T user) {
-            Quest<T> quest = targetQuest.getQuest();
+            Quest<T> quest = targetQuestData.getQuest();
             if (quest == null)
                 return false;
             QuestData<T> questData = user.getQuestData(quest);
             return questData.failedTimes() >= amountData.getAmount();
         }
 
-        public TargetQuestData<T, FailedQuestRequire> getTargetQuestData() {
-            return targetQuest;
-        }
-
-        public AmountData<T, FailedQuestRequire> getAmountData() {
-            return amountData;
-        }
-
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            info.addAll(targetQuest.getInfo());
+            info.addAll(targetQuestData.getInfo());
             if (amountData.getAmount() != 1)
                 info.add("&9Must be Failed: &e" + amountData.getAmount() + " &9times");
             return info;

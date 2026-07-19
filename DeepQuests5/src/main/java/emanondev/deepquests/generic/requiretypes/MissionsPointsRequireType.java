@@ -11,6 +11,7 @@ import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.Quest;
 import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,7 @@ public class MissionsPointsRequireType<T extends User<T>> extends ARequireType<T
         return new MissionsPointsRequire(id, manager, section);
     }
 
+    @Getter
     public class MissionsPointsRequire extends ARequire<T> {
 
         private final AmountData<T, MissionsPointsRequire> amountData;
@@ -52,10 +54,6 @@ public class MissionsPointsRequireType<T extends User<T>> extends ARequireType<T
                     getConfig().loadSection(Paths.REQUIRE_INFO_AMOUNT));
             targetQuestData = new TargetQuestData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_TARGETQUEST));
-        }
-
-        public AmountData<T, MissionsPointsRequire> getAmountData() {
-            return amountData;
         }
 
         public boolean isAllowed(@NotNull T p) {
@@ -71,10 +69,6 @@ public class MissionsPointsRequireType<T extends User<T>> extends ARequireType<T
             info.add("&9Required Points: &e" + amountData.getAmount());
             info.addAll(targetQuestData.getInfo());
             return info;
-        }
-
-        public TargetQuestData<T, MissionsPointsRequire> getTargetQuestData() {
-            return targetQuestData;
         }
 
         @Override

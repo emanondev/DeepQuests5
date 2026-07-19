@@ -13,6 +13,7 @@ import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Require;
 import emanondev.deepquests.player.QuestPlayer;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -43,42 +44,35 @@ public class JobLevelRequireType extends ARequireType<QuestPlayer> {
         return new JobLevelRequire(id, manager, section);
     }
 
+    @Getter
     public class JobLevelRequire extends ARequire<QuestPlayer> {
 
-        private final JobTypeData<QuestPlayer, JobLevelRequire> jobData;
+        private final JobTypeData<QuestPlayer, JobLevelRequire> jobTypeData;
         private final AmountData<QuestPlayer, JobLevelRequire> amountData;
 
         public JobLevelRequire(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, JobLevelRequireType.this, section);
-            jobData = new JobTypeData<>(this,
+            jobTypeData = new JobTypeData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_JOBDATA));
             amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REQUIRE_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
-        }
-
-        public JobTypeData<QuestPlayer, JobLevelRequire> getJobTypeData() {
-            return jobData;
-        }
-
-        public AmountData<QuestPlayer, JobLevelRequire> getAmountData() {
-            return amountData;
         }
 
         @Override
         public boolean isAllowed(@NotNull QuestPlayer user) {
             if (user.getPlayer() == null)
                 return false;
-            if (jobData.getJob() == null)
+            if (jobTypeData.getJob() == null)
                 return false;
             JobsPlayer jobsPlayer = Jobs.getPlayerManager().getJobsPlayer(user.getPlayer());
-            return jobsPlayer != null && jobsPlayer.isInJob(jobData.getJob())
-                    && jobsPlayer.getJobProgression(jobData.getJob()).getLevel() >= amountData.getAmount();
+            return jobsPlayer != null && jobsPlayer.isInJob(jobTypeData.getJob())
+                    && jobsPlayer.getJobProgression(jobTypeData.getJob()).getLevel() >= amountData.getAmount();
         }
 
         @Override
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            info.addAll(jobData.getInfo());
+            info.addAll(jobTypeData.getInfo());
             info.add("&9Required Level: &e" + amountData.getAmount());
             return info;
         }

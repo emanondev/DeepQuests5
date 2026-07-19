@@ -12,6 +12,7 @@ import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.interfaces.RewardType;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
+import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -28,6 +29,7 @@ import java.util.Objects;
 public abstract class AReward<T extends User<T>> extends AQuestComponent<T> implements Reward<T> {
 
     private final RewardType<T> type;
+    @Getter
     private boolean isHidden;
     private String feedback = null;
     private boolean isFeedbackDefault = true;
@@ -45,10 +47,6 @@ public abstract class AReward<T extends User<T>> extends AQuestComponent<T> impl
                 feedback = getConfig().loadMessage(Paths.REWARD_FEEDBACK, getDefaultFeedback(), true);
         }, 1L);
 
-    }
-
-    public boolean isHidden() {
-        return isHidden;
     }
 
     public void setHidden(Boolean value) {

@@ -54,8 +54,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
             case COMPLETE -> Material.GREEN_TERRACOTTA;
             case FAIL -> Material.RED_TERRACOTTA;
             case PAUSE -> Material.LIME_TERRACOTTA;
-            case START -> Material.BLUE_TERRACOTTA;
-            case UNPAUSE -> Material.BLUE_TERRACOTTA;
+            case START, UNPAUSE -> Material.BLUE_TERRACOTTA;
             default -> throw new IllegalStateException();
         };
     }
@@ -65,8 +64,7 @@ public class AMission<T extends User<T>> extends AQuestComponentWithCooldown<T> 
             case COMPLETE -> Material.GREEN_STAINED_GLASS;
             case FAIL -> Material.RED_STAINED_GLASS;
             case PAUSE -> Material.LIME_STAINED_GLASS;
-            case START -> Material.BLUE_STAINED_GLASS;
-            case UNPAUSE -> Material.BLUE_STAINED_GLASS;
+            case START, UNPAUSE -> Material.BLUE_STAINED_GLASS;
             default -> throw new IllegalStateException();
         };
     }

@@ -1,6 +1,5 @@
 package emanondev.deepquests.player.rewardtypes;
 
-import com.sucy.skill.SkillAPI;
 import emanondev.core.ItemBuilder;
 import emanondev.core.YMLSection;
 import emanondev.deepquests.Translations;
@@ -14,6 +13,7 @@ import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.player.QuestPlayer;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -30,11 +30,6 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
 
     public SkillAPIExpRewardType(QuestManager<QuestPlayer> manager) {
         super(ID, manager);
-    }
-
-    @Override
-    protected boolean getStandardHiddenValue() {
-        return false;
     }
 
     @Override
@@ -64,17 +59,23 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
 
         }
         return Translations.replaceAll(txt)
-                .replace("{skillapiclass}", DataUtils.getSkillAPIClassHolder(r.getSkillAPIClassData()))
+                .replace("{skillapiclass}", DataUtils.getSkillAPIClassHolder(r.getSkillApiClassData()))
                 .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 
+    @Override
+    protected boolean getStandardHiddenValue() {
+        return false;
+    }
+
+    @Getter
     public class SkillAPIExpReward extends AReward<QuestPlayer> {
-        private final SkillAPIClassData<QuestPlayer, SkillAPIExpReward> skillData;
+        private final SkillAPIClassData<QuestPlayer, SkillAPIExpReward> skillApiClassData;
         private final AmountData<QuestPlayer, SkillAPIExpReward> amountData;
 
         public SkillAPIExpReward(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, SkillAPIExpRewardType.this, section);
-            skillData = new SkillAPIClassData<>(this,
+            skillApiClassData = new SkillAPIClassData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_JOB));
             amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
@@ -82,7 +83,7 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
 
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            info.addAll(skillData.getInfo());
+            info.addAll(skillApiClassData.getInfo());
             info.add("&9Exp Reward: &e" + amountData.getAmount());
             return info;
         }
@@ -96,11 +97,11 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
                 return;
             try {
                 PlayerClass pClass = data.getMainClass();
-                if (pClass == null || !skillData.isValidRPGClass(pClass.getData())) {
+                if (pClass == null || !skillApiClassData.isValidRPGClass(pClass.getData())) {
                     pClass = null;
                     PlayerClass[] array = data.getClasses().toArray(new PlayerClass[0]);
                     for (PlayerClass playerClass : array) {
-                        if (playerClass != null && skillData.isValidRPGClass(playerClass.getData())) {
+                        if (playerClass != null && skillApiClassData.isValidRPGClass(playerClass.getData())) {
                             pClass = playerClass;
                             break;
                         }
@@ -114,14 +115,6 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
             }
         }
 
-        public AmountData<QuestPlayer, SkillAPIExpReward> getAmountData() {
-            return amountData;
-        }
-
-        public SkillAPIClassData<QuestPlayer, SkillAPIExpReward> getSkillAPIClassData() {
-            return skillData;
-        }
-
         @Override
         public @NotNull Gui getEditorGui(Player target, Gui parent) {
             return new GuiEditor(target, parent);
@@ -131,8 +124,8 @@ public class SkillAPIExpRewardType extends ARewardType<QuestPlayer> {
 
             public GuiEditor(Player player, Gui previusHolder) {
                 super(player, previusHolder);
-                this.putButton(27, getSkillAPIClassData().getGroupButton(this));
-                this.putButton(28, getSkillAPIClassData().getRPGClassButton(this));
+                this.putButton(27, getSkillApiClassData().getGroupButton(this));
+                this.putButton(28, getSkillApiClassData().getRPGClassButton(this));
                 this.putButton(29,
                         getAmountData().getAmountEditorButton("&9Select exp reiceved as reward",
                                 Arrays.asList("&6Exp Reward Selector", "&9Experience: &e%amount%"),

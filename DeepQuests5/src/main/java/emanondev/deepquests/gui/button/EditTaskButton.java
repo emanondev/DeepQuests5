@@ -6,6 +6,7 @@ import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
+import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class EditTaskButton<T extends User<T>> extends QuestComponentButton<Task<T>> {
+    @Getter
     private final T user;
     private Player clicker = null;
 
@@ -42,10 +44,6 @@ public class EditTaskButton<T extends User<T>> extends QuestComponentButton<Task
     public void onClick(Player clicker, ClickType click) {
         this.clicker = clicker;
         new ClickEditorButton().onClick(clicker, click);
-    }
-
-    public T getUser() {
-        return user;
     }
 
     public void handle(ActionType element) {

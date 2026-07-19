@@ -10,6 +10,7 @@ import emanondev.deepquests.implementations.ARequireType;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.User;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,7 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
         return new HaveQuestItemRequire(id, manager, section);
     }
 
+    @Getter
     public class HaveQuestItemRequire extends ARequire<T> {
 
         private final AmountData<T, HaveQuestItemRequire> amountData;
@@ -53,10 +55,6 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
                     getConfig().loadSection(Paths.REQUIRE_INFO_TARGETQUEST));
         }
 
-        public AmountData<T, HaveQuestItemRequire> getAmountData() {
-            return amountData;
-        }
-
         public boolean isAllowed(@NotNull T p) {
             if (this.questItemData.getQuestItemID() == null)
                 return false;
@@ -68,10 +66,6 @@ public class HaveQuestItemRequireType<T extends User<T>> extends ARequireType<T>
             info.add("&9Required Points: &e" + amountData.getAmount());
             info.addAll(questItemData.getInfo());
             return info;
-        }
-
-        public QuestItemData<T, HaveQuestItemRequire> getQuestItemData() {
-            return questItemData;
         }
 
         @Override

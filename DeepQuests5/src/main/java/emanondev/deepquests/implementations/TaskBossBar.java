@@ -5,6 +5,7 @@ import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.TaskData;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.Utils;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -19,6 +20,7 @@ public class TaskBossBar<T extends User<T>> {
 
     private final BossBar bar;
     private final TaskData<T> taskData;
+    @Getter
     private long lastUpdate = 0;
 
     public TaskBossBar(@NotNull TaskData<T> taskData) {
@@ -71,10 +73,6 @@ public class TaskBossBar<T extends User<T>> {
             bar.setTitle(
                     Utils.fixString(getTask().getPhaseDescription(taskData.getUser(), Phase.PROGRESS), null, true));
         lastUpdate = new Date().getTime();
-    }
-
-    public long getLastUpdate() {
-        return lastUpdate;
     }
 
     public Task<T> getTask() {

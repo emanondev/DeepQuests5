@@ -11,6 +11,7 @@ import emanondev.deepquests.implementations.ARewardType;
 import emanondev.deepquests.implementations.Paths;
 import emanondev.deepquests.interfaces.*;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -60,27 +61,24 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
                 .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 
+    @Getter
     public class MissionsPointsReward extends AReward<T> {
-        private final TargetQuestData<T, MissionsPointsReward> questData;
+        private final TargetQuestData<T, MissionsPointsReward> targetQuestData;
         private final AmountData<T, MissionsPointsReward> amountData;
 
         public MissionsPointsReward(int id, QuestManager<T> manager, YMLSection section) {
             super(id, manager, MissionsPointsRewardType.this, section);
             amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_AMOUNT));
-            questData = new TargetQuestData<>(this,
+            targetQuestData = new TargetQuestData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_TARGET_QUEST));
         }
 
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            info.addAll(questData.getInfo());
+            info.addAll(targetQuestData.getInfo());
             info.add("&9Points: &e%amount%");
             return info;
-        }
-
-        public TargetQuestData<T, MissionsPointsReward> getTargetQuestData() {
-            return questData;
         }
 
         @Override
@@ -88,7 +86,7 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
             if (amount <= 0)
                 return;
             try {
-                Quest<T> quest = questData.getQuest();
+                Quest<T> quest = targetQuestData.getQuest();
                 if (quest == null)
                     new NullPointerException("Data missing or not setted still on reward " + this.getID())
                             .printStackTrace();
@@ -97,10 +95,6 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-
-        public AmountData<T, MissionsPointsReward> getAmountData() {
-            return amountData;
         }
 
         @Override
@@ -112,7 +106,7 @@ public class MissionsPointsRewardType<T extends User<T>> extends ARewardType<T> 
 
             public GuiEditor(Player player, Gui previousHolder) {
                 super(player, previousHolder);
-                this.putButton(27, questData.getQuestSelectorButton(this));
+                this.putButton(27, targetQuestData.getQuestSelectorButton(this));
                 this.putButton(28,
                         amountData.getAmountEditorButton("&9Points Selector",
                                 Arrays.asList("&6Points Selector", "&9Points: &e%amount%"),

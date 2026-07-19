@@ -21,58 +21,56 @@ public class DataUtils {
 
     public static <T extends User<T>, E extends QuestComponent<T>> String getBlockHolder(
             BlockTypeData<T, E> blockType) {
-        StringBuilder txt = new StringBuilder("");
+        StringBuilder txt = new StringBuilder();
         if (blockType.getMaterials().isEmpty())
             txt.append(Translations.translateAction("blocks"));
         else {
             if (!blockType.areMaterialsWhitelist())
-                txt.append(Translations.translateAction("any_block_except") + " ");
+                txt.append(Translations.translateAction("any_block_except")).append(" ");
             List<Material> list = new ArrayList<Material>(blockType.getMaterials());
             for (int i = 0; i < list.size() - 2; i++)
-                txt.append(Translations.translate(list.get(i)) + ", ");
+                txt.append(Translations.translate(list.get(i))).append(", ");
             if (list.size() >= 2)
-                txt.append(Translations.translate(list.get(list.size() - 2)) + " "
-                        + Translations.translateConjunction("or") + " ");
-            txt.append(Translations.translate(list.get(list.size() - 1)));
+                txt.append(Translations.translate(list.get(list.size() - 2))).append(" ").append(Translations.translateConjunction("or")).append(" ");
+            txt.append(Translations.translate(list.getLast()));
         }
         return txt.toString();
     }
 
     public static <T extends User<T>, E extends QuestComponent<T>> String getEntityHolder(EntityData<T, E> data) {
-        StringBuilder txt = new StringBuilder("");
+        StringBuilder txt = new StringBuilder();
         if (data.getTypes().isEmpty())
             txt.append(Translations.translateAction("entities"));
         else {
             if (!data.areTypesWhitelist())
-                txt.append(Translations.translateAction("any_entity_except") + " ");
+                txt.append(Translations.translateAction("any_entity_except")).append(" ");
             List<EntityType> list = new ArrayList<EntityType>(data.getTypes());
             for (int i = 0; i < list.size() - 2; i++)
-                txt.append(Translations.translate(list.get(i)) + ", ");
+                txt.append(Translations.translate(list.get(i))).append(", ");
             if (list.size() >= 2)
-                txt.append(Translations.translate(list.get(list.size() - 2)) + " "
-                        + Translations.translateConjunction("or") + " ");
-            txt.append(Translations.translate(list.get(list.size() - 1)));
+                txt.append(Translations.translate(list.get(list.size() - 2))).append(" ").append(Translations.translateConjunction("or")).append(" ");
+            txt.append(Translations.translate(list.getLast()));
         }
         return txt.toString();
     }
 
     public static <T extends User<T>, E extends QuestComponent<T>> String getRegionHolder(RegionsData<T, E> data) {
-        StringBuilder txt = new StringBuilder("");
+        StringBuilder txt = new StringBuilder();
         if (data.getRegionNames().isEmpty())
             txt.append(Translations.translateAction("regions"));
         else {
             if (!data.areRegionNamesWhitelist())
-                txt.append(Translations.translateAction("any_region_except") + " ");
+                txt.append(Translations.translateAction("any_region_except")).append(" ");
             List<String> regions = new ArrayList<String>(data.getRegionNames());
             HashSet<String> set = new HashSet<>();
             for (String region : regions)
                 set.add(Translations.translateRegion(region));
-            regions = new ArrayList<String>(set);
+            regions = new ArrayList<>(set);
             for (int i = 0; i < regions.size() - 2; i++)
-                txt.append(regions.get(i) + ", ");
+                txt.append(regions.get(i)).append(", ");
             if (regions.size() >= 2)
-                txt.append(regions.get(regions.size() - 2) + " " + Translations.translateConjunction("or") + " ");
-            txt.append(regions.get(regions.size() - 1));
+                txt.append(regions.get(regions.size() - 2)).append(" ").append(Translations.translateConjunction("or")).append(" ");
+            txt.append(regions.getLast());
         }
         return txt.toString();
     }
@@ -86,19 +84,18 @@ public class DataUtils {
 
     public static <T extends User<T>, E extends QuestComponent<T>> String getMythicMobsHolder(
             MythicMobsData<T, E> data) {
-        StringBuilder txt = new StringBuilder("");
+        StringBuilder txt = new StringBuilder();
         if (data.getInternalNames().isEmpty())
             txt.append(Translations.translateAction("mythicmobs"));
         else {
             if (!data.areInternalNamesWhitelist())
-                txt.append(Translations.translateAction("any_entity_except") + " ");
+                txt.append(Translations.translateAction("any_entity_except")).append(" ");
             List<String> list = new ArrayList<String>(data.getInternalNames());
             for (int i = 0; i < list.size() - 2; i++)
-                txt.append(Translations.translateMythicMob(list.get(i)) + ", ");
+                txt.append(Translations.translateMythicMob(list.get(i))).append(", ");
             if (list.size() >= 2)
-                txt.append(Translations.translateMythicMob(list.get(list.size() - 2)) + " "
-                        + Translations.translateConjunction("or") + " ");
-            txt.append(Translations.translateMythicMob(list.get(list.size() - 1)));
+                txt.append(Translations.translateMythicMob(list.get(list.size() - 2))).append(" ").append(Translations.translateConjunction("or")).append(" ");
+            txt.append(Translations.translateMythicMob(list.getLast()));
         }
         return txt.toString();
     }
@@ -160,22 +157,22 @@ public class DataUtils {
 
     private static class NPCModule {
         private static <T extends User<T>, E extends QuestComponent<T>> String getNPCHolder(NPCData<T, E> data) {
-            StringBuilder txt = new StringBuilder("");
+            StringBuilder txt = new StringBuilder();
             if (data.getNpcIds().isEmpty())
                 txt.append(Translations.translateAction("?"));
             else {
                 if (!data.areNpcIdsWhitelist())
-                    txt.append(Translations.translateAction("any_npc_except") + " ");
-                List<Integer> list = new ArrayList<Integer>(data.getNpcIds());
+                    txt.append(Translations.translateAction("any_npc_except")).append(" ");
+                List<Integer> list = new ArrayList<>(data.getNpcIds());
                 for (int i = 0; i < list.size() - 2; i++) {
                     NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(i));
-                    txt.append((npc == null ? "?" : npc.getFullName()) + ", ");
+                    txt.append(npc == null ? "?" : npc.getFullName()).append(", ");
                 }
                 if (list.size() >= 2) {
                     NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(list.size() - 2));
-                    txt.append((npc == null ? "?" : npc.getFullName()) + " " + Translations.translateConjunction("or") + " ");
+                    txt.append(npc == null ? "?" : npc.getFullName()).append(" ").append(Translations.translateConjunction("or")).append(" ");
                 }
-                NPC npc = CitizensAPI.getNPCRegistry().getById(list.get(list.size() - 1));
+                NPC npc = CitizensAPI.getNPCRegistry().getById(list.getLast());
                 txt.append(npc == null ? "?" : npc.getFullName());
             }
             return txt.toString();
@@ -185,25 +182,24 @@ public class DataUtils {
     private static class SkillAPIModule {
         public static <T extends User<T>, E extends QuestComponent<T>> String getSkillAPIClassHolder(
                 SkillAPIClassData<T, E> data) {
-            StringBuilder text = new StringBuilder("");
+            StringBuilder text = new StringBuilder();
             if (data.getStoredRPGClasses().isEmpty() && data.getStoredGroups().isEmpty())
-                text.append(Translations.translateConjunction("any") + " " + Translations.translateAction("skillapiclass"));
+                text.append(Translations.translateConjunction("any")).append(" ").append(Translations.translateAction("skillapiclass"));
             else if (data.getStoredRPGClasses().isEmpty()) {
                 ArrayList<String> groups = new ArrayList<>(data.getGroups());
-                text.append(Translations.translateConjunction("any") + " " + Translations.translateAction("skillapiclass")
-                        + " " + Translations.translateConjunction("of") + " ");
+                text.append(Translations.translateConjunction("any")).append(" ").append(Translations.translateAction("skillapiclass")).append(" ").append(Translations.translateConjunction("of")).append(" ");
                 for (int i = 0; i < groups.size() - 2; i++)
-                    text.append(groups.get(i) + ", ");
+                    text.append(groups.get(i)).append(", ");
                 if (groups.size() > 2)
-                    text.append(groups.get(groups.size() - 2) + " " + Translations.translateConjunction("or") + " ");
-                text.append(groups.get(groups.size() - 1));
+                    text.append(groups.get(groups.size() - 2)).append(" ").append(Translations.translateConjunction("or")).append(" ");
+                text.append(groups.getLast());
             } else {
                 ArrayList<FabledClass> classes = new ArrayList<>(data.getRPGClasses());
                 for (int i = 0; i < classes.size() - 2; i++)
-                    text.append(classes.get(i).getName() + ", ");
+                    text.append(classes.get(i).getName()).append(", ");
                 if (classes.size() > 2)
-                    text.append(classes.get(classes.size() - 2).getName() + " " + Translations.translateConjunction("or") + " ");
-                text.append(classes.get(classes.size() - 1).getName());
+                    text.append(classes.get(classes.size() - 2).getName()).append(" ").append(Translations.translateConjunction("or")).append(" ");
+                text.append(classes.getLast().getName());
             }
             return text.toString();
         }

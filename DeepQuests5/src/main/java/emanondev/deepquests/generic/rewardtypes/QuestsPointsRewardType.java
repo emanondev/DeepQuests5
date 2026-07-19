@@ -12,6 +12,7 @@ import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +61,7 @@ public class QuestsPointsRewardType<T extends User<T>> extends ARewardType<T> {
         return Translations.replaceAll(txt).replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 
+    @Getter
     public class QuestsPointsReward extends AReward<T> {
         private final AmountData<T, QuestsPointsReward> amountData;
 
@@ -73,10 +75,6 @@ public class QuestsPointsRewardType<T extends User<T>> extends ARewardType<T> {
             List<String> info = super.getInfo();
             info.add("&9Points: &e%amount%");
             return info;
-        }
-
-        public AmountData<T, QuestsPointsReward> getAmountData() {
-            return amountData;
         }
 
         @Override

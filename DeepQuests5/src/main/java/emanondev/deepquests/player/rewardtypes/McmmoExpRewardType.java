@@ -15,6 +15,7 @@ import emanondev.deepquests.interfaces.QuestManager;
 import emanondev.deepquests.interfaces.Reward;
 import emanondev.deepquests.player.QuestPlayer;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -64,13 +65,14 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
                 .replace("{amount}", DataUtils.getAmountHolder(r.getAmountData()));
     }
 
+    @Getter
     public class McmmoExpReward extends AReward<QuestPlayer> {
-        private final McMMOSkillTypeData<QuestPlayer, McmmoExpReward> skillData;
+        private final McMMOSkillTypeData<QuestPlayer, McmmoExpReward> mcmmoSkillTypeData;
         private final AmountData<QuestPlayer, McmmoExpReward> amountData;
 
         public McmmoExpReward(int id, QuestManager<QuestPlayer> manager, YMLSection section) {
             super(id, manager, McmmoExpRewardType.this, section);
-            skillData = new McMMOSkillTypeData<>(this,
+            mcmmoSkillTypeData = new McMMOSkillTypeData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_MCMMO));
             amountData = new AmountData<>(this,
                     getConfig().loadSection(Paths.REWARD_INFO_AMOUNT), 1, Integer.MAX_VALUE, 1);
@@ -78,30 +80,22 @@ public class McmmoExpRewardType extends ARewardType<QuestPlayer> {
 
         public @NotNull List<String> getInfo() {
             List<String> info = super.getInfo();
-            info.addAll(skillData.getInfo());
+            info.addAll(mcmmoSkillTypeData.getInfo());
             info.add("&9Exp Reward: &e" + amountData.getAmount());
             return info;
         }
 
         @Override
         public void apply(@NotNull QuestPlayer qPlayer, int amount) {
-            if (amount <= 0 || amountData.getAmount() <= 0 || skillData.getSkillType() == null)
+            if (amount <= 0 || amountData.getAmount() <= 0 || mcmmoSkillTypeData.getSkillType() == null)
                 return;
             try {
                 McMMOPlayer mcmmoPlayer = UserManager.getPlayer(qPlayer.getPlayer());
-                mcmmoPlayer.addXp(skillData.getSkillType(), amountData.getAmount() * amount);
-                mcmmoPlayer.getProfile().registerXpGain(skillData.getSkillType(), amountData.getAmount() * amount);
+                mcmmoPlayer.addXp(mcmmoSkillTypeData.getSkillType(), amountData.getAmount() * amount);
+                mcmmoPlayer.getProfile().registerXpGain(mcmmoSkillTypeData.getSkillType(), amountData.getAmount() * amount);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-
-        public AmountData<QuestPlayer, McmmoExpReward> getAmountData() {
-            return amountData;
-        }
-
-        public McMMOSkillTypeData<QuestPlayer, McmmoExpReward> getMcmmoSkillTypeData() {
-            return skillData;
         }
 
         @Override

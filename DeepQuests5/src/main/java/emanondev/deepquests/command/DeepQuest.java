@@ -219,7 +219,7 @@ class SubEditor extends ASubCommand {
             for (QuestManager man : Quests.get().getManagers()) {
                 comp.append((color ? ChatColor.YELLOW : ChatColor.GOLD) + man.getName());
                 List<String> desc = Utils.fixList(man.getInfo(), null, true);
-                StringBuilder txt = new StringBuilder("");
+                StringBuilder txt = new StringBuilder();
                 for (String line : desc) {
                     txt.append(line).append("\n");
                 }

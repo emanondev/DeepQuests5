@@ -1,6 +1,7 @@
 package emanondev.deepquests.command;
 
 import emanondev.deepquests.utils.Utils;
+import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -15,10 +16,13 @@ import java.util.*;
 public abstract class ASubCommand {
     protected final HashMap<String, ASubCommand> subsByAlias = new HashMap<>();
     protected final LinkedHashSet<ASubCommand> subs = new LinkedHashSet<>();
+    @Getter
     private final String permission;
     private final List<String> aliases = new ArrayList<>();
     private boolean playerOnly = false;
+    @Getter
     private String params = null;
+    @Getter
     private String description;
     private boolean showLockedSuggestions = true;
 
@@ -188,14 +192,6 @@ public abstract class ASubCommand {
         return aliases.get(0);
     }
 
-    public String getPermission() {
-        return permission;
-    }
-
-    public String getParams() {
-        return params;
-    }
-
     /**
      * for help utility
      *
@@ -205,10 +201,6 @@ public abstract class ASubCommand {
     protected ASubCommand setParams(String params) {
         this.params = params;
         return this;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     /**

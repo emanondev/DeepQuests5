@@ -48,7 +48,7 @@ public class ObtainQuestItemTaskType<T extends User<T>> extends ATaskType<T> {
             return;
         for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             ObtainQuestItemTask task = (ObtainQuestItemTask) tTask;
-            if (!event.getID().equals(task.getQuestItemData().getQuestItemID()))
+            if (!event.getId().equals(task.getQuestItemData().getQuestItemID()))
                 continue;
             int progress = Math.min(task.getMaxProgress() - user.getTaskProgress(task), event.getAmount());
             if (progress > 0) {

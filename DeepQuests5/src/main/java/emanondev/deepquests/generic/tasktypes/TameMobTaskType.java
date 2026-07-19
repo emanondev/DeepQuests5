@@ -14,6 +14,7 @@ import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -107,6 +108,7 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
         return Translations.replaceAll(txt).replace("{entities}", DataUtils.getEntityHolder(t.getEntityData()));
     }
 
+    @Getter
     public class TameMobTask extends ATask<T> {
 
         private final EntityData<T, TameMobTask> entityData;
@@ -114,10 +116,6 @@ public class TameMobTaskType<T extends User<T>> extends ATaskType<T> {
         public TameMobTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, TameMobTaskType.this, section);
             entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
-        }
-
-        public EntityData<T, TameMobTask> getEntityData() {
-            return entityData;
         }
 
         public @NotNull TameMobTaskType<T> getType() {

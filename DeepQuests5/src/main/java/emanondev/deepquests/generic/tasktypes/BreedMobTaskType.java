@@ -16,6 +16,7 @@ import emanondev.deepquests.interfaces.Task;
 import emanondev.deepquests.interfaces.Task.Phase;
 import emanondev.deepquests.interfaces.User;
 import emanondev.deepquests.utils.DataUtils;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -55,9 +56,9 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
         for (Task<T> tTask : new ArrayList<>(user.getActiveTasks(this))) {
             BreedMobTask task = (BreedMobTask) tTask;
             if (task.isWorldAllowed(p.getWorld()) && task.entityData.isValidEntity(event.getEntity())
-                    && task.toolData.isValidTool(event.getBredWith(), p))
+                    && task.breedItemData.isValidTool(event.getBredWith(), p))
                 if (task.onProgress(user, 1, p, false) > 0) {
-                    if (task.dropsData.removeExpDrops())
+                    if (task.dropData.removeExpDrops())
                         event.setExperience(0);
                 }
         }
@@ -112,29 +113,18 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
         return Translations.replaceAll(txt).replace("{entities}", DataUtils.getEntityHolder(t.getEntityData()));
     }
 
+    @Getter
     public class BreedMobTask extends ATask<T> {
 
         private final EntityData<T, BreedMobTask> entityData;
-        private final DropData<T, BreedMobTask> dropsData;
-        private final ToolData<T, BreedMobTask> toolData;
+        private final DropData<T, BreedMobTask> dropData;
+        private final ToolData<T, BreedMobTask> breedItemData;
 
         public BreedMobTask(int id, Mission<T> mission, YMLSection section) {
             super(id, mission, BreedMobTaskType.this, section);
             entityData = new EntityData<>(this, getConfig().loadSection(Paths.TASK_INFO_ENTITYDATA));
-            dropsData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
-            toolData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
-        }
-
-        public EntityData<T, BreedMobTask> getEntityData() {
-            return entityData;
-        }
-
-        public DropData<T, BreedMobTask> getDropData() {
-            return dropsData;
-        }
-
-        public ToolData<T, BreedMobTask> getBreedItemData() {
-            return toolData;
+            dropData = new DropData<>(this, getConfig().loadSection(Paths.TASK_INFO_DROPDATA));
+            breedItemData = new ToolData<>(this, getConfig().loadSection(Paths.TASK_INFO_TOOLDATA));
         }
 
         @Override
@@ -146,11 +136,11 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
             List<String> info = super.getInfo();
             info.addAll(entityData.getInfo());
 
-            if (dropsData.removeExpDrops())
+            if (dropData.removeExpDrops())
                 info.add("&9Exp Drops: &cDisabled");
-            if (toolData.isEnabled()) {
+            if (breedItemData.isEnabled()) {
                 info.add("&9Breeding Item Check:");
-                info.addAll(toolData.getInfo());
+                info.addAll(breedItemData.getInfo());
             }
             return info;
         }
@@ -167,8 +157,8 @@ public class BreedMobTaskType<T extends User<T>> extends ATaskType<T> {
                 this.putButton(27, entityData.getEntityTypeButton(this));
                 this.putButton(28, entityData.getSpawnReasonButton(this));
                 this.putButton(36, entityData.getIgnoreNPCFlagButton(this));
-                this.putButton(37, dropsData.getExpDropsFlagButton(this));
-                toolData.setupButtons("&6Breeding Item Button", this, 45);
+                this.putButton(37, dropData.getExpDropsFlagButton(this));
+                breedItemData.setupButtons("&6Breeding Item Button", this, 45);
             }
         }
     }
