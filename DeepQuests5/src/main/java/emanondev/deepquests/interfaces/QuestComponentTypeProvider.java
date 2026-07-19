@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public interface QuestComponentTypeProvider<T extends User<T>, K extends QuestComponent<T>, E extends QuestComponentType<T, K>> {
 
@@ -21,7 +22,17 @@ public interface QuestComponentTypeProvider<T extends User<T>, K extends QuestCo
      * @param id type id
      * @return type with type.getKeyID().equals(id) or null
      */
-    @Nullable E getType(@NotNull String id);
+    @Nullable
+    E getType(@NotNull String id);
+
+    /**
+     * @param id type id
+     * @return type with type.getKeyID().equals(id) or null
+     */
+    @NotNull
+    default E getTypeOrThrow(@NotNull String id) {
+        return Objects.requireNonNull(getType(id));
+    }
 
     /**
      * @param type - type to register

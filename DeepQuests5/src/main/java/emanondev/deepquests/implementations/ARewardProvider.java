@@ -38,8 +38,6 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
     }
 
     public @NotNull YMLSection getTypeConfig(@NotNull RewardType<T> t) {
-        if (t == null)
-            throw new NullPointerException();
         return config.loadSection(t.getKeyID());
     }
 
@@ -64,8 +62,6 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
 
     @Override
     public void registerQuestType(@NotNull RewardType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
         if (type.getManager() != manager)
             throw new IllegalArgumentException();
         types.put(type.getKeyID(), type);
@@ -77,8 +73,6 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
 
     @Override
     public void registerMissionType(@NotNull RewardType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
         if (type.getManager() != manager)
             throw new IllegalArgumentException();
         types.put(type.getKeyID(), type);
@@ -90,8 +84,6 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
 
     @Override
     public void registerTaskType(@NotNull RewardType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
         if (type.getManager() != manager)
             throw new IllegalArgumentException();
         types.put(type.getKeyID(), type);
@@ -103,8 +95,6 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
 
     @Override
     public void registerType(@NotNull RewardType<T> type) {
-        if (type == null)
-            throw new NullPointerException();
         if (type.getManager() != manager)
             throw new IllegalArgumentException();
         types.put(type.getKeyID(), type);
@@ -136,7 +126,7 @@ public class ARewardProvider<T extends User<T>> implements RewardProvider<T> {
         if (manager == null)
             throw new NullPointerException();
         try {
-            Reward<T> reward = getType(section.getString(Paths.TYPE_NAME, null)).getInstance(id, manager, section);
+            Reward<T> reward = getTypeOrThrow(section.getString(Paths.TYPE_NAME, null)).getInstance(id, manager, section);
             reward.getRawFeedback();// preload performance boost
             /*
              * Quests.get().logDone("Loaded reward &e" + id + " &f(Type: &e" +

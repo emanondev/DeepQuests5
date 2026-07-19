@@ -174,10 +174,7 @@ public abstract class ASubCommand {
      * @return true if target has permission for this or if permission is null
      */
     public boolean hasPermission(CommandSender target) {
-        if (permission == null || target.hasPermission(permission)) {
-            return true;
-        }
-        return false;
+        return permission == null || target.hasPermission(permission);
     }
 
     /*

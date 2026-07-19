@@ -30,11 +30,6 @@ public class FailMissionRewardType<T extends User<T>> extends ARewardType<T> {
     }
 
     @Override
-    protected boolean getStandardHiddenValue() {
-        return true;
-    }
-
-    @Override
     public Material getGuiMaterial() {
         return Material.RED_BANNER;
     }
@@ -69,6 +64,11 @@ public class FailMissionRewardType<T extends User<T>> extends ARewardType<T> {
         return Translations.replaceAll(txt).replace("{target}", DataUtils.getTargetHolder(r.getTargetMissionData()));
     }
 
+    @Override
+    protected boolean getStandardHiddenValue() {
+        return true;
+    }
+
     public class FailMissionReward extends AReward<T> {
         private final TargetMissionData<T, FailMissionReward> missionData;
 
@@ -99,10 +99,12 @@ public class FailMissionRewardType<T extends User<T>> extends ARewardType<T> {
                 return;
             try {
                 Mission<T> mission = missionData.getMission();
-                if (mission == null)
+                if (mission == null) {
                     new NullPointerException("Data missing or not setted still on reward " + this.getID())
                             .printStackTrace();
-                qPlayer.failMission(mission);
+                } else {
+                    qPlayer.failMission(mission);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

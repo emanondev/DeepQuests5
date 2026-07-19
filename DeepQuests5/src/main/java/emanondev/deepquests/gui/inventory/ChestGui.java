@@ -24,8 +24,8 @@ public abstract class ChestGui implements Gui {
         if (rows < 1 || rows > 9)
             throw new IllegalArgumentException("invalid rows size '" + rows + "'");
         this.previusHolder = previusHolder;
-        this.inv = Bukkit.createInventory(this, rows * 9, Utils.fixString(title, player, true));
         this.player = p;
+        this.inv = Bukkit.createInventory(this, rows * 9, Utils.fixString(title, player, true));
     }
 
     @Override

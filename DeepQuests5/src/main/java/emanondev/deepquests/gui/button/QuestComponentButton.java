@@ -17,8 +17,6 @@ public abstract class QuestComponentButton<T extends QuestComponent<?>> extends 
 
     @Override
     public int compareTo(@NotNull QuestComponentButton<T> o) {
-        if (o == null)
-            return -questComponent.getPriority();
         if (o.questComponent.getPriority() - questComponent.getPriority() != 0)
             return o.questComponent.getPriority() - questComponent.getPriority();
         return questComponent.getID() - o.questComponent.getID();

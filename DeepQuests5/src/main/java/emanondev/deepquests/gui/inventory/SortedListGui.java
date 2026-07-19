@@ -114,9 +114,7 @@ public class SortedListGui<T extends Button & Comparable<? super T>> extends Pag
         try {
             List<T> copy = new ArrayList<T>(buttons);
             Collections.sort(buttons);
-            if (buttons.equals(copy))
-                return false;
-            return true;
+            return !buttons.equals(copy);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -86,7 +86,7 @@ public interface Task<T extends User<T>> extends HasWorlds, QuestComponent<T> {
     double getProgressChance();
 
     /**
-     * @param progressChance Allowed values are ]0;1] , where 1 is 100% and 0 is 0% chances to
+     * @param progressChance Allowed values are {@code ]0;1]} , where 1 is 100% and 0 is 0% chances to
      *                       progress
      */
     void setProgressChance(double progressChance);

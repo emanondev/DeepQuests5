@@ -11,6 +11,7 @@ import emanondev.deepquests.gui.inventory.Gui;
 import emanondev.deepquests.gui.inventory.PagedMapGui;
 import emanondev.deepquests.interfaces.*;
 import emanondev.deepquests.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.*;
 
+@Slf4j
 public abstract class AQuestManager<T extends User<T>> implements QuestManager<T> {
 
     private final static String SUB_PATH_COMPLETE_REWARDS = "complete-rewards";
@@ -167,7 +169,6 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     @Override
     public void reload() {
         try {
-
             quests.clear();
             missions.clear();
             tasks.clear();
@@ -177,151 +178,51 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
             HashSet<Integer> ids = new HashSet<>();
             for (String rw : rewardsDB.getKeys(PATH_REWARDS)) {
                 try {
-                    ids.add(Integer.valueOf(rw));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    ids.add(Integer.parseInt(rw));
+                } catch (NumberFormatException e) {
+                    log.error("Unable to parse {} as int", rw, e);
                 }
             }
-            for (int id : ids)
+
+            for (int id : ids) {
                 try {
                     rewards.put(id, loadReward(id));
                 } catch (Throwable t) {
-                    t.printStackTrace();
+                    log.error("Unable to load reward {}", id, t);
                 }
+            }
 
             ids.clear();
             for (String rw : requiresDB.getKeys(PATH_REQUIRES)) {
                 try {
-                    ids.add(Integer.valueOf(rw));
+                    ids.add(Integer.parseInt(rw));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("Unable to parse {} as int", rw, e);
                 }
             }
-            for (int id : ids)
+            for (int id : ids) {
                 try {
                     requires.put(id, loadRequire(id));
                 } catch (Throwable t) {
-                    t.printStackTrace();
+                    log.error("Unable to load require {}", id, t);
                 }
+            }
 
             ids.clear();
             for (String questId : questsDB.getKeys(PATH_QUESTS)) {
                 try {
-                    ids.add(Integer.valueOf(questId));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    ids.add(Integer.parseInt(questId));
+                } catch (NumberFormatException e) {
+                    log.error("Unable to parse {} as int", questId, e);
                 }
             }
-            for (int questId : ids)
+            for (int questId : ids) {
                 try {
-                    Quest<T> quest = loadQuest(questId);
-                    quests.put(questId, quest);
-
-                    for (int missionId : questsDB.getIntegerList(PATH_QUESTS + "." + questId + "." + SUB_PATH_MISSIONS))
-                        try {
-                            if (missions.containsKey(missionId))
-                                throw new IllegalStateException("More quests have the same mission (" + missionId
-                                        + " on manager " + this.getName() + ")");
-                            Mission<T> mission = loadMission(missionId, quest);
-                            quest.addMission(mission);
-                            missions.put(missionId, mission);
-
-                            for (int taskId : missionsDB.getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_TASKS))
-                                try {
-                                    if (tasks.containsKey(taskId))
-                                        throw new IllegalStateException("More missions have the same task (" + taskId
-                                                + " on manager " + this.getName() + ")");
-                                    Task<T> task = loadTask(taskId, mission);
-                                    mission.addTask(task);
-                                    tasks.put(taskId, task);
-
-                                    for (int rewId : tasksDB
-                                            .getIntegerList(PATH_TASKS + "." + taskId + "." + SUB_PATH_PROGRESS_REWARDS))
-                                        try {
-                                            Reward<T> rew = rewards.get(rewId);
-                                            if (rew == null)
-                                                throw new NullPointerException();
-                                            task.addProgressReward(rew);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    for (int rewId : tasksDB
-                                            .getIntegerList(PATH_TASKS + "." + taskId + "." + SUB_PATH_COMPLETE_REWARDS))
-                                        try {
-                                            Reward<T> rew = rewards.get(rewId);
-                                            if (rew == null)
-                                                throw new NullPointerException();
-                                            task.addCompleteReward(rew);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            for (int rewId : missionsDB
-                                    .getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_COMPLETE_REWARDS))
-                                try {
-                                    Reward<T> rew = rewards.get(rewId);
-                                    if (rew == null)
-                                        throw new NullPointerException();
-                                    mission.addCompleteReward(rew);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            for (int rewId : missionsDB
-                                    .getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_FAIL_REWARDS))
-                                try {
-                                    Reward<T> rew = rewards.get(rewId);
-                                    if (rew == null)
-                                        throw new NullPointerException();
-                                    mission.addFailReward(rew);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            for (int rewId : missionsDB
-                                    .getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_START_REWARDS))
-                                try {
-                                    Reward<T> rew = rewards.get(rewId);
-                                    if (rew == null)
-                                        throw new NullPointerException();
-                                    mission.addStartReward(rew);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            for (int reqId : missionsDB
-                                    .getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_REQUIRES))
-                                try {
-                                    Require<T> req = requires.get(reqId);
-                                    if (req == null)
-                                        throw new NullPointerException();
-                                    mission.addRequire(req);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    for (int reqId : questsDB.getIntegerList(PATH_QUESTS + "." + questId + "." + SUB_PATH_REQUIRES))
-                        try {
-                            Require<T> req = requires.get(reqId);
-                            if (req == null)
-                                throw new NullPointerException();
-                            quest.addRequire(req);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
+                    reloadQuest(questId);
                 } catch (Throwable t) {
-                    t.printStackTrace();
+                    log.error("Unable to load quest {}", questId, t);
                 }
+            }
 
             Quests.get().logDone("Loaded &e" + quests.size() + "&f quest(s) for manager &e" + this.getName());
             Quests.get().logDone("Loaded &e" + missions.size() + "&f mission(s) for manager &e" + this.getName());
@@ -352,26 +253,6 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     @Override
     public @NotNull SortableButton getEditorButton(@NotNull Gui parent) {
         return new GuiElementButton<>(parent, this);
-    }
-
-    protected Quest<T> generateQuest(int id, YMLSection section) {
-        return new AQuest<>(id, this, section);
-    }
-
-    private Require<T> generateRequire(int id, YMLSection section) {
-        return getRequireProvider().getInstance(id, section);
-    }
-
-    private Reward<T> generateReward(int id, YMLSection section) {
-        return getRewardProvider().getInstance(id, section);
-    }
-
-    protected Mission<T> generateMission(int id, Quest<T> quest, YMLSection section) {
-        return new AMission<>(id, quest, section);
-    }
-
-    private Task<T> generateTask(int id, Mission<T> mission, YMLSection section) {
-        return getTaskProvider().getInstance(id, mission, section);
     }
 
     @Override
@@ -453,8 +334,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> missionsIds = new TreeSet<>(
                 questsDB.getIntegerList(PATH_QUESTS + "." + quest.getID() + "." + SUB_PATH_MISSIONS, Collections.emptyList()));
         missionsIds.add(id);
-        questsDB.set(PATH_QUESTS + "." + quest.getID() + "." + SUB_PATH_MISSIONS,
-                missionsIds.isEmpty() ? null : new ArrayList<>(missionsIds));
+        questsDB.set(PATH_QUESTS + "." + quest.getID() + "." + SUB_PATH_MISSIONS, new ArrayList<>(missionsIds));
 
         quest.addMission(generateMission(id, quest, section));
         missions.put(id, quest.getMission(id));
@@ -481,8 +361,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> tasksIds = new TreeSet<>(
                 missionsDB.getIntegerList(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_TASKS, Collections.emptyList()));
         tasksIds.add(id);
-        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_TASKS,
-                tasksIds.isEmpty() ? null : new ArrayList<>(tasksIds));
+        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_TASKS, new ArrayList<>(tasksIds));
 
         mission.addTask(generateTask(id, mission, section));
         tasks.put(id, mission.getTask(id));
@@ -658,8 +537,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> requiresIds = new TreeSet<>(questsDB
                 .getIntegerList(PATH_QUESTS + "." + quest.getID() + "." + SUB_PATH_REQUIRES, Collections.emptyList()));
         requiresIds.add(require.getID());
-        questsDB.set(PATH_QUESTS + "." + quest.getID() + "." + SUB_PATH_REQUIRES,
-                requiresIds.isEmpty() ? null : new ArrayList<>(requiresIds));
+        questsDB.set(PATH_QUESTS + "." + quest.getID() + "." + SUB_PATH_REQUIRES, new ArrayList<>(requiresIds));
 
     }
 
@@ -680,8 +558,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_REQUIRES, Collections.emptyList()));
         requiresIds.add(require.getID());
-        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_REQUIRES,
-                requiresIds.isEmpty() ? null : new ArrayList<>(requiresIds));
+        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_REQUIRES, new ArrayList<>(requiresIds));
     }
 
     @Override
@@ -700,8 +577,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_COMPLETE_REWARDS, Collections.emptyList()));
         requiresIds.add(reward.getID());
-        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_COMPLETE_REWARDS,
-                requiresIds.isEmpty() ? null : new ArrayList<>(requiresIds));
+        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_COMPLETE_REWARDS, new ArrayList<>(requiresIds));
     }
 
     @Override
@@ -720,8 +596,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_START_REWARDS, Collections.emptyList()));
         requiresIds.add(reward.getID());
-        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_START_REWARDS,
-                requiresIds.isEmpty() ? null : new ArrayList<>(requiresIds));
+        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_START_REWARDS, new ArrayList<>(requiresIds));
     }
 
     @Override
@@ -740,8 +615,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> requiresIds = new TreeSet<>(missionsDB.getIntegerList(
                 PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_FAIL_REWARDS, Collections.emptyList()));
         requiresIds.add(reward.getID());
-        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_FAIL_REWARDS,
-                requiresIds.isEmpty() ? null : new ArrayList<>(requiresIds));
+        missionsDB.set(PATH_MISSIONS + "." + mission.getID() + "." + SUB_PATH_FAIL_REWARDS, new ArrayList<>(requiresIds));
     }
 
     @Override
@@ -760,8 +634,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> requiresIds = new TreeSet<>(tasksDB.getIntegerList(
                 PATH_TASKS + "." + task.getID() + "." + SUB_PATH_COMPLETE_REWARDS, Collections.emptyList()));
         requiresIds.add(reward.getID());
-        tasksDB.set(PATH_TASKS + "." + task.getID() + "." + SUB_PATH_COMPLETE_REWARDS,
-                requiresIds.isEmpty() ? null : new ArrayList<>(requiresIds));
+        tasksDB.set(PATH_TASKS + "." + task.getID() + "." + SUB_PATH_COMPLETE_REWARDS, new ArrayList<>(requiresIds));
     }
 
     @Override
@@ -780,8 +653,7 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
         TreeSet<Integer> requiresIds = new TreeSet<>(tasksDB.getIntegerList(
                 PATH_TASKS + "." + task.getID() + "." + SUB_PATH_PROGRESS_REWARDS, Collections.emptyList()));
         requiresIds.add(reward.getID());
-        tasksDB.set(PATH_TASKS + "." + task.getID() + "." + SUB_PATH_PROGRESS_REWARDS,
-                requiresIds.isEmpty() ? null : new ArrayList<>(requiresIds));
+        tasksDB.set(PATH_TASKS + "." + task.getID() + "." + SUB_PATH_PROGRESS_REWARDS, new ArrayList<>(requiresIds));
     }
 
     @Override
@@ -857,6 +729,136 @@ public abstract class AQuestManager<T extends User<T>> implements QuestManager<T
     @Override
     public @NotNull Permission getEditorPermission() {
         return this.editorPermission;
+    }
+
+    protected Quest<T> generateQuest(int id, YMLSection section) {
+        return new AQuest<>(id, this, section);
+    }
+
+    protected Mission<T> generateMission(int id, Quest<T> quest, YMLSection section) {
+        return new AMission<>(id, quest, section);
+    }
+
+    private void reloadQuest(int questId) {
+        Quest<T> quest = loadQuest(questId);
+        quests.put(questId, quest);
+
+        for (int missionId : questsDB.getIntegerList(PATH_QUESTS + "." + questId + "." + SUB_PATH_MISSIONS)) {
+            try {
+                if (missions.containsKey(missionId))
+                    throw new IllegalStateException("More quests have the same mission (" + missionId
+                            + " on manager " + this.getName() + ")");
+                Mission<T> mission = loadMission(missionId, quest);
+                quest.addMission(mission);
+                missions.put(missionId, mission);
+
+                for (int taskId : missionsDB.getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_TASKS))
+                    try {
+                        if (tasks.containsKey(taskId))
+                            throw new IllegalStateException("More missions have the same task (" + taskId
+                                    + " on manager " + this.getName() + ")");
+                        Task<T> task = loadTask(taskId, mission);
+                        mission.addTask(task);
+                        tasks.put(taskId, task);
+
+                        for (int rewId : tasksDB
+                                .getIntegerList(PATH_TASKS + "." + taskId + "." + SUB_PATH_PROGRESS_REWARDS))
+                            try {
+                                Reward<T> rew = rewards.get(rewId);
+                                if (rew == null) {
+                                    throw new NullPointerException();
+                                }
+                                task.addProgressReward(rew);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        for (int rewId : tasksDB
+                                .getIntegerList(PATH_TASKS + "." + taskId + "." + SUB_PATH_COMPLETE_REWARDS))
+                            try {
+                                Reward<T> rew = rewards.get(rewId);
+                                if (rew == null) {
+                                    throw new NullPointerException();
+                                }
+                                task.addCompleteReward(rew);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                for (int rewId : missionsDB
+                        .getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_COMPLETE_REWARDS))
+                    try {
+                        Reward<T> rew = rewards.get(rewId);
+                        if (rew == null)
+                            throw new NullPointerException();
+                        mission.addCompleteReward(rew);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                for (int rewId : missionsDB
+                        .getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_FAIL_REWARDS))
+                    try {
+                        Reward<T> rew = rewards.get(rewId);
+                        if (rew == null)
+                            throw new NullPointerException();
+                        mission.addFailReward(rew);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                for (int rewId : missionsDB
+                        .getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_START_REWARDS))
+                    try {
+                        Reward<T> rew = rewards.get(rewId);
+                        if (rew == null)
+                            throw new NullPointerException();
+                        mission.addStartReward(rew);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                for (int reqId : missionsDB
+                        .getIntegerList(PATH_MISSIONS + "." + missionId + "." + SUB_PATH_REQUIRES))
+                    try {
+                        Require<T> req = requires.get(reqId);
+                        if (req == null)
+                            throw new NullPointerException();
+                        mission.addRequire(req);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int reqId : questsDB.getIntegerList(PATH_QUESTS + "." + questId + "." + SUB_PATH_REQUIRES))
+            try {
+                Require<T> req = requires.get(reqId);
+                if (req == null)
+                    throw new NullPointerException();
+                quest.addRequire(req);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
+    private Require<T> generateRequire(int id, YMLSection section) {
+        return getRequireProvider().getInstance(id, section);
+    }
+
+    private Reward<T> generateReward(int id, YMLSection section) {
+        return getRewardProvider().getInstance(id, section);
+    }
+
+    private Task<T> generateTask(int id, Mission<T> mission, YMLSection section) {
+        return getTaskProvider().getInstance(id, mission, section);
     }
 
     private Quest<T> loadQuest(int questId) {

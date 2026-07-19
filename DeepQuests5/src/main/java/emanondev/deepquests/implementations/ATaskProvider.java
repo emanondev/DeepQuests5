@@ -9,11 +9,9 @@ import emanondev.deepquests.interfaces.Task.Phase;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
 
@@ -34,7 +32,8 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
         config.reload();
     }
 
-    public @NotNull YMLSection getTypeConfig(@NotNull TaskType<T> t) {
+    @NotNull
+    public YMLSection getTypeConfig(@NotNull TaskType<T> t) {
         return config.loadSection(t.getKeyID());
     }
 
@@ -43,13 +42,15 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     }
 
     @Override
-    public @NotNull QuestManager<T> getManager() {
+    @NotNull
+    public QuestManager<T> getManager() {
         return manager;
     }
 
     @Override
-    public @NotNull TaskType<T> getType(@NotNull String id) {
-        return types.get(id);
+    @Nullable
+    public TaskType<T> getType(@NotNull String id) {
+        return Objects.requireNonNull(types.get(id));
     }
 
     @Override
@@ -66,14 +67,14 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     }
 
     @Override
-    public @NotNull Collection<TaskType<T>> getTypes() {
+    @NotNull
+    public Collection<TaskType<T>> getTypes() {
         return Collections.unmodifiableCollection(types.values());
     }
 
     @Override
-    public @NotNull Task<T> getInstance(int id, @NotNull Mission<T> mission, @NotNull YMLSection section) {
-        if (mission == null)
-            throw new NullPointerException();
+    @NotNull
+    public Task<T> getInstance(int id, @NotNull Mission<T> mission, @NotNull YMLSection section) {
         try {
             TaskType<T> type = getType(section.getString(Paths.TYPE_NAME, null));
             if (type == null) {
@@ -103,7 +104,8 @@ public class ATaskProvider<T extends User<T>> implements TaskProvider<T> {
     }
 
     @Override
-    public @NotNull Permission getEditorPermission() {
+    @NotNull
+    public Permission getEditorPermission() {
         return editPermission;
     }
 
